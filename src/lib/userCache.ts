@@ -8,6 +8,7 @@ interface CachedUser {
     email: string;
     name: string | null;
     role: 'user' | 'escort' | 'admin';
+    isVerified: boolean;
     phone: string;
     whatsappAvailable?: boolean;
     viberAvailable?: boolean;

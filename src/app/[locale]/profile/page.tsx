@@ -47,6 +47,17 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [uploadingImages, setUploadingImages] = useState(false);
+  const [uploadingVideo, setUploadingVideo] = useState(false);
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [videoPreviews, setVideoPreviews] = useState<string | null>(null);
+  const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [imageUploadStatus, setImageUploadStatus] = useState<{ [key: number]: 'waiting' | 'uploading' | 'success' | 'error' }>({});
+  const [deletingImages, setDeletingImages] = useState<Set<string>>(new Set());
+  const [deletingVideo, setDeletingVideo] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
   useEffect(() => {
     fetchProfile();
@@ -56,7 +67,7 @@ export default function ProfilePage() {
     try {
       const response = await fetch('/api/profile');
       if (!response.ok) {
-        router.push('/login');
+        router.push('/');
         return;
       }
       const data = await response.json();
@@ -65,6 +76,287 @@ export default function ProfilePage() {
       setError('Failed to load profile');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const getImageDimensions = (file: File): Promise<{ width: number; height: number }> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        resolve({ width: img.width, height: img.height });
+        URL.revokeObjectURL(url); // Clean up memory
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url); // Clean up on error too
+        reject(new Error('Failed to load image'));
+      };
+      img.src = url;
+    });
+  };
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    // Validate files
+    const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+    const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const currentCount = ((profile as any)?.images as any[])?.length || 0;
+    const newFiles: File[] = [];
+    const newPreviews: string[] = [];
+    
+    for (const file of Array.from(files)) {
+      if (currentCount + selectedImages.length + newFiles.length >= 10) {
+        setNotification({ type: 'error', message: 'Maximum 10 images allowed' });
+        break;
+      }
+      
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        setNotification({ type: 'error', message: `Invalid file type: ${file.name}. Only JPG, PNG, and WebP are allowed.` });
+        continue;
+      }
+      if (file.size > MAX_SIZE) {
+        setNotification({ type: 'error', message: `File too large: ${file.name}. Maximum size is 10MB.` });
+        continue;
+      }
+      
+      newFiles.push(file);
+      newPreviews.push(URL.createObjectURL(file));
+    }
+
+    setSelectedImages([...selectedImages, ...newFiles]);
+    setImagePreviews([...imagePreviews, ...newPreviews]);
+    e.target.value = ''; // Clear input
+  };
+
+  const removeSelectedImage = (index: number) => {
+    URL.revokeObjectURL(imagePreviews[index]);
+    setSelectedImages(selectedImages.filter((_, i) => i !== index));
+    setImagePreviews(imagePreviews.filter((_, i) => i !== index));
+  };
+
+  const uploadImages = async () => {
+    if (selectedImages.length === 0) return;
+
+    setUploadingImages(true);
+    const errors: string[] = [];
+    let successCount = 0;
+
+    // Set all files to waiting initially
+    const initialStatus: { [key: number]: 'waiting' } = {};
+    for (let i = 0; i < selectedImages.length; i++) {
+      initialStatus[i] = 'waiting';
+    }
+    setImageUploadStatus(initialStatus);
+
+    try {
+      for (let i = 0; i < selectedImages.length; i++) {
+        const file = selectedImages[i];
+        
+        // Set uploading status for this file
+        setImageUploadStatus(prev => ({ ...prev, [i]: 'uploading' }));
+        
+        try {
+          const dimensions = await getImageDimensions(file);
+
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('type', 'image');
+          formData.append('width', dimensions.width.toString());
+          formData.append('height', dimensions.height.toString());
+
+          const response = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (!response.ok) {
+            const error = await response.json();
+            errors.push(`${file.name}: ${error.error || 'Upload failed'}`);
+            setImageUploadStatus(prev => ({ ...prev, [i]: 'error' }));
+          } else {
+            successCount++;
+            setImageUploadStatus(prev => ({ ...prev, [i]: 'success' }));
+          }
+        } catch (err: any) {
+          errors.push(`${file.name}: ${err.message || 'Upload failed'}`);
+          setImageUploadStatus(prev => ({ ...prev, [i]: 'error' }));
+        }
+      }
+      
+      // Wait a bit to show success status
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Clear selections and previews
+      imagePreviews.forEach(url => URL.revokeObjectURL(url));
+      setSelectedImages([]);
+      setImagePreviews([]);
+      setImageUploadStatus({});
+      
+      // Refresh profile
+      await fetchProfile();
+      
+      if (errors.length > 0) {
+        setNotification({ type: 'error', message: `Uploaded ${successCount} image(s). Errors: ${errors.join(', ')}` });
+      } else {
+        setNotification({ type: 'success', message: `Successfully uploaded ${successCount} image(s)!` });
+      }
+    } catch (err: any) {
+      setNotification({ type: 'error', message: `Failed to upload images: ${err.message}` });
+    } finally {
+      setUploadingImages(false);
+    }
+  };
+
+  const getVideoMetadata = (file: File): Promise<{ width: number; height: number; duration: number }> => {
+    return new Promise((resolve, reject) => {
+      const video = document.createElement('video');
+      video.preload = 'metadata';
+      video.onloadedmetadata = () => {
+        resolve({
+          width: video.videoWidth,
+          height: video.videoHeight,
+          duration: video.duration,
+        });
+        URL.revokeObjectURL(video.src);
+      };
+      video.onerror = reject;
+      video.src = URL.createObjectURL(file);
+    });
+  };
+
+  const handleVideoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file
+    const MAX_SIZE = 100 * 1024 * 1024; // 100MB
+    const ALLOWED_TYPES = ['video/mp4', 'video/webm', 'video/quicktime'];
+    
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      setNotification({ type: 'error', message: 'Invalid file type. Only MP4, WebM, and MOV are allowed.' });
+      e.target.value = ''; // Clear input
+      return;
+    }
+    if (file.size > MAX_SIZE) {
+      setNotification({ type: 'error', message: 'File too large. Maximum size is 100MB.' });
+      e.target.value = ''; // Clear input
+      return;
+    }
+
+    // Clear previous video if any
+    if (videoPreviews) {
+      URL.revokeObjectURL(videoPreviews);
+    }
+
+    setSelectedVideo(file);
+    setVideoPreviews(URL.createObjectURL(file));
+    e.target.value = ''; // Clear input
+  };
+
+  const removeSelectedVideo = () => {
+    if (videoPreviews) {
+      URL.revokeObjectURL(videoPreviews);
+    }
+    setSelectedVideo(null);
+    setVideoPreviews(null);
+  };
+
+  const uploadVideo = async () => {
+    if (!selectedVideo) return;
+
+    setUploadingVideo(true);
+    try {
+      const metadata = await getVideoMetadata(selectedVideo);
+
+      const formData = new FormData();
+      formData.append('file', selectedVideo);
+      formData.append('type', 'video');
+      formData.append('width', metadata.width.toString());
+      formData.append('height', metadata.height.toString());
+      formData.append('duration', metadata.duration.toString());
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Upload failed');
+      }
+
+      // Clear selection and preview
+      if (videoPreviews) {
+        URL.revokeObjectURL(videoPreviews);
+      }
+      setSelectedVideo(null);
+      setVideoPreviews(null);
+      
+      // Refresh profile
+      await fetchProfile();
+      setNotification({ type: 'success', message: 'Video uploaded successfully!' });
+    } catch (err: any) {
+      setNotification({ type: 'error', message: `Failed to upload video: ${err.message}` });
+    } finally {
+      setUploadingVideo(false);
+    }
+  };
+
+  const handleDeleteImage = async (imageUrl: string) => {
+    if (!confirm('Are you sure you want to delete this image?')) return;
+
+    // Add to deleting set
+    setDeletingImages(prev => new Set(prev).add(imageUrl));
+
+    try {
+      const response = await fetch('/api/profile/delete-media', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: imageUrl, type: 'image' }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete image');
+      }
+
+      await fetchProfile();
+      setNotification({ type: 'success', message: 'Image deleted successfully!' });
+    } catch (err: any) {
+      setNotification({ type: 'error', message: `Failed to delete image: ${err.message}` });
+    } finally {
+      // Remove from deleting set
+      setDeletingImages(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(imageUrl);
+        return newSet;
+      });
+    }
+  };
+
+  const handleDeleteVideo = async (videoUrl: string) => {
+    if (!confirm('Are you sure you want to delete this video?')) return;
+
+    setDeletingVideo(true);
+
+    try {
+      const response = await fetch('/api/profile/delete-media', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: videoUrl, type: 'video' }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete video');
+      }
+
+      await fetchProfile();
+      setNotification({ type: 'success', message: 'Video deleted successfully!' });
+    } catch (err: any) {
+      setNotification({ type: 'error', message: `Failed to delete video: ${err.message}` });
+    } finally {
+      setDeletingVideo(false);
     }
   };
 
@@ -85,6 +377,36 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 py-8">
+      {/* Notification Toast */}
+      {notification && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4">
+          <div className={`rounded-lg shadow-lg p-4 flex items-center justify-between ${
+            notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
+          } text-white`}>
+            <div className="flex items-center gap-3">
+              {notification.type === 'success' ? (
+                <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              ) : (
+                <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              )}
+              <p className="text-sm font-medium">{notification.message}</p>
+            </div>
+            <button
+              onClick={() => setNotification(null)}
+              className="ml-4 flex-shrink-0 hover:bg-white/20 rounded p-1 transition"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-6xl mx-auto px-4">
 
         {/* Premium Header Card */}
@@ -217,16 +539,174 @@ export default function ProfilePage() {
                 </svg>
                 Public Gallery (10 max)
               </h3>
-              <p className="text-xs md:text-sm text-gray-600 mb-3">Upload up to 10 images</p>
-              <div className="w-full h-32 md:h-40 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center hover:border-purple-400 transition cursor-pointer mb-3">
-                <svg className="w-8 h-8 md:w-10 md:h-10 text-gray-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <p className="text-xs md:text-sm text-gray-500">No images uploaded</p>
+              <p className="text-xs md:text-sm text-gray-600 mb-3">
+                {(profile as any)?.images?.length || 0} / 10 images uploaded
+              </p>
+              
+              {/* Uploaded Images */}
+              {(profile as any)?.images && (profile as any).images.length > 0 && (
+                <div className="grid grid-cols-3 gap-2 mb-3">
+                  {(profile as any).images.map((image: any, index: number) => {
+                    const isDeleting = deletingImages.has(image.url);
+                    return (
+                      <div key={index} className="relative aspect-square group">
+                        <img 
+                          src={image.url} 
+                          alt={`Image ${index + 1}`} 
+                          className="w-full h-full object-cover rounded-lg md:cursor-pointer" 
+                          onClick={() => setLightboxImage(image.url)}
+                        />
+                        
+                        {/* Deleting Overlay */}
+                        {isDeleting && (
+                          <div className="absolute inset-0 bg-black/40 rounded-lg flex flex-col items-center justify-center">
+                            <div className="animate-spin rounded-full h-10 w-10 border-4 border-white border-t-transparent mb-2"></div>
+                            <span className="text-white text-sm font-bold drop-shadow-lg">Deleting...</span>
+                          </div>
+                        )}
+                        
+                        {!isDeleting && (
+                          <>
+                            {/* Center View Icon - Desktop only */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setLightboxImage(image.url);
+                              }}
+                              className="hidden md:flex absolute inset-0 items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition rounded-lg"
+                              title="View fullscreen"
+                            >
+                              <div className="bg-white rounded-full p-3 shadow-xl">
+                                <svg className="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                              </div>
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteImage(image.url);
+                              }}
+                              className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 md:opacity-0 md:group-hover:opacity-100 transition shadow-lg"
+                              title="Delete image"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Image Previews (before upload) */}
+              {imagePreviews.length > 0 && (
+                <div className="grid grid-cols-3 gap-2 mb-3">
+                  {imagePreviews.map((preview, index) => {
+                    const status = imageUploadStatus[index];
+                    return (
+                      <div key={index} className="relative aspect-square">
+                        <img src={preview} alt={`Preview ${index + 1}`} className="w-full h-full object-cover rounded-lg border-2 border-blue-400" />
+                        
+                        {/* Upload Status Overlay */}
+                        {status && (
+                          <div className="absolute inset-0 bg-black/40 rounded-lg flex flex-col items-center justify-center">
+                            {status === 'waiting' && (
+                              <>
+                                <div className="flex space-x-1 mb-2">
+                                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                                </div>
+                                <span className="text-white text-sm font-bold drop-shadow-lg">Waiting...</span>
+                              </>
+                            )}
+                            {status === 'uploading' && (                                                                                                                                                                                                                            
+                              <>
+                                <div className="animate-spin rounded-full h-10 w-10 border-4 border-white border-t-transparent mb-2"></div>
+                                <span className="text-white text-sm font-bold drop-shadow-lg">Uploading...</span>
+                              </>
+                            )}
+                            {status === 'success' && (
+                              <>
+                                <svg className="w-14 h-14 text-green-400 drop-shadow-lg" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                </svg>
+                                <span className="text-white text-sm font-bold drop-shadow-lg mt-1">Success!</span>
+                              </>
+                            )}
+                            {status === 'error' && (
+                              <>
+                                <svg className="w-14 h-14 text-red-400 drop-shadow-lg" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                </svg>
+                                <span className="text-white text-sm font-bold drop-shadow-lg mt-1">Failed</span>
+                              </>
+                            )}
+                          </div>
+                        )}
+                        
+                        {!status && (
+                          <button
+                            onClick={() => removeSelectedImage(index)}
+                            disabled={uploadingImages}
+                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {imagePreviews.length === 0 && (profile as any)?.images?.length === 0 && (
+                <div 
+                  onClick={() => document.getElementById('image-upload')?.click()}
+                  className="w-full h-32 md:h-40 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center hover:border-purple-400 transition cursor-pointer mb-3"
+                >
+                  <svg className="w-8 h-8 md:w-10 md:h-10 text-gray-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <p className="text-xs md:text-sm text-gray-500">Click to select images</p>
+                </div>
+              )}
+
+              <input
+                type="file"
+                id="image-upload"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={handleImageSelect}
+                disabled={uploadingImages}
+              />
+              
+              <div className="flex gap-2">
+                <button
+                  onClick={() => document.getElementById('image-upload')?.click()}
+                  disabled={uploadingImages}
+                  className="flex-1 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white py-2 rounded-lg font-semibold transition text-xs md:text-sm"
+                >
+                  Select Images
+                </button>
+                {selectedImages.length > 0 && (
+                  <button
+                    onClick={uploadImages}
+                    disabled={uploadingImages}
+                    className="flex-1 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white py-2 rounded-lg font-semibold transition text-xs md:text-sm"
+                  >
+                    {uploadingImages ? 'Uploading...' : `Upload (${selectedImages.length})`}
+                  </button>
+                )}
               </div>
-              <button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg font-semibold transition text-xs md:text-sm">
-                Upload Images
-              </button>
             </div>
 
             {/* Video Section */}
@@ -237,16 +717,99 @@ export default function ProfilePage() {
                 </svg>
                 Public Video (1 max)
               </h3>
-              <p className="text-xs md:text-sm text-gray-600 mb-3">Upload 1 video</p>
-              <div className="w-full h-32 md:h-40 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center hover:border-blue-400 transition cursor-pointer mb-3">
-                <svg className="w-8 h-8 md:w-10 md:h-10 text-gray-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
-                </svg>
-                <p className="text-xs md:text-sm text-gray-500">No video uploaded</p>
+              <p className="text-xs md:text-sm text-gray-600 mb-3">
+                {(profile as any)?.videos?.length > 0 ? '1 video uploaded' : 'No video uploaded'}
+              </p>
+              
+              {/* Uploaded Video */}
+              {(profile as any)?.videos && (profile as any).videos.length > 0 && (
+                <div className="relative mb-3 group">
+                  <video 
+                    id="uploaded-video"
+                    src={(profile as any).videos[0].url} 
+                    className="w-full h-auto rounded-lg bg-black" 
+                    controls 
+                  />
+                  
+                  {/* Deleting Overlay */}
+                  {deletingVideo && (
+                    <div className="absolute inset-0 bg-black/40 rounded-lg flex flex-col items-center justify-center pointer-events-none">
+                      <div className="animate-spin rounded-full h-10 w-10 border-4 border-white border-t-transparent mb-2"></div>
+                      <span className="text-white text-sm font-bold drop-shadow-lg">Deleting...</span>
+                    </div>
+                  )}
+                  
+                  {!deletingVideo && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteVideo((profile as any).videos[0].url);
+                      }}
+                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 md:opacity-0 md:group-hover:opacity-100 transition shadow-lg"
+                      title="Delete video"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {/* Video Preview (before upload) */}
+              {videoPreviews && (
+                <div className="relative mb-3 border-2 border-blue-400 rounded-lg">
+                  <video src={videoPreviews} className="w-full h-auto rounded-lg bg-black" controls />
+                  <button
+                    onClick={removeSelectedVideo}
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              )}
+
+              {!videoPreviews && !((profile as any)?.videos?.length > 0) && (
+                <div 
+                  onClick={() => document.getElementById('video-upload')?.click()}
+                  className="w-full h-32 md:h-40 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center hover:border-blue-400 transition cursor-pointer mb-3"
+                >
+                  <svg className="w-8 h-8 md:w-10 md:h-10 text-gray-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                  </svg>
+                  <p className="text-xs md:text-sm text-gray-500">Click to select video</p>
+                </div>
+              )}
+
+              <input
+                type="file"
+                id="video-upload"
+                accept="video/*"
+                className="hidden"
+                onChange={handleVideoSelect}
+                disabled={uploadingVideo}
+              />
+              
+              <div className="flex gap-2">
+                <button
+                  onClick={() => document.getElementById('video-upload')?.click()}
+                  disabled={uploadingVideo}
+                  className="flex-1 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white py-2 rounded-lg font-semibold transition text-xs md:text-sm"
+                >
+                  Select Video
+                </button>
+                {selectedVideo && (
+                  <button
+                    onClick={uploadVideo}
+                    disabled={uploadingVideo}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-2 rounded-lg font-semibold transition text-xs md:text-sm"
+                  >
+                    {uploadingVideo ? 'Uploading...' : 'Upload'}
+                  </button>
+                )}
               </div>
-              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold transition text-xs md:text-sm">
-                Upload Video
-              </button>
             </div>
           </div>
         </div>
@@ -495,6 +1058,71 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+
+      {/* Lightbox Modal - Images Only */}
+      {lightboxImage && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+          onClick={() => setLightboxImage(null)}
+        >
+          <div className="relative max-w-6xl max-h-[90vh] w-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+            <img 
+              src={lightboxImage} 
+              alt="Full view" 
+              className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+            />
+            
+            {/* Close Button */}
+            <button
+              onClick={() => setLightboxImage(null)}
+              className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full p-2.5 hover:bg-red-600 transition shadow-xl"
+              title="Close"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            {/* Previous Button */}
+            {(profile as any)?.images && (profile as any).images.length > 1 && (
+              <>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const images = (profile as any).images;
+                    const currentIndex = images.findIndex((img: any) => img.url === lightboxImage);
+                    const prevIndex = currentIndex > 0 ? currentIndex - 1 : images.length - 1;
+                    setLightboxImage(images[prevIndex].url);
+                  }}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 text-gray-900 rounded-full p-3 hover:bg-white transition shadow-xl"
+                  title="Previous"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                
+                {/* Next Button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const images = (profile as any).images;
+                    const currentIndex = images.findIndex((img: any) => img.url === lightboxImage);
+                    const nextIndex = currentIndex < images.length - 1 ? currentIndex + 1 : 0;
+                    setLightboxImage(images[nextIndex].url);
+                  }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 text-gray-900 rounded-full p-3 hover:bg-white transition shadow-xl"
+                  title="Next"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

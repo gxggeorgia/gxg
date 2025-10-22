@@ -1,0 +1,59 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/middleware';
+import { db } from '@/db';
+import { users } from '@/db/schema/users';
+import { eq } from 'drizzle-orm';
+import { deleteFile } from '@/lib/upload';
+
+export async function POST(request: NextRequest) {
+  try {
+    // Check authentication
+    const authResult = await requireAuth(request);
+    if (authResult instanceof NextResponse) {
+      return authResult;
+    }
+
+    const { user } = authResult;
+    const { url, type } = await request.json();
+
+    if (!url || !type) {
+      return NextResponse.json({ error: 'Missing url or type' }, { status: 400 });
+    }
+
+    if (type === 'image') {
+      // Remove image from array
+      const images = (user.images as any[]) || [];
+      const updatedImages = images.filter((img: any) => img.url !== url);
+
+      await db
+        .update(users)
+        .set({ images: updatedImages })
+        .where(eq(users.id, user.id));
+    } else if (type === 'video') {
+      // Remove video from videos array
+      const videos = (user.videos as any[]) || [];
+      const updatedVideos = videos.filter((vid: any) => vid.url !== url);
+
+      await db
+        .update(users)
+        .set({ videos: updatedVideos })
+        .where(eq(users.id, user.id));
+    }
+
+    // Delete file from B2
+    try {
+      await deleteFile(url);
+    } catch (error) {
+      console.error('Failed to delete file from B2:', error);
+      // Continue even if B2 deletion fails
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Delete media error:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete media' },
+      { status: 500 }
+    );
+  }
+}

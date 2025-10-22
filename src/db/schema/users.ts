@@ -18,6 +18,7 @@ export const users = pgTable('users', {
   password: text('password').notNull(),
   email: text('email').notNull().unique(),
   emailVerified: boolean('email_verified').notNull().default(false),
+  isVerified: boolean('is_verified').notNull().default(false),
   role: userRoleEnum('role').notNull().default('user'),
   
   // Subscription features (can have multiple at same time)
@@ -96,6 +97,25 @@ export const users = pgTable('users', {
   
   // Tags - array of tag names
   tags: text('tags').array().default([]),
+  
+  // Media - images and videos with metadata
+  images: jsonb('images').$type<Array<{
+    url: string;
+    width?: number;
+    height?: number;
+    size: number;
+    mimeType: string;
+    isPrimary?: boolean;
+  }>>().default([]),
+  videos: jsonb('videos').$type<Array<{
+    url: string;
+    width?: number;
+    height?: number;
+    duration?: number;
+    size: number;
+    mimeType: string;
+    thumbnailUrl?: string;
+  }>>().default([]),
   
   // Timestamps
   lastActive: timestamp('last_active').defaultNow(),
