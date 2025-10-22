@@ -13,9 +13,9 @@ export default function HomePage() {
       <div className="w-full">
         <div className="px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6">
           {/* Mobile Filters - Show on mobile only */}
-          <div className="lg:hidden mb-4">
+          {/* <div className="lg:hidden mb-4">
             <RightSidebar />
-          </div>
+          </div> */}
 
           {/* Desktop 2-Column Layout */}
           <div className="flex flex-col lg:flex-row gap-3 sm:gap-4">
@@ -44,9 +44,9 @@ export default function HomePage() {
             </main>
 
             {/* Right Sidebar - Search Panel - Desktop only */}
-            <aside className="hidden lg:block w-72 xl:w-80 shrink-0">
+            {/* <aside className="hidden lg:block w-72 xl:w-80 shrink-0">
               <RightSidebar />
-            </aside>
+            </aside> */}
           </div>
         </div>
       </div>

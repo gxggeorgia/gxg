@@ -128,14 +128,25 @@
     "district": "რაიონი",
     "gender": "სქესი",
     "vipOnly": "მხოლოდ VIP",
+    "vipEliteOnly": "VIP ელიტა",
+    "topOnly": "ტოპ",
+    "newOnly": "ახალი",
+    "onlineOnly": "ონლაინ",
     "verifiedOnly": "მხოლოდ გადამოწმებული",
+    "quickSearch": "სწრაფი ძებნა",
+    "quickFilters": "სწრაფი ფილტრები",
+    "clearFilters": "ფილტრების გასუფთავება",
+    "allCities": "ყველა ქალაქი",
+    "allDistricts": "ყველა რაიონი",
+    "allGenders": "ყველა სქესი",
     "searchButton": "ძიება",
     "advancedSearch": "გაფართოებული ძიება"
   },
   "gender": {
     "female": "ქალი",
     "male": "კაცი",
-    "transsexual": "ტრანსსექსუალი"
+    "transsexual": "ტრანსსექსუალი",
+    "trans": "ტრანს"
   },
   "profile": {
     "lastActive": "ბოლო აქტივობა",

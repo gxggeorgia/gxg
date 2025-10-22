@@ -124,14 +124,25 @@
     "district": "District",
     "gender": "Gender",
     "vipOnly": "VIP Only",
+    "vipEliteOnly": "VIP Elite",
+    "topOnly": "Top",
+    "newOnly": "New",
+    "onlineOnly": "Online",
     "verifiedOnly": "Verified Only",
+    "quickSearch": "Quick Search",
+    "quickFilters": "Quick Filters",
+    "clearFilters": "Clear Filters",
+    "allCities": "All Cities",
+    "allDistricts": "All Districts",
+    "allGenders": "All Genders",
     "searchButton": "Search",
     "advancedSearch": "Advanced Search"
   },
   "gender": {
     "female": "Female",
     "male": "Male",
-    "transsexual": "Transsexual"
+    "transsexual": "Transsexual",
+    "trans": "Trans"
   },
   "profile": {
     "lastActive": "Last active",

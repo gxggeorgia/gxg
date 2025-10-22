@@ -5,6 +5,7 @@ import { Link, useRouter, usePathname } from '@/i18n/routing';
 import { Search, Mail, Menu, X, User, LogOut, ChevronDown } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import LoginModal from './auth/LoginModal';
+import QuickSearchModal from './QuickSearchModal';
 import { getCachedUser, setCachedUser, clearCachedUser } from '@/lib/userCache';
 
 interface User {
@@ -22,6 +23,7 @@ export default function Header() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const loginDropdownRef = useRef<HTMLDivElement>(null);
@@ -130,7 +132,11 @@ export default function Header() {
               <option value="ru" className="bg-slate-800 text-white">Русский</option>
             </select>
 
-            <button className="hover:text-purple-400 transition p-1.5 sm:p-2 hover:bg-slate-700/50 rounded">
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="hover:text-purple-400 transition p-1.5 sm:p-2 hover:bg-slate-700/50 rounded"
+              aria-label="Open quick search"
+            >
               <Search size={18} className="sm:w-5 sm:h-5" />
             </button>
             <button className="hidden md:block hover:text-purple-400 transition p-2 hover:bg-slate-700/50 rounded">
@@ -350,7 +356,9 @@ export default function Header() {
       </div>
 
     </header>
-    
+
+    <QuickSearchModal open={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+
     {/* Login Modal - Works for both mobile and desktop */}
     {isLoginModalOpen && (
       <LoginModal

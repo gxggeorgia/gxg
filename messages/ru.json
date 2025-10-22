@@ -124,14 +124,25 @@
     "district": "Район",
     "gender": "Пол",
     "vipOnly": "Только VIP",
+    "vipEliteOnly": "VIP Элит",
+    "topOnly": "Топ",
+    "newOnly": "Новые",
+    "onlineOnly": "Онлайн",
     "verifiedOnly": "Только проверенные",
+    "quickSearch": "Быстрый поиск",
+    "quickFilters": "Быстрые фильтры",
+    "clearFilters": "Сбросить фильтры",
+    "allCities": "Все города",
+    "allDistricts": "Все районы",
+    "allGenders": "Все полы",
     "searchButton": "Поиск",
     "advancedSearch": "Расширенный поиск"
   },
   "gender": {
     "female": "Женщина",
     "male": "Мужчина",
-    "transsexual": "Транссексуал"
+    "transsexual": "Транссексуал",
+    "trans": "Транс"
   },
   "profile": {
     "lastActive": "Последняя активность",
