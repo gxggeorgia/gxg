@@ -74,10 +74,23 @@ export default function Header() {
     <header className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white w-full sticky top-0 z-50 shadow-lg border-b border-slate-700/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="text-lg sm:text-xl font-bold whitespace-nowrap bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent hover:from-purple-300 hover:to-blue-300 transition">
-            {process.env.NEXT_PUBLIC_SITE_NAME || 'EG'}
-          </Link>
+          {/* Logo and Telegram */}
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+            <Link href="/" className="text-base sm:text-lg md:text-xl font-bold whitespace-nowrap bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent hover:from-purple-300 hover:to-blue-300 transition">
+              {process.env.NEXT_PUBLIC_SITE_NAME || 'EG'}
+            </Link>
+            <a 
+              href="https://t.me/XgeorgiaNET" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 md:px-3 py-1 sm:py-1.5 bg-blue-600 hover:bg-blue-700 rounded-md sm:rounded-lg transition text-[10px] sm:text-xs md:text-sm font-medium"
+            >
+              <svg className="w-5 h-5 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z"/>
+              </svg>
+              <span className="hidden sm:inline">Telegram</span>
+            </a>
+          </div>
 
           {/* Navigation - Hidden on mobile */}
           <nav className="hidden lg:flex items-center gap-6">
@@ -106,7 +119,7 @@ export default function Header() {
             {/* Language Dropdown */}
             <select
               value={locale}
-              className="bg-slate-700/50 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm border border-slate-600 hover:bg-slate-600 transition shadow-md cursor-pointer"
+              className="bg-slate-700/50 text-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm border border-slate-600 hover:bg-slate-600 transition shadow-md cursor-pointer"
               onChange={(e) => {
                 const newLocale = e.target.value as 'en' | 'ka' | 'ru';
                 router.replace(pathname, { locale: newLocale });
