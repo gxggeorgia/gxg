@@ -15,7 +15,6 @@ export const users = pgTable('users', {
   id: uuid('id').defaultRandom().primaryKey(),
   
   // Auth fields
-  username: text('username').notNull().unique(),
   password: text('password').notNull(),
   email: text('email').notNull().unique(),
   emailVerified: boolean('email_verified').notNull().default(false),
@@ -53,7 +52,7 @@ export const users = pgTable('users', {
   hairColor: hairColorEnum('hair_color'),
   bustSize: bustSizeEnum('bust_size'),
   height: integer('height').notNull(),
-  weight: decimal('weight', { precision: 5, scale: 2 }).notNull(),
+  weight: text('weight').notNull(),
   build: buildEnum('build'),
   
   // Availability

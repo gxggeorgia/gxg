@@ -1,4 +1,3 @@
-import Header from '@/components/Header';
 import LeftSidebar from '@/components/LeftSidebar';
 import RightSidebar from '@/components/RightSidebar';
 import ProfileSlider from '@/components/ProfileSlider';
@@ -7,8 +6,6 @@ import ProfileGrid from '@/components/ProfileGrid';
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header - Full Width */}
-      <Header />
       
       {/* Profile Slider - Full Width */}
       <ProfileSlider />
@@ -28,7 +25,7 @@ export default function HomePage() {
           {/* Desktop 3-Column Layout */}
           <div className="flex flex-col lg:flex-row gap-3 sm:gap-4">
             {/* Left Sidebar - City List - Desktop only */}
-            <aside className="hidden lg:block w-64 flex-shrink-0">
+            <aside className="hidden lg:block w-64 shrink-0">
               <LeftSidebar />
             </aside>
 
@@ -57,7 +54,7 @@ export default function HomePage() {
             </main>
 
             {/* Right Sidebar - Search Panel - Desktop only */}
-            <aside className="hidden lg:block w-72 xl:w-80 flex-shrink-0">
+            <aside className="hidden lg:block w-72 xl:w-80 shrink-0">
               <RightSidebar />
             </aside>
           </div>

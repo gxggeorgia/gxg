@@ -24,7 +24,7 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
       {/* Image Container */}
       <div className="relative">
         {/* Placeholder Image */}
-        <div className={`${compact ? 'h-48' : 'h-64'} bg-gradient-to-br from-pink-200 to-purple-200 flex items-center justify-center`}>
+        <div className={`${compact ? 'h-48' : 'h-64'} bg-linear-to-br from-pink-200 to-purple-200 flex items-center justify-center`}>
           <span className="text-6xl">👤</span>
         </div>
 

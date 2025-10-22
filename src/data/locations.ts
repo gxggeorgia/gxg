@@ -17,6 +17,16 @@ export interface City {
   districts: District[];
 }
 
+// Common "Other" district for all cities
+const otherDistrict: District = {
+  id: 'other',
+  name: {
+    en: 'Other',
+    ka: 'სხვა',
+    ru: 'Другое'
+  }
+};
+
 export const locations: City[] = [
   {
     id: 'other',
@@ -25,7 +35,7 @@ export const locations: City[] = [
       ka: 'სხვა',
       ru: 'Другое'
     },
-    districts: []
+    districts: [otherDistrict]
   },
   {
     id: 'batumi',
@@ -34,7 +44,7 @@ export const locations: City[] = [
       ka: 'ბათუმი',
       ru: 'Батуми'
     },
-    districts: []
+    districts: [otherDistrict]
   },
   {
     id: 'kutaisi',
@@ -43,7 +53,7 @@ export const locations: City[] = [
       ka: 'ქუთაისი',
       ru: 'Кутаиси'
     },
-    districts: []
+    districts: [otherDistrict]
   },
   {
     id: 'rustavi',
@@ -52,7 +62,7 @@ export const locations: City[] = [
       ka: 'რუსთავი',
       ru: 'Рустави'
     },
-    districts: []
+    districts: [otherDistrict]
   },
   {
     id: 'gori',
@@ -61,7 +71,7 @@ export const locations: City[] = [
       ka: 'გორი',
       ru: 'Гори'
     },
-    districts: []
+    districts: [otherDistrict]
   },
   {
     id: 'zugdidi',
@@ -70,7 +80,7 @@ export const locations: City[] = [
       ka: 'ზუგდიდი',
       ru: 'Зугдиди'
     },
-    districts: []
+    districts: [otherDistrict]
   },
   {
     id: 'tbilisi',
@@ -135,7 +145,8 @@ export const locations: City[] = [
           ka: 'რუსთაველი',
           ru: 'Руставели'
         }
-      }
+      },
+      otherDistrict
     ]
   },
   {
@@ -145,7 +156,7 @@ export const locations: City[] = [
       ka: 'თელავი',
       ru: 'Телави'
     },
-    districts: []
+    districts: [otherDistrict]
   },
   {
     id: 'kobuleti',
@@ -154,7 +165,7 @@ export const locations: City[] = [
       ka: 'ქობულეთი',
       ru: 'Кобулети'
     },
-    districts: []
+    districts: [otherDistrict]
   },
   {
     id: 'borjomi',
@@ -163,7 +174,7 @@ export const locations: City[] = [
       ka: 'ბორჯომი',
       ru: 'Боржоми'
     },
-    districts: []
+    districts: [otherDistrict]
   },
   {
     id: 'zestaponi',
@@ -172,6 +183,6 @@ export const locations: City[] = [
       ka: 'ზესტაფონი',
       ru: 'Зестафони'
     },
-    districts: []
+    districts: [otherDistrict]
   }
 ];

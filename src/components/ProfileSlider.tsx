@@ -54,7 +54,7 @@ export default function ProfileSlider() {
   };
 
   return (
-    <div className="relative bg-black py-4 mb-6 w-full">
+    <div className="relative  py-4 mb-6 w-full">
       <div className="max-w-[1920px] mx-auto px-4">
         <div className="relative overflow-hidden">
           {/* Slider Container */}
@@ -65,7 +65,7 @@ export default function ProfileSlider() {
             {mockProfiles.map((profile) => (
               <div 
                 key={profile.id} 
-                className="flex-shrink-0"
+                className="shrink-0"
                 style={{ width: `${100 / itemsPerView}%` }}
               >
                 <ProfileCard profile={profile} compact />
