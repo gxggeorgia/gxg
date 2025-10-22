@@ -38,6 +38,9 @@ PROJECT_ANALYSIS.md
 DEVELOPMENT_NOTES.md
 AUTH_README.md
 
+# drizzle migrations
+drizzle/
+
 # vercel
 .vercel
 
