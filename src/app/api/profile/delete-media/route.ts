@@ -40,12 +40,12 @@ export async function POST(request: NextRequest) {
         .where(eq(users.id, user.id));
     }
 
-    // Delete file from B2
+    // Delete file from R2
     try {
       await deleteFile(url);
     } catch (error) {
-      console.error('Failed to delete file from B2:', error);
-      // Continue even if B2 deletion fails
+      console.error('Failed to delete file from R2:', error);
+      // Continue even if R2 deletion fails
     }
 
     return NextResponse.json({ success: true });

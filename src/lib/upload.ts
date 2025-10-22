@@ -1,67 +1,17 @@
-import B2 from 'backblaze-b2';
+import { S3Client, PutObjectCommand, DeleteObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
 
-const ACCOUNT_ID = process.env.B2_ACCOUNT_ID?.trim();
-
-const APPLICATION_KEY = (() => {
-  const value = process.env.B2_APPLICATION_KEY?.trim();
-  if (!value) {
-    throw new Error('B2_APPLICATION_KEY is not set in environment variables');
-  }
-  return value;
-})();
-
-const APPLICATION_KEY_ID = (() => {
-  const explicit = process.env.B2_APPLICATION_KEY_ID?.trim();
-  const candidate = explicit || ACCOUNT_ID;
-
-  if (!candidate) {
-    throw new Error('B2_APPLICATION_KEY_ID is not set in environment variables');
-  }
-
-  if (candidate === APPLICATION_KEY) {
-    if (!ACCOUNT_ID) {
-      throw new Error(
-        'B2_APPLICATION_KEY_ID equals the application key secret, and no B2_ACCOUNT_ID is available to fall back to.'
-      );
-    }
-    console.warn(
-      'B2_APPLICATION_KEY_ID matches the application key secret. Falling back to B2_ACCOUNT_ID because this looks like a master key.'
-    );
-    return ACCOUNT_ID;
-  }
-
-  return candidate;
-})();
-
-const BUCKET_NAME = (() => {
-  const value = process.env.B2_BUCKET_NAME?.trim();
-  if (!value) {
-    throw new Error('B2_BUCKET_NAME is not set in environment variables');
-  }
-  return value;
-})();
-
-const BUCKET_ID = (() => {
-  const value = process.env.B2_BUCKET_ID?.trim();
-  if (!value) {
-    throw new Error('B2_BUCKET_ID is not set in environment variables');
-  }
-  return value;
-})();
-
-const b2 = new B2({
-  applicationKeyId: APPLICATION_KEY_ID,
-  applicationKey: APPLICATION_KEY,
-  ...(ACCOUNT_ID ? { accountId: ACCOUNT_ID } : {}),
+// Initialize Cloudflare R2 client (S3-compatible)
+const r2Client = new S3Client({
+  region: 'auto',
+  endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+  },
 });
 
-if (process.env.NODE_ENV !== 'production') {
-  console.log('B2 Native API Config:', {
-    keyId: APPLICATION_KEY_ID,
-    accountId: ACCOUNT_ID,
-    keyLength: APPLICATION_KEY.length,
-  });
-}
+const BUCKET_NAME = process.env.R2_BUCKET_NAME!;
+
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
 const MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100MB
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
@@ -75,7 +25,6 @@ interface FileMetadata {
   size: number;
   mimeType: string;
   thumbnailUrl?: string;
-  downloadAuthorizationToken?: string;
 }
 
 export async function uploadFile(
@@ -105,59 +54,22 @@ export async function uploadFile(
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  // Authorize with B2
-  try {
-    await b2.authorize();
-  } catch (error: any) {
-    console.error('B2 authorization failed', error?.response?.data ?? error);
-    if (error?.response?.status === 401) {
-      throw new Error(
-        'Backblaze credentials were rejected (401). Verify B2_APPLICATION_KEY_ID/B2_ACCOUNT_ID and B2_APPLICATION_KEY.'
-      );
-    }
-    throw new Error('Unable to authorize with Backblaze B2');
-  }
-
-  // List buckets to find the correct bucket ID
-  let bucketId = BUCKET_ID;
-  try {
-    const bucketsResponse = await b2.listBuckets();
-    const bucket = bucketsResponse.data.buckets.find((b: any) => b.bucketName === BUCKET_NAME);
-    if (bucket) {
-      bucketId = bucket.bucketId;
-      console.log('Found bucket:', { name: BUCKET_NAME, id: bucketId });
-    } else {
-      console.warn('Bucket not found in list, using configured ID:', BUCKET_ID);
-    }
-  } catch (error) {
-    console.warn('Failed to list buckets, using configured ID:', error);
-  }
-
-  // Get upload URL
-  let uploadUrlResponse;
-  try {
-    uploadUrlResponse = await b2.getUploadUrl({ bucketId });
-  } catch (error: any) {
-    console.error('Failed to get upload URL:', error?.response?.data ?? error);
-    console.error('Bucket ID used:', bucketId);
-    throw new Error(`Failed to get upload URL: ${error?.response?.data?.message || error.message}`);
-  }
-
-  // Upload to B2
-  const uploadResponse = await b2.uploadFile({
-    uploadUrl: uploadUrlResponse.data.uploadUrl,
-    uploadAuthToken: uploadUrlResponse.data.authorizationToken,
-    fileName: filename,
-    data: buffer,
-    contentType: file.type,
+  // Upload to R2
+  const command = new PutObjectCommand({
+    Bucket: BUCKET_NAME,
+    Key: filename,
+    Body: buffer,
+    ContentType: file.type,
   });
 
-  // For private buckets, store the B2 file path
-  // We'll serve files through our own API endpoint with authorization
-  // This allows geo-restriction and domain-only access
-  const fileId = uploadResponse.data.fileId;
-  
-  // Store the internal B2 path - we'll create a proxy endpoint to serve these
+  try {
+    await r2Client.send(command);
+  } catch (error: any) {
+    console.error('R2 upload failed:', error);
+    throw new Error(`Failed to upload file: ${error.message}`);
+  }
+
+  // Return URL for our proxy endpoint
   // Format: /api/media/{userId}/{type}/{filename}
   const url = `/api/media/${filename}`;
   
@@ -174,25 +86,15 @@ export async function deleteFile(fileUrl: string): Promise<void> {
     const urlParts = fileUrl.split('/');
     const filename = urlParts.slice(-3).join('/'); // userId/type/filename
 
-    // Authorize with B2
-    await b2.authorize();
-
-    // Get file info
-    const fileList = await b2.listFileNames({
-      bucketId: BUCKET_ID,
-      prefix: filename,
-      maxFileCount: 1,
+    // Delete from R2
+    const command = new DeleteObjectCommand({
+      Bucket: BUCKET_NAME,
+      Key: filename,
     });
 
-    if (fileList.data.files.length > 0) {
-      const fileId = fileList.data.files[0].fileId;
-      await b2.deleteFileVersion({
-        fileId,
-        fileName: filename,
-      });
-    }
+    await r2Client.send(command);
   } catch (error) {
-    console.error('Error deleting file:', error);
+    console.error('Error deleting file from R2:', error);
     throw new Error('Failed to delete file');
   }
 }

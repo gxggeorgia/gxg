@@ -9,8 +9,8 @@ A modern, scalable escort directory platform built with Next.js, Drizzle ORM, an
 - **Database:** PostgreSQL
 - **ORM:** Drizzle ORM
 - **Internationalization:** next-intl (Georgian, English, Russian)
-- **Authentication:** NextAuth.js (planned)
-- **File Upload:** Cloudinary (planned)
+- **Authentication:** JWT-based custom auth
+- **File Storage:** Cloudflare R2 (S3-compatible)
 
 ## 📋 Features
 
@@ -19,9 +19,11 @@ A modern, scalable escort directory platform built with Next.js, Drizzle ORM, an
 - ✅ User roles (User, Escort, Admin)
 - ✅ Profile management system
 - ✅ Location-based organization (Cities & Districts)
+- ✅ Image & video upload system (Cloudflare R2)
+- ✅ Media management (upload, view, delete)
+- ✅ Lightbox gallery with navigation
 - 🔄 Search & filtering (planned)
 - 🔄 Premium/VIP profiles (planned)
-- 🔄 Image upload system (planned)
 - 🔄 Payment integration (planned)
 
 ## 🛠️ Setup Instructions
@@ -41,14 +43,41 @@ npm install
 ```
 
 2. **Set up environment variables:**
-```bash
-cp env.example .env.local
+
+Create a `.env` file in the root directory with the following variables:
+
+```env
+# Site Configuration
+NEXT_PUBLIC_SITE_NAME=YourSiteName
+
+# Database
+DATABASE_URL=postgresql://user:password@localhost:5432/escort_directory
+
+# Cloudflare R2 Configuration
+R2_ACCOUNT_ID=your_account_id
+R2_ACCESS_KEY_ID=your_access_key_id
+R2_SECRET_ACCESS_KEY=your_secret_access_key
+R2_BUCKET_NAME=your-bucket-name
+R2_PUBLIC_URL=https://your_account_id.r2.cloudflarestorage.com
 ```
 
-Edit `.env.local` and add your PostgreSQL connection string:
-```env
-DATABASE_URL=postgresql://user:password@localhost:5432/escort_directory
-```
+**How to get Cloudflare R2 credentials:**
+
+1. Go to [Cloudflare Dashboard](https://dash.cloudflare.com/)
+2. Navigate to **R2** in the left sidebar
+3. Click **Create bucket** and name it (e.g., `eg-media`)
+4. Click **Manage R2 API Tokens**
+5. Click **Create API Token** (choose "Account API Tokens" for production)
+6. Configure:
+   - **Token name**: `your-app-name-production`
+   - **Permissions**: Object Read & Write
+   - **Bucket**: Select your bucket or "Apply to all buckets"
+7. Click **Create API Token**
+8. **IMPORTANT**: Copy these values immediately (shown only once):
+   - **Access Key ID** → Use for `R2_ACCESS_KEY_ID`
+   - **Secret Access Key** → Use for `R2_SECRET_ACCESS_KEY`
+   - **Endpoint URL** → Extract account ID for `R2_ACCOUNT_ID`
+9. Update your `.env` file with these credentials
 
 3. **Set up the database:**
 ```bash
@@ -137,12 +166,42 @@ npm run db:studio    # Open Drizzle Studio (database GUI)
 
 ## 🔐 Environment Variables
 
-See `env.example` for all required environment variables:
+Required environment variables:
+
+### Database
 - `DATABASE_URL` - PostgreSQL connection string
-- `NEXTAUTH_URL` - Application URL (for authentication)
-- `NEXTAUTH_SECRET` - Secret key for NextAuth
-- Cloudinary credentials (for file uploads)
-- SMTP settings (for emails)
+
+### Cloudflare R2 (File Storage)
+- `R2_ACCOUNT_ID` - Your Cloudflare account ID
+- `R2_ACCESS_KEY_ID` - R2 API access key
+- `R2_SECRET_ACCESS_KEY` - R2 API secret key
+- `R2_BUCKET_NAME` - Your R2 bucket name
+- `R2_PUBLIC_URL` - R2 endpoint URL
+
+### Site Configuration
+- `NEXT_PUBLIC_SITE_NAME` - Your site name
+
+## 💾 File Storage (Cloudflare R2)
+
+This project uses Cloudflare R2 for storing user-uploaded images and videos.
+
+### Why Cloudflare R2?
+- ✅ **Zero egress fees** - Unlimited free bandwidth
+- ✅ **10 GB free storage**
+- ✅ **S3-compatible API** - Easy to use
+- ✅ **Private files** - Served through your domain only
+- ✅ **Geo-restriction ready** - Control access by location
+
+### Pricing
+- **Storage**: $0.015/GB per month (after 10 GB free)
+- **Downloads**: **FREE** (unlimited)
+- **Uploads**: 1 million operations/month FREE
+
+### File Access
+Files are stored privately in R2 and served through `/api/media/[...path]` endpoint, ensuring:
+- Domain-only access (no direct R2 URLs)
+- Optional authentication/geo-restriction
+- Bandwidth cost savings
 
 ## 🚧 Development Roadmap
 
@@ -151,11 +210,12 @@ See `env.example` for all required environment variables:
 - [x] Database schema
 - [x] Multi-language support
 
-### Phase 2: Core Features (In Progress)
-- [ ] Authentication system
-- [ ] Profile creation & management
+### Phase 2: Core Features ✅
+- [x] Authentication system
+- [x] Profile creation & management
+- [x] Image & video upload (Cloudflare R2)
+- [x] Media management
 - [ ] Search & filtering
-- [ ] Image upload
 
 ### Phase 3: Premium Features
 - [ ] Payment integration
