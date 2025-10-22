@@ -3,6 +3,7 @@ import { relations } from 'drizzle-orm';
 
 // Enums
 export const userRoleEnum = pgEnum('user_role', ['user', 'escort', 'admin']);
+export const profileStatusEnum = pgEnum('profile_status', ['private', 'public', 'suspended', 'pending']);
 export const genderEnum = pgEnum('gender', ['female', 'male', 'transsexual']);
 export const languageLevelEnum = pgEnum('language_level', ['minimal', 'conversational', 'fluent']);
 export const ethnicityEnum = pgEnum('ethnicity', ['georgian', 'russian', 'black', 'turk', 'armenian', 'azerbaijan', 'kazakh', 'greek', 'ukraine', 'other']);
@@ -18,8 +19,9 @@ export const users = pgTable('users', {
   password: text('password').notNull(),
   email: text('email').notNull().unique(),
   emailVerified: boolean('email_verified').notNull().default(false),
-  isVerified: boolean('is_verified').notNull().default(false),
-  role: userRoleEnum('role').notNull().default('user'),
+  status: profileStatusEnum('status').notNull().default('private'),
+  statusMessage: text('status_message').default('Waiting for admin verification. Please send a message on Telegram for verification.'),
+  role: userRoleEnum('role').notNull().default('escort'),
   
   // Subscription features (can have multiple at same time)
   isVip: boolean('is_vip').notNull().default(false),

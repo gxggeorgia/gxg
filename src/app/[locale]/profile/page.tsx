@@ -13,6 +13,8 @@ interface UserProfile extends Omit<RegisterFormData, 'password' | 'confirmPasswo
   id: string;
   email: string;
   emailVerified: boolean;
+  status: 'private' | 'public' | 'suspended' | 'pending';
+  statusMessage: string | null;
   role: 'user' | 'escort' | 'admin';
   isVip: boolean;
   isTop: boolean;
@@ -414,16 +416,22 @@ export default function ProfilePage() {
           <div className="relative bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-8 py-12">
             {/* Subscription Badges */}
             <div className="absolute top-2 right-2 md:top-4 md:right-4 flex flex-nowrap gap-1 md:gap-2 overflow-x-auto max-w-[calc(100%-1rem)] md:max-w-none scrollbar-hide">
-              {/* Verified Badge */}
+              {/* Status Badge */}
               <div className={`px-2 py-1 md:px-3 md:py-1.5 rounded-full flex items-center gap-1 md:gap-1.5 shadow-lg ${
-                profile.emailVerified 
-                  ? 'bg-gradient-to-r from-green-500 to-emerald-500' 
-                  : 'bg-gray-400 opacity-50'
+                profile.status === 'public' ? 'bg-gradient-to-r from-green-500 to-emerald-500' :
+                profile.status === 'suspended' ? 'bg-gradient-to-r from-red-500 to-red-600' :
+                profile.status === 'pending' ? 'bg-gradient-to-r from-yellow-500 to-orange-500' :
+                'bg-gray-400 opacity-50'
               }`}>
                 <svg className="w-3 h-3 md:w-4 md:h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
-                <span className="text-white font-bold text-[10px] md:text-xs">VERIFIED</span>
+                <span className="text-white font-bold text-[10px] md:text-xs uppercase">
+                  {profile.status === 'public' ? 'ACTIVE' :
+                   profile.status === 'pending' ? 'PENDING' :
+                   profile.status === 'suspended' ? 'SUSPENDED' :
+                   'PRIVATE'}
+                </span>
               </div>
               
               {/* VIP Elite Badge */}
@@ -480,6 +488,26 @@ export default function ProfilePage() {
                     </div>
                   )}
                 </div>
+                
+                {/* Status Message */}
+                {profile.statusMessage && (
+                  <div className={`mt-4 px-4 py-3 rounded-lg border-l-4 ${
+                    profile.status === 'suspended' ? 'bg-red-900/30 border-red-400' :
+                    profile.status === 'pending' ? 'bg-yellow-900/30 border-yellow-400' :
+                    profile.status === 'public' ? 'bg-green-900/30 border-green-400' :
+                    'bg-blue-900/30 border-blue-400'
+                  }`}>
+                    <p className={`text-sm ${
+                      profile.status === 'suspended' ? 'text-red-200' :
+                      profile.status === 'pending' ? 'text-yellow-200' :
+                      profile.status === 'public' ? 'text-green-200' :
+                      'text-blue-200'
+                    }`}>
+                     
+                      {profile.statusMessage}
+                    </p>
+                  </div>
+                )}
               </div>
               <button
                 onClick={() => router.push('/profile/edit')}
