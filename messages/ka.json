@@ -1,0 +1,62 @@
+{
+  "common": {
+    "home": "მთავარი",
+    "search": "ძიება",
+    "login": "შესვლა",
+    "register": "რეგისტრაცია",
+    "logout": "გასვლა",
+    "myAccount": "ჩემი ანგარიში",
+    "contactUs": "დაგვიკავშირდით",
+    "language": "ენა"
+  },
+  "header": {
+    "title": "ესკორტ დირექტორია საქართველო",
+    "subtitle": "იპოვეთ გადამოწმებული ესკორტები საქართველოში"
+  },
+  "search": {
+    "city": "ქალაქი",
+    "district": "რაიონი",
+    "gender": "სქესი",
+    "vipOnly": "მხოლოდ VIP",
+    "verifiedOnly": "მხოლოდ გადამოწმებული",
+    "searchButton": "ძიება",
+    "advancedSearch": "გაფართოებული ძიება"
+  },
+  "gender": {
+    "female": "ქალი",
+    "male": "კაცი",
+    "transsexual": "ტრანსსექსუალი"
+  },
+  "profile": {
+    "lastActive": "ბოლო აქტივობა",
+    "verified": "გადამოწმებული",
+    "vip": "VIP",
+    "new": "ახალი",
+    "online": "ონლაინ",
+    "viewProfile": "პროფილის ნახვა",
+    "boost": "პროფილის აწევა"
+  },
+  "cities": {
+    "tbilisi": "თბილისი",
+    "batumi": "ბათუმი",
+    "kutaisi": "ქუთაისი",
+    "rustavi": "რუსთავი",
+    "poti": "ფოთი",
+    "zugdidi": "ზუგდიდი",
+    "telavi": "თელავი",
+    "kobuleti": "ქობულეთი",
+    "borjomi": "ბორჯომი",
+    "gori": "გორი",
+    "zestaponi": "ზესტაფონი",
+    "other": "სხვა"
+  },
+  "districts": {
+    "tsereteli": "წერეთელი",
+    "saburtalo": "საბურთალო",
+    "varketili": "ვარკეთილი",
+    "isani": "ისანი",
+    "gldani": "გლდანი",
+    "dighomi": "დიღომი",
+    "rustaveli": "რუსთაველი"
+  }
+}

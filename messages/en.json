@@ -1,0 +1,62 @@
+{
+  "common": {
+    "home": "Home",
+    "search": "Search",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "myAccount": "My Account",
+    "contactUs": "Contact Us",
+    "language": "Language"
+  },
+  "header": {
+    "title": "Escort Directory Georgia",
+    "subtitle": "Find verified escorts in Georgia"
+  },
+  "search": {
+    "city": "City",
+    "district": "District",
+    "gender": "Gender",
+    "vipOnly": "VIP Only",
+    "verifiedOnly": "Verified Only",
+    "searchButton": "Search",
+    "advancedSearch": "Advanced Search"
+  },
+  "gender": {
+    "female": "Female",
+    "male": "Male",
+    "transsexual": "Transsexual"
+  },
+  "profile": {
+    "lastActive": "Last active",
+    "verified": "Verified",
+    "vip": "VIP",
+    "new": "NEW",
+    "online": "Online",
+    "viewProfile": "View Profile",
+    "boost": "Boost Profile"
+  },
+  "cities": {
+    "tbilisi": "Tbilisi",
+    "batumi": "Batumi",
+    "kutaisi": "Kutaisi",
+    "rustavi": "Rustavi",
+    "poti": "Poti",
+    "zugdidi": "Zugdidi",
+    "telavi": "Telavi",
+    "kobuleti": "Kobuleti",
+    "borjomi": "Borjomi",
+    "gori": "Gori",
+    "zestaponi": "Zestaponi",
+    "other": "Other"
+  },
+  "districts": {
+    "tsereteli": "Tsereteli",
+    "saburtalo": "Saburtalo",
+    "varketili": "Varketili",
+    "isani": "Isani",
+    "gldani": "Gldani",
+    "dighomi": "Dighomi",
+    "rustaveli": "Rustaveli"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "common": {
+    "home": "Главная",
+    "search": "Поиск",
+    "login": "Войти",
+    "register": "Регистрация",
+    "logout": "Выйти",
+    "myAccount": "Мой аккаунт",
+    "contactUs": "Связаться с нами",
+    "language": "Язык"
+  },
+  "header": {
+    "title": "Эскорт Директория Грузия",
+    "subtitle": "Найдите проверенных эскортов в Грузии"
+  },
+  "search": {
+    "city": "Город",
+    "district": "Район",
+    "gender": "Пол",
+    "vipOnly": "Только VIP",
+    "verifiedOnly": "Только проверенные",
+    "searchButton": "Поиск",
+    "advancedSearch": "Расширенный поиск"
+  },
+  "gender": {
+    "female": "Женщина",
+    "male": "Мужчина",
+    "transsexual": "Транссексуал"
+  },
+  "profile": {
+    "lastActive": "Последняя активность",
+    "verified": "Проверено",
+    "vip": "VIP",
+    "new": "НОВЫЙ",
+    "online": "Онлайн",
+    "viewProfile": "Посмотреть профиль",
+    "boost": "Поднять профиль"
+  },
+  "cities": {
+    "tbilisi": "Тбилиси",
+    "batumi": "Батуми",
+    "kutaisi": "Кутаиси",
+    "rustavi": "Рустави",
+    "poti": "Поти",
+    "zugdidi": "Зугдиди",
+    "telavi": "Телави",
+    "kobuleti": "Кобулети",
+    "borjomi": "Боржоми",
+    "gori": "Гори",
+    "zestaponi": "Зестафони",
+    "other": "Другое"
+  },
+  "districts": {
+    "tsereteli": "Церетели",
+    "saburtalo": "Сабуртало",
+    "varketili": "Варкетили",
+    "isani": "Исани",
+    "gldani": "Глдани",
+    "dighomi": "Дигоми",
+    "rustaveli": "Руставели"
+  }
+}
