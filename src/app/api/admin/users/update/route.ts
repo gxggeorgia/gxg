@@ -30,18 +30,20 @@ export async function POST(request: NextRequest) {
     
     for (const [key, value] of Object.entries(updates)) {
       if (allowedFields.includes(key)) {
-        // Handle subscription toggles - set expiration date
-        if ((key === 'isVip' || key === 'isTop' || key === 'isVipElite') && value === true) {
-          updateData[key] = value;
-          // Set expiration to 30 days from now
-          const expiresAtKey = key.replace('is', '').toLowerCase() + 'ExpiresAt';
-          if (expiresAtKey === 'vipExpiresAt' || expiresAtKey === 'topExpiresAt' || expiresAtKey === 'vipeliteExpiresAt') {
-            const correctKey = expiresAtKey === 'vipeliteExpiresAt' ? 'vipEliteExpiresAt' : expiresAtKey;
-            updateData[correctKey] = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+        // Handle date fields - convert string to Date if needed
+        if (key.endsWith('ExpiresAt')) {
+          if (value === null) {
+            updateData[key] = null;
+          } else if (typeof value === 'string') {
+            updateData[key] = new Date(value);
+          } else if (value instanceof Date) {
+            updateData[key] = value;
           }
-        } else if ((key === 'isVip' || key === 'isTop' || key === 'isVipElite') && value === false) {
+        }
+        // Handle subscription toggles
+        else if ((key === 'isVip' || key === 'isTop' || key === 'isVipElite') && value === false) {
           updateData[key] = value;
-          // Clear expiration date
+          // Clear expiration date when disabling subscription
           const expiresAtKey = key.replace('is', '').toLowerCase() + 'ExpiresAt';
           const correctKey = expiresAtKey === 'vipeliteExpiresAt' ? 'vipEliteExpiresAt' : expiresAtKey;
           updateData[correctKey] = null;

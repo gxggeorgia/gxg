@@ -106,15 +106,15 @@ export default function Header() {
             {/* Language Dropdown */}
             <select
               value={locale}
-              className="bg-slate-700/50 text-white px-2 sm:px-3 py-1.5 sm:py-2 rounded text-xs sm:text-sm border border-slate-600 hover:bg-slate-700 transition"
+              className="bg-slate-700/50 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm border border-slate-600 hover:bg-slate-600 transition shadow-md cursor-pointer"
               onChange={(e) => {
                 const newLocale = e.target.value as 'en' | 'ka' | 'ru';
                 router.replace(pathname, { locale: newLocale });
               }}
             >
-              <option value="en">English</option>
-              <option value="ka">ქართული</option>
-              <option value="ru">Русский</option>
+              <option value="en" className="bg-slate-800 text-white">English</option>
+              <option value="ka" className="bg-slate-800 text-white">ქართული</option>
+              <option value="ru" className="bg-slate-800 text-white">Русский</option>
             </select>
 
             <button className="hover:text-purple-400 transition p-1.5 sm:p-2 hover:bg-slate-700/50 rounded">
@@ -129,7 +129,7 @@ export default function Header() {
               <div className="hidden md:block relative">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center gap-2 bg-slate-700/50 hover:bg-slate-700 px-3 py-2 rounded text-sm transition border border-slate-600"
+                  className="flex items-center gap-2 bg-slate-700/50 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm transition border border-slate-600 shadow-md"
                 >
                   <User size={16} />
                   <span className="max-w-[100px] truncate">{user.name || user.email}</span>
@@ -198,7 +198,7 @@ export default function Header() {
               <>
                 <Link
                   href="/register"
-                  className="hidden md:flex items-center bg-purple-600 px-4 py-2 rounded text-sm hover:bg-purple-700 transition font-medium"
+                  className="hidden md:flex items-center bg-purple-600 px-4 py-2 rounded-lg text-sm hover:bg-purple-700 transition font-medium shadow-md"
                 >
                   {t('common.register')}
                 </Link>
@@ -207,7 +207,7 @@ export default function Header() {
                 <div className="hidden md:block relative" ref={loginDropdownRef}>
                   <button
                     onClick={() => setIsLoginModalOpen(!isLoginModalOpen)}
-                    className="flex items-center gap-2 bg-slate-700/50 px-4 py-2 rounded text-sm hover:bg-slate-700 transition border border-slate-600"
+                    className="flex items-center gap-2 bg-slate-700/50 px-4 py-2 rounded-lg text-sm hover:bg-slate-600 transition border border-slate-600 shadow-md"
                   >
                     {t('common.login')}
                     <ChevronDown size={16} className={`transition-transform ${isLoginModalOpen ? 'rotate-180' : ''}`} />

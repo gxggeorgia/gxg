@@ -19,6 +19,9 @@ interface UserProfile extends Omit<RegisterFormData, 'password' | 'confirmPasswo
   isVip: boolean;
   isTop: boolean;
   isVipElite: boolean;
+  vipExpiresAt: string | null;
+  topExpiresAt: string | null;
+  vipEliteExpiresAt: string | null;
   createdAt: string;
   rates?: {
     incall?: {
@@ -413,68 +416,90 @@ export default function ProfilePage() {
 
         {/* Premium Header Card */}
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden mb-6 border border-gray-200">
-          <div className="relative bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-8 py-12">
-            {/* Subscription Badges */}
-            <div className="absolute top-2 right-2 md:top-4 md:right-4 flex flex-nowrap gap-1 md:gap-2 overflow-x-auto max-w-[calc(100%-1rem)] md:max-w-none scrollbar-hide">
-              {/* Status Badge */}
-              <div className={`px-2 py-1 md:px-3 md:py-1.5 rounded-full flex items-center gap-1 md:gap-1.5 shadow-lg ${
-                profile.status === 'public' ? 'bg-gradient-to-r from-green-500 to-emerald-500' :
-                profile.status === 'suspended' ? 'bg-gradient-to-r from-red-500 to-red-600' :
-                profile.status === 'pending' ? 'bg-gradient-to-r from-yellow-500 to-orange-500' :
-                'bg-gray-400 opacity-50'
-              }`}>
-                <svg className="w-3 h-3 md:w-4 md:h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span className="text-white font-bold text-[10px] md:text-xs uppercase">
-                  {profile.status === 'public' ? 'ACTIVE' :
-                   profile.status === 'pending' ? 'PENDING' :
-                   profile.status === 'suspended' ? 'SUSPENDED' :
-                   'PRIVATE'}
-                </span>
-              </div>
-              
+          <div className="relative bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-4 py-4 md:px-8 md:py-8">
+            {/* Subscription Badges - Single Row */}
+            <div className="mb-2 md:mb-4 flex gap-2 overflow-x-auto scrollbar-hide justify-center md:justify-end">
               {/* VIP Elite Badge */}
-              <div className={`px-2 py-1 md:px-4 md:py-2 rounded-full flex items-center gap-1 md:gap-2 shadow-lg ${
-                profile.isVipElite 
-                  ? 'bg-gradient-to-r from-yellow-400 to-orange-500' 
-                  : 'bg-gray-400 opacity-50'
-              }`}>
-                <Crown size={14} className="text-white md:w-[18px] md:h-[18px]" />
-                <span className="text-white font-bold text-[10px] md:text-sm">VIP ELITE</span>
-              </div>
+              {profile.isVipElite && (
+                <div className="px-2 md:px-3 py-1.5 md:py-2 rounded-md bg-yellow-700 border-2 border-yellow-500 shadow-lg flex-shrink-0">
+                  <div className="flex items-center gap-1.5">
+                    <Crown size={14} className="text-white md:w-4 md:h-4" />
+                    <div className="flex flex-col">
+                      <span className="text-white font-bold text-[10px] md:text-xs leading-tight whitespace-nowrap">VIP ELITE</span>
+                      {profile.vipEliteExpiresAt && (
+                        <span className="text-yellow-100 text-[8px] md:text-[10px] leading-tight whitespace-nowrap">
+                          {new Date(profile.vipEliteExpiresAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
               
               {/* VIP Badge */}
-              <div className={`px-2 py-1 md:px-4 md:py-2 rounded-full flex items-center gap-1 md:gap-2 shadow-lg ${
-                profile.isVip 
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500' 
-                  : 'bg-gray-400 opacity-50'
-              }`}>
-                <Star size={14} className="text-white md:w-[18px] md:h-[18px]" />
-                <span className="text-white font-bold text-[10px] md:text-sm">VIP</span>
-              </div>
+              {profile.isVip && (
+                <div className="px-2 md:px-3 py-1.5 md:py-2 rounded-md bg-purple-700 border-2 border-purple-400 shadow-lg flex-shrink-0">
+                  <div className="flex items-center gap-1.5">
+                    <Star size={14} className="text-white md:w-4 md:h-4 fill-white" />
+                    <div className="flex flex-col">
+                      <span className="text-white font-bold text-[10px] md:text-xs leading-tight whitespace-nowrap">VIP</span>
+                      {profile.vipExpiresAt && (
+                        <span className="text-purple-100 text-[8px] md:text-[10px] leading-tight whitespace-nowrap">
+                          {new Date(profile.vipExpiresAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
               
               {/* TOP Badge */}
-              <div className={`px-2 py-1 md:px-4 md:py-2 rounded-full flex items-center gap-1 md:gap-2 shadow-lg ${
-                profile.isTop 
-                  ? 'bg-gradient-to-r from-blue-500 to-cyan-500' 
-                  : 'bg-gray-400 opacity-50'
-              }`}>
-                <Star size={14} className="text-white md:w-[18px] md:h-[18px]" />
-                <span className="text-white font-bold text-[10px] md:text-sm">TOP</span>
-              </div>
+              {profile.isTop && (
+                <div className="px-2 md:px-3 py-1.5 md:py-2 rounded-md bg-blue-700 border-2 border-blue-400 shadow-lg flex-shrink-0">
+                  <div className="flex items-center gap-1.5">
+                    <Star size={14} className="text-white md:w-4 md:h-4 fill-white" />
+                    <div className="flex flex-col">
+                      <span className="text-white font-bold text-[10px] md:text-xs leading-tight whitespace-nowrap">TOP</span>
+                      {profile.topExpiresAt && (
+                        <span className="text-blue-100 text-[8px] md:text-[10px] leading-tight whitespace-nowrap">
+                          {new Date(profile.topExpiresAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
-            <div className="flex flex-col md:flex-row items-center gap-6">
+            <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
               <div className="w-24 h-24 md:w-32 md:h-32 bg-white rounded-full flex items-center justify-center shadow-2xl ring-4 ring-white/30">
                 <User size={48} className="text-purple-600 md:w-16 md:h-16" />
               </div>
               <div className="text-white flex-1 text-center md:text-left">
                 <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3 mb-2">
                   <h1 className="text-2xl md:text-4xl font-bold">{profile.name || t('common.user')}</h1>
-                  <span className="px-3 py-1 bg-amber-500/20 backdrop-blur-sm rounded-full text-xs md:text-sm font-semibold capitalize border border-amber-400/30">
-                    {profile.role}
-                  </span>
+                  <div className="flex items-center gap-2 flex-wrap justify-center md:justify-start">
+                    <span className="px-3 py-1 bg-amber-500/20 backdrop-blur-sm rounded-full text-xs md:text-sm font-semibold capitalize border border-amber-400/30">
+                      {profile.role}
+                    </span>
+                    {/* Status Badge */}
+                    <div className={`px-2 py-1 md:px-3 md:py-1.5 rounded-full flex items-center gap-1 md:gap-1.5 shadow-lg ${
+                      profile.status === 'public' ? 'bg-green-600' :
+                      profile.status === 'suspended' ? 'bg-red-600' :
+                      profile.status === 'pending' ? 'bg-yellow-600' :
+                      'bg-gray-600'
+                    }`}>
+                      <svg className="w-3 h-3 md:w-4 md:h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span className="text-white font-bold text-[10px] md:text-xs uppercase">
+                        {profile.status === 'public' ? 'ACTIVE' :
+                         profile.status === 'pending' ? 'PENDING' :
+                         profile.status === 'suspended' ? 'SUSPENDED' :
+                         'PRIVATE'}
+                      </span>
+                    </div>
+                  </div>
                 </div>
                 <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-gray-300 text-sm md:text-base">
                   <div className="flex items-center gap-2">
@@ -527,7 +552,7 @@ export default function ProfilePage() {
         )}
 
         {/* Verification Alert */}
-        {!profile.emailVerified && (
+        {profile.status === 'pending' && (
           <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-2xl p-6 mb-6 shadow-lg">
             <div className="flex items-start gap-4">
               <div className="flex-shrink-0">
