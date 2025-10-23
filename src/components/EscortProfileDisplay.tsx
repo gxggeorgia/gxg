@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { useRouter } from '@/i18n/routing';
-import { Phone, MapPin, Edit2, Globe, Ruler, Heart, Languages as LanguagesIcon, DollarSign, Star, Crown, MessageCircle, Clock, Zap, ExternalLink, Instagram, Facebook, Twitter } from 'lucide-react';
+import { useRouter, usePathname } from '@/i18n/routing';
+import { Phone, MapPin, Edit2, Globe, Ruler, Heart, Languages as LanguagesIcon, DollarSign, Star, Crown, MessageCircle, Clock, Zap, ExternalLink, Instagram, Facebook, Twitter, Flag } from 'lucide-react';
 import Image from 'next/image';
 import ImageLightbox from './ImageLightbox';
 import Link from 'next/link';
+import ReportModal from './ReportModal';
 
 interface EscortProfile {
     id: string;
@@ -76,8 +77,10 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false }: 
     const tProfile = useTranslations('profile');
     const tServices = useTranslations('services');
     const router = useRouter();
+    const pathname = usePathname();
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxIndex, setLightboxIndex] = useState(0);
+    const [reportModalOpen, setReportModalOpen] = useState(false);
 
     const calculateAge = (dob: Date | string) => {
         const birthDate = typeof dob === 'string' ? new Date(dob) : dob;
@@ -252,18 +255,36 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false }: 
                                             {tCommon('editProfile')}
                                         </button>
                                     ) : (
-                                        <Link
-                                            href={`/escort/${profile.id}/chat`}
-                                            className="block w-full mt-3 text-center bg-purple-600 hover:bg-purple-700 text-white transition-colors py-2.5 px-4 rounded-lg font-medium text-sm"
-                                        >
-                                            {tCommon('sendMessage')}
-                                        </Link>
+                                        <>
+                                            <Link
+                                                href={`/escort/${profile.id}/chat`}
+                                                className="block w-full mt-3 text-center bg-purple-600 hover:bg-purple-700 text-white transition-colors py-2.5 px-4 rounded-lg font-medium text-sm"
+                                            >
+                                                {tCommon('sendMessage')}
+                                            </Link>
+                                            <button
+                                                onClick={() => setReportModalOpen(true)}
+                                                className="w-full mt-2 bg-white text-red-600 hover:bg-red-50 transition-colors py-2.5 px-4 rounded-lg font-medium text-sm border border-red-200 flex items-center justify-center gap-2"
+                                            >
+                                                <Flag size={14} />
+                                                Report Profile
+                                            </button>
+                                        </>
                                     )}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {/* Report Modal */}
+                <ReportModal
+                    isOpen={reportModalOpen}
+                    onClose={() => setReportModalOpen(false)}
+                    profileId={profile.id}
+                    profileUrl={typeof window !== 'undefined' ? window.location.href : pathname}
+                    profileName={profile.name || 'Unknown'}
+                />
 
                 {/* Images & Videos Section */}
                 <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 border border-gray-200 mb-6">

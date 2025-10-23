@@ -1,8 +1,10 @@
+// npx tsx src/scripts/create-admin.ts
 import 'dotenv/config';
 import { db } from '../db';
 import { users } from '../db/schema/users';
 import { eq } from 'drizzle-orm';
 import { hashPassword } from '../lib/auth';
+import { generateSlug } from '../lib/slug';
 
 async function createAdmin() {
   try {
@@ -44,11 +46,15 @@ async function createAdmin() {
       // Hash password
       const hashedPassword = await hashPassword(password);
       
+      // Generate slug for admin user
+      const slug = generateSlug('Admin', 'Tbilisi');
+      
       // Create admin user
       const [admin] = await db.insert(users).values({
         email,
         password: hashedPassword,
         name: 'Admin',
+        slug,
         phone: '+990000000000',
         role: 'admin',
         status: 'private',
@@ -86,4 +92,3 @@ async function createAdmin() {
 
 createAdmin();
 
-// npx tsx src/scripts/create-admin.ts

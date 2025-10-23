@@ -11,12 +11,13 @@ export const contactTypeEnum = pgEnum('contact_type', ['support', 'inquiry', 'co
 // Reports table
 export const reports = pgTable('reports', {
   id: uuid('id').defaultRandom().primaryKey(),
-  profileId: uuid('profile_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  profileId: uuid('profile_id').references(() => users.id, { onDelete: 'cascade' }), // Nullable - anonymous users can report
   reason: reportReasonEnum('reason').notNull(),
   description: text('description'),
   reporterName: text('reporter_name'),
   reporterEmail: text('reporter_email'),
   reporterIp: text('reporter_ip'),
+  profileUrl: text('profile_url'), // Store the URL of the reported profile
   status: reportStatusEnum('status').notNull().default('pending'),
   adminNotes: text('admin_notes'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
