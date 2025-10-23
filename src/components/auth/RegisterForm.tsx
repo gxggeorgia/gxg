@@ -175,7 +175,7 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Form submitted!', { acceptedTerms, formData });
     setIsLoading(true);

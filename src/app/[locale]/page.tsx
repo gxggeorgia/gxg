@@ -13,8 +13,7 @@ export default function HomePage() {
 
           <div className="flex flex-col lg:flex-row gap-3 sm:gap-4">
             <main className="flex-1 min-w-0">
-              <div className="mb-6 sm:mb-8">
-                <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-gray-900">All escorts</h2>
+              <div className="mb-6 sm:mb-8"> 
                 <ProfileGrid />
               </div>
             </main>

@@ -16,6 +16,21 @@ interface Escort {
   images: Array<{ url: string; width?: number; height?: number; isPrimary?: boolean }>;
 }
 
+interface Profile {
+  id: string;
+  slug: string;
+  name: string;
+  city: string;
+  isVip: boolean;
+  isVipElite: boolean;
+  isVerified: boolean;
+  isOnline: boolean;
+  languages?: Array<{ name: string; level: string }>;
+  coverImage?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+}
+
 export default function FeaturedProfileSlider() {
   const [profiles, setProfiles] = useState<Escort[]>([]);
   const [isLoading, setIsLoading] = useState(true);

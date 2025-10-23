@@ -42,7 +42,7 @@ export default function EditUserModal({ user, onClose, onSave }: EditUserModalPr
   const handleSave = async () => {
     setSaving(true);
     try {
-      const updates: any = {
+      const updates: Partial<User> = {
         role: data.role,
         status: data.status,
         statusMessage: data.statusMessage,
@@ -59,6 +59,10 @@ export default function EditUserModal({ user, onClose, onSave }: EditUserModalPr
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setData({ ...data, [e.target.name]: e.target.value });
   };
 
   return (
@@ -81,7 +85,8 @@ export default function EditUserModal({ user, onClose, onSave }: EditUserModalPr
               <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
               <select 
                 value={data.role} 
-                onChange={(e) => setData({...data, role: e.target.value as any})} 
+                onChange={handleInputChange} 
+                name="role"
                 className="w-full px-3 py-2 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
               >
                 <option value="user" className="text-gray-900">User</option>

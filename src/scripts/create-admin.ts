@@ -50,6 +50,26 @@ async function createAdmin() {
       const slug = generateSlug('Admin', 'Tbilisi');
       
       // Create admin user
+      interface User {
+        id: string;
+        email: string;
+        name: string | null;
+        role: string;
+        password: string;
+        slug: string;
+        phone: string;
+        status: string;
+        statusMessage: string | null;
+        emailVerified: boolean;
+        city: string;
+        gender: string;
+        dateOfBirth: string;
+        ethnicity: string;
+        height: number;
+        weight: string;
+        aboutYou: string;
+      }
+
       const [admin] = await db.insert(users).values({
         email,
         password: hashedPassword,

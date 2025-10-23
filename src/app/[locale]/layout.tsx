@@ -21,6 +21,7 @@ const geistMono = Geist_Mono({
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://escortdirectorygeorgia.com";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
   title: "Escort Directory Georgia | Verified Escorts & Companions",
   description: "Find verified escorts and companions in Georgia. Browse profiles, rates, and services. Safe, discreet, and professional escort directory.",
   keywords: ["escorts Georgia", "companions Georgia", "escort services", "verified escorts"],

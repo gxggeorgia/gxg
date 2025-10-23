@@ -13,7 +13,14 @@ export async function POST(request: NextRequest) {
     const { user } = authResult;
 
     const formData = await request.formData();
-    const file = formData.get('file') as File;
+    const file = formData.get('file') as File | null;
+    
+    if (!file) {
+      return NextResponse.json(
+        { error: 'No file provided' },
+        { status: 400 }
+      );
+    }
     const type = formData.get('type') as 'image' | 'video';
     const width = formData.get('width');
     const height = formData.get('height');
@@ -48,7 +55,7 @@ export async function POST(request: NextRequest) {
 
     // Save metadata to database
     if (type === 'image') {
-      const currentImages = (currentUser.images as any[]) || [];
+      const currentImages = currentUser.images || [];
       
       // Check max limit (10 images)
       if (currentImages.length >= 10) {

@@ -17,13 +17,50 @@ interface Escort {
   coverImage?: string;
 }
 
+interface Pagination {
+  total: number;
+  currentPage: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+interface Profile {
+  id: string;
+  slug: string;
+  name: string;
+  city: string;
+  isVip: boolean;
+  isVipElite: boolean;
+  isVerified: boolean;
+  isOnline: boolean;
+  languages?: Array<{ name: string; level: string }>;
+  coverImage?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+}
+
 export default function ProfileGrid() {
   const searchParams = useSearchParams();
   const [escorts, setEscorts] = useState<Escort[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [pagination, setPagination] = useState({ total: 0, currentPage: 1, totalPages: 1, hasNextPage: false, hasPreviousPage: false });
+  const [pagination, setPagination] = useState<Pagination>({
+    total: 0,
+    currentPage: 1,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPreviousPage: false,
+  });
   const [currentPage, setCurrentPage] = useState(1);
+
+  const handleFilterChange = (type: string, value: string | number | boolean) => {
+    // implement filter change logic here
+  };
+
+  const handleSort = (key: string) => {
+    // implement sort logic here
+  };
 
   useEffect(() => {
     const fetchEscorts = async () => {
