@@ -6,6 +6,10 @@ import { CheckCircle, Send, MessageCircle, ArrowLeft } from 'lucide-react';
 
 export default function VerifyPage() {
   const t = useTranslations();
+  const contactEmail =
+    process.env.NEXT_PUBLIC_CONTACT_MAIL_ADDRESS ||
+    process.env.CONTACT_MAIL_ADDRESS ||
+    'support@example.com';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 py-4 md:py-8">
@@ -133,8 +137,11 @@ export default function VerifyPage() {
           <div className="mt-6 text-center mb-20 md:mb-6">
             <p className="text-gray-600">
               {t('common.needHelp')}{' '}
-              <a href="mailto:support@example.com" className="text-blue-600 hover:text-blue-700 font-semibold">
-                support@example.com
+              <a
+                href={`mailto:${contactEmail}`}
+                className="text-blue-600 hover:text-blue-700 font-semibold"
+              >
+                {contactEmail}
               </a>
             </p>
           </div>
