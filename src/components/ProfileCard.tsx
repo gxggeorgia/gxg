@@ -8,6 +8,7 @@ import Link from 'next/link';
 interface ProfileCardProps {
   profile: {
     id: string | number;
+    slug?: string; // SEO-friendly URL slug
     name: string;
     city: string;
     isVip: boolean;
@@ -53,8 +54,11 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
     }
   };
 
+  // Use slug if available, otherwise fall back to id
+  const profileUrl = profile.slug ? `/${locale}/escort/${profile.slug}` : `/${locale}/escort/${profile.id}`;
+  
   return (
-    <Link href={`/${locale}/escort/${profile.id}`}>
+    <Link href={profileUrl}>
       <div className="bg-white rounded-lg   hover:shadow-xl transition cursor-pointer group overflow-hidden">
       {/* Image Container - Relative for badges */}
       <div className="relative w-full" style={{ aspectRatio: profile.imageWidth && profile.imageHeight ? `${profile.imageWidth}/${profile.imageHeight}` : '3/4' }}>

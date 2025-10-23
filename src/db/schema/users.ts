@@ -19,6 +19,7 @@ export const users = pgTable('users', {
   password: text('password').notNull(),
   email: text('email').notNull().unique(),
   emailVerified: boolean('email_verified').notNull().default(false),
+  slug: text('slug').notNull().unique(), // Unique slug for SEO-friendly URLs (e.g., "natalia-tbilisi-123")
   status: profileStatusEnum('status').notNull().default('private'),
   statusMessage: text('status_message').default('Waiting for admin verification. Please send a message on Telegram for verification.'),
   role: userRoleEnum('role').notNull().default('escort'),

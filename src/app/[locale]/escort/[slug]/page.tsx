@@ -8,13 +8,13 @@ import EscortProfileDisplay from '@/components/EscortProfileDisplay';
 interface EscortDetailPageProps {
   params: Promise<{
     locale: string;
-    id: string;
+    slug: string;
   }>;
 }
 
 export async function generateMetadata({ params }: EscortDetailPageProps) {
-  const { id } = await params;
-  const escort = await db.select().from(users).where(eq(users.id, id)).limit(1).then(res => res[0]);
+  const { slug } = await params;
+  const escort = await db.select().from(users).where(eq(users.slug, slug)).limit(1).then(res => res[0]);
 
   if (!escort) {
     return {};
@@ -26,14 +26,14 @@ export async function generateMetadata({ params }: EscortDetailPageProps) {
   return generatePageMetadata(
     title,
     description,
-    `/escort/${id}`,
+    `/escort/${slug}`,
     escort.coverImage || undefined
   );
 }
 
 export default async function EscortDetailPage({ params }: EscortDetailPageProps) {
-  const { id } = await params;
-  const escort = await db.select().from(users).where(eq(users.id, id)).limit(1).then(res => res[0]);
+  const { slug } = await params;
+  const escort = await db.select().from(users).where(eq(users.slug, slug)).limit(1).then(res => res[0]);
 
   if (!escort || escort.status !== 'public') {
     notFound();

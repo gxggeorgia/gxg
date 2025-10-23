@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { hashPassword, generateToken, setAuthCookie } from '@/lib/auth';
+import { generateSlug } from '@/lib/slug';
 import { eq } from 'drizzle-orm';
 
 export async function POST(request: NextRequest) {
@@ -82,6 +83,9 @@ export async function POST(request: NextRequest) {
     // Hash password
     const hashedPassword = await hashPassword(password);
 
+    // Generate unique slug (8 random chars makes collisions extremely unlikely)
+    const slug = generateSlug(name || email.split('@')[0], city);
+
     // Create user with all fields from schema
     const [newUser] = await db
       .insert(users)
@@ -89,6 +93,7 @@ export async function POST(request: NextRequest) {
         // Auth fields
         email,
         password: hashedPassword,
+        slug,
         role: 'user', // Default role
         status: 'pending', // New users start as pending
         statusMessage: 'Waiting for admin verification. Please send a message on Telegram for verification.',

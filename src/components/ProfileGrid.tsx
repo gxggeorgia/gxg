@@ -6,6 +6,7 @@ import ProfileCard from './ProfileCard';
 
 interface Escort {
   id: string;
+  slug: string;
   name: string;
   city: string;
   isFeatured: boolean;
@@ -114,6 +115,7 @@ export default function ProfileGrid() {
                 key={escort.id}
                 profile={{
                   id: escort.id,
+                  slug: escort.slug,
                   name: escort.name,
                   city: escort.city,
                   isVip: escort.isVip,

@@ -6,6 +6,7 @@ import ProfileCard from './ProfileCard';
 
 interface Escort {
   id: string;
+  slug: string;
   name: string;
   city: string;
   isVip: boolean;
@@ -196,6 +197,7 @@ export default function FeaturedProfileSlider() {
                     key={profile.id}
                     profile={{
                       id: profile.id,
+                      slug: profile.slug,
                       name: profile.name,
                       city: profile.city,
                       isVip: profile.isVip,

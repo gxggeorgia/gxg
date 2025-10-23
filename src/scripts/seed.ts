@@ -8,6 +8,8 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { users } from '@/db/schema/users';
 import { hashPassword } from '@/lib/auth';
+import { generateSlug } from '@/lib/slug';
+import { eq } from 'drizzle-orm';
 
 // Hardcoded credentials
 const DATABASE_URL = 'postgresql://postgres:development@db.jbhvtgnqbeowuwprymbk.supabase.co:5432/postgres';
@@ -119,13 +121,18 @@ async function seed() {
     const shuffledServices = [...services].sort(() => Math.random() - 0.5);
     const userServices = shuffledServices.slice(0, Math.floor(Math.random() * 8) + 5);
     
+    const city = cities[Math.floor(Math.random() * cities.length)];
+    // Generate slug (8 random chars makes collisions extremely unlikely)
+    const slug = generateSlug(name, city);
+    
     try {
       await db.insert(users).values({
         email,
         password,
         name,
+        slug,
         phone: `+995${590000000 + i}`,
-        city: cities[Math.floor(Math.random() * cities.length)],
+        city,
         district: districts[Math.floor(Math.random() * districts.length)],
         gender: (i < 18 ? 'female' : 'male') as 'female' | 'male',
         dateOfBirth: `${1995 + Math.floor(Math.random() * 6)}-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}` as any,
