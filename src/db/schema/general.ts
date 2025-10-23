@@ -1,12 +1,10 @@
-import { pgTable, text, timestamp, uuid, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, uuid, pgEnum, jsonb } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { users } from './users';
 
 // Enums
 export const reportStatusEnum = pgEnum('report_status', ['pending', 'reviewed', 'resolved', 'dismissed']);
 export const reportReasonEnum = pgEnum('report_reason', ['fake_profile', 'inappropriate_content', 'scam', 'underage', 'spam', 'other']);
-export const contactStatusEnum = pgEnum('contact_status', ['new', 'in_progress', 'resolved', 'closed']);
-export const contactTypeEnum = pgEnum('contact_type', ['support', 'inquiry', 'complaint', 'feedback', 'other']);
 
 // Reports table
 export const reports = pgTable('reports', {
@@ -20,22 +18,6 @@ export const reports = pgTable('reports', {
   profileUrl: text('profile_url'), // Store the URL of the reported profile
   status: reportStatusEnum('status').notNull().default('pending'),
   adminNotes: text('admin_notes'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-});
-
-// Contact/Support messages table
-export const contacts = pgTable('contacts', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  name: text('name').notNull(),
-  email: text('email').notNull(),
-  phone: text('phone'),
-  subject: text('subject').notNull(),
-  message: text('message').notNull(),
-  type: contactTypeEnum('type').notNull().default('support'),
-  status: contactStatusEnum('status').notNull().default('new'),
-  userIp: text('user_ip'),
-  adminResponse: text('admin_response'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -68,7 +50,5 @@ export const verificationTokensRelations = relations(verificationTokens, ({ one 
 // Types
 export type Report = typeof reports.$inferSelect;
 export type NewReport = typeof reports.$inferInsert;
-export type Contact = typeof contacts.$inferSelect;
-export type NewContact = typeof contacts.$inferInsert;
 export type VerificationToken = typeof verificationTokens.$inferSelect;
 export type NewVerificationToken = typeof verificationTokens.$inferInsert;

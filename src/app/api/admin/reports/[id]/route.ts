@@ -6,12 +6,13 @@ import { eq } from 'drizzle-orm';
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const adminCheck = await requireAdmin(request);
     if (adminCheck instanceof NextResponse) return adminCheck;
-    
+
+    const { id } = await params;
     const body = await request.json();
     const { status, adminNotes } = body;
 
@@ -29,7 +30,7 @@ export async function PATCH(
         adminNotes: adminNotes || null,
         updatedAt: new Date(),
       })
-      .where(eq(reports.id, params.id))
+      .where(eq(reports.id, id))
       .returning();
 
     if (!updatedReport) {

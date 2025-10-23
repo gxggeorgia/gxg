@@ -18,7 +18,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     { icon: Users, label: 'Users', path: '/admin', description: 'Manage users and profiles' },
     { icon: BarChart3, label: 'Analytics', path: '/admin/analytics', description: 'View statistics' },
     { icon: FileText, label: 'Reports', path: '/admin/reports', description: 'User reports and flags' },
-    { icon: MessageSquare, label: 'Support', path: '/admin/support', description: 'Support tickets' },
   ];
 
   const isActive = (path: string) => {
@@ -29,7 +28,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex ">
+    <div className="min-h-screen bg-gray-50 flex">
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div 
@@ -107,7 +106,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0 lg:ml-64 lg:h-[calc(100vh-4rem)] lg:overflow-y-auto pt-14 lg:pt-0">
+      <div className="flex-1 flex flex-col min-w-0 lg:ml-64">
         {/* Mobile Header */}
         <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between fixed top-16 left-0 right-0 z-30">
           <button
@@ -121,7 +120,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </div>
 
         {/* Content */}
-        <main className="flex-1 min-h-screen lg:min-h-0">
+        <main className="flex-1 overflow-hidden">
           {children}
         </main>
       </div>

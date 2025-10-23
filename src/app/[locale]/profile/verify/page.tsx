@@ -6,10 +6,7 @@ import { CheckCircle, Send, MessageCircle, ArrowLeft } from 'lucide-react';
 
 export default function VerifyPage() {
   const t = useTranslations();
-  const contactEmail =
-    process.env.NEXT_PUBLIC_CONTACT_MAIL_ADDRESS ||
-    process.env.CONTACT_MAIL_ADDRESS ||
-    'support@example.com';
+  const contactEmail = process.env.NEXT_PUBLIC_MAIL_ADDRESS || 'contact@escortgeorgia.com';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 py-4 md:py-8">

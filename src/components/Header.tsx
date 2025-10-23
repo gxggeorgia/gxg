@@ -2,7 +2,7 @@
 
 import { useTranslations, useLocale } from 'next-intl';
 import { Link, useRouter, usePathname } from '@/i18n/routing';
-import { Search, Mail, Menu, X, User, LogOut, ChevronDown, Heart, Home, MessageCircle } from 'lucide-react';
+import { Search, Mail, Menu, X, User, LogOut, ChevronDown, Heart, Home, MessageCircle, Headset } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import LoginModal from './auth/LoginModal';
 import RegistrationInfoModal from './auth/RegistrationInfoModal';
@@ -113,11 +113,11 @@ export default function Header() {
               {t('common.favorites')}
             </Link>
             <Link 
-              href="/contact" 
-              className={`flex items-center gap-2 text-base transition-colors text-green-400 hover:text-green-300 ${pathname === '/contact' ? 'font-semibold' : ''}`}
+              href="/support" 
+              className={`flex items-center gap-2 text-base transition-colors text-green-400 hover:text-green-300 ${pathname === '/support' ? 'font-semibold' : ''}`}
             >
-              <MessageCircle size={18} />
-              {t('common.contactUs')}
+              <Headset size={18} />
+              {t('common.support')}
             </Link>
           </nav>
 
@@ -268,12 +268,12 @@ export default function Header() {
                 {t('common.favorites')}
               </Link>
               <Link 
-                href="/contact" 
+                href="/support" 
                 className="px-4 py-2 hover:bg-slate-700 rounded transition flex items-center gap-2 text-green-400 hover:text-green-300"
                 onClick={() => setIsMenuOpen(false)}
               >
-                <MessageCircle size={18} />
-                {t('common.contactUs')}
+                <Headset size={18} />
+                {t('common.support')}
               </Link>
               <div className="border-t border-gray-700 my-2"></div>
               
