@@ -21,8 +21,8 @@ export async function POST(request: NextRequest) {
 
     // Validate and prepare updates
     const allowedFields = [
-      'status', 'statusMessage', 'role', 'isVip', 'isTop', 'isVipElite',
-      'vipExpiresAt', 'topExpiresAt', 'vipEliteExpiresAt',
+      'status', 'statusMessage', 'role', 'isVip', 'isFeatured', 'isVipElite',
+      'vipExpiresAt', 'featuredExpiresAt', 'vipEliteExpiresAt',
       'name', 'phone', 'city', 'district', 'emailVerified'
     ];
 
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
           }
         }
         // Handle subscription toggles
-        else if ((key === 'isVip' || key === 'isTop' || key === 'isVipElite') && value === false) {
+        else if ((key === 'isVip' || key === 'isFeatured' || key === 'isVipElite') && value === false) {
           updateData[key] = value;
           // Clear expiration date when disabling subscription
           const expiresAtKey = key.replace('is', '').toLowerCase() + 'ExpiresAt';

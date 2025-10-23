@@ -90,6 +90,8 @@ export async function POST(request: NextRequest) {
         email,
         password: hashedPassword,
         role: 'user', // Default role
+        status: 'pending', // New users start as pending
+        statusMessage: 'Waiting for admin verification. Please send a message on Telegram for verification.',
         
         // Basic Info
         phone,
@@ -138,6 +140,10 @@ export async function POST(request: NextRequest) {
         // Services & Tags
         services: services || [],
         tags: tags || [],
+        
+        // Images
+        images: [],
+        videos: [],
       })
       .returning();
 

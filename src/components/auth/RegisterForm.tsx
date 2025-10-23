@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { Globe, Instagram, MessageCircle, Twitter, Facebook, Phone, X, Eye, EyeOff } from 'lucide-react';
+import Image from 'next/image';
 import type { RegisterFormData } from '@/types/auth';
 import { locations } from '@/data/locations';
 import { services } from '@/data/services';
@@ -521,7 +522,7 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
                     className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                   />
                   <label htmlFor="viberAvailable" className="ml-2 text-sm text-gray-700 flex items-center gap-1">
-                    <MessageCircle size={16} className="text-purple-600" />
+                    <Image src="/icons/viber_logo-170x170.png" alt="Viber" width={16} height={16} />
                     {t('auth.viberAvailable')}
                   </label>
                 </div>

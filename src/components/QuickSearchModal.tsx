@@ -7,12 +7,13 @@ import { X, Search } from 'lucide-react';
 import { locations } from '@/data/locations';
 
 type FiltersState = {
+  search: string;
   gender: string;
   city: string;
   district: string;
   vipOnly: boolean;
   vipEliteOnly: boolean;
-  topOnly: boolean;
+  featured: boolean;
   verifiedOnly: boolean;
   newOnly: boolean;
   onlineOnly: boolean;
@@ -24,12 +25,13 @@ interface QuickSearchModalProps {
 }
 
 const defaultFilters: FiltersState = {
+  search: '',
   gender: '',
   city: '',
   district: '',
   vipOnly: false,
   vipEliteOnly: false,
-  topOnly: false,
+  featured: false,
   verifiedOnly: false,
   newOnly: false,
   onlineOnly: false,
@@ -46,12 +48,13 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
     if (!open) return;
 
     setFilters({
+      search: searchParams.get('search') || '',
       gender: searchParams.get('gender') || '',
       city: searchParams.get('city') || '',
       district: searchParams.get('district') || '',
       vipOnly: searchParams.get('vip') === 'true',
       vipEliteOnly: searchParams.get('vipElite') === 'true',
-      topOnly: searchParams.get('top') === 'true',
+      featured: searchParams.get('featured') === 'true',
       verifiedOnly: searchParams.get('verified') === 'true',
       newOnly: searchParams.get('new') === 'true',
       onlineOnly: searchParams.get('online') === 'true',
@@ -75,12 +78,13 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
 
   const handleSearch = () => {
     const params = new URLSearchParams();
+    if (filters.search) params.set('search', filters.search);
     if (filters.gender) params.set('gender', filters.gender);
     if (filters.city) params.set('city', filters.city);
     if (filters.district) params.set('district', filters.district);
     if (filters.vipOnly) params.set('vip', 'true');
     if (filters.vipEliteOnly) params.set('vipElite', 'true');
-    if (filters.topOnly) params.set('top', 'true');
+    if (filters.featured) params.set('featured', 'true');
     if (filters.verifiedOnly) params.set('verified', 'true');
     if (filters.newOnly) params.set('new', 'true');
     if (filters.onlineOnly) params.set('online', 'true');
@@ -92,12 +96,13 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
   const handleClearAll = () => {
     setFilters(defaultFilters);
     const params = new URLSearchParams(searchParams.toString());
+    params.delete('search');
     params.delete('gender');
     params.delete('city');
     params.delete('district');
     params.delete('vip');
     params.delete('vipElite');
-    params.delete('top');
+    params.delete('featured');
     params.delete('verified');
     params.delete('new');
     params.delete('online');
@@ -129,6 +134,17 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
         </div>
 
         <div className="max-h-[70vh] overflow-y-auto px-5 py-4 sm:px-6 sm:py-6 space-y-5">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Search by Name</label>
+            <input
+              type="text"
+              value={filters.search}
+              onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value }))}
+              placeholder="Search escorts..."
+              className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
+            />
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('search.city')}</label>
@@ -204,11 +220,11 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
               <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition">
                 <input
                   type="checkbox"
-                  checked={filters.topOnly}
-                  onChange={() => handleCheckboxToggle('topOnly')}
+                  checked={filters.featured}
+                  onChange={() => handleCheckboxToggle('featured')}
                   className="w-4 h-4 text-purple-600 accent-purple-600 rounded"
                 />
-                <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.topOnly')}</span>
+                <span className="text-xs sm:text-sm text-gray-700 font-medium">⭐ Featured</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition">
                 <input

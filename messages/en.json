@@ -2,6 +2,7 @@
   "common": {
     "home": "Home",
     "escorts": "Escorts",
+    "favorites": "Favorites",
     "contactUs": "Contact Us",
     "login": "Login",
     "register": "Register",
@@ -34,7 +35,25 @@
     "verificationFree": "Verification is free and only needs to be done once",
     "verifiedHigherVisibility": "Verified accounts get higher visibility in search results",
     "dontSharePhotos": "Do not share your verification photos with anyone else",
-    "needHelp": "Need help? Contact our support team at"
+    "needHelp": "Need help? Contact our support team at",
+    "accountPending": "Your account is pending verification. Please wait for admin approval.",
+    "accountSuspended": "Your account has been suspended. Please contact support for more information.",
+    "registerAsEscort": "Register as an Escort",
+    "subscriptionPackages": "Subscription Packages",
+    "freeOneFeatured": "Free - 1 Month Featured",
+    "getFeaturedFirstMonth": "Get featured for your first month",
+    "vipPass": "VIP Pass",
+    "vipPassDesc": "Premium visibility and features",
+    "eliteVipPass": "Elite VIP Pass",
+    "eliteVipPassDesc": "Maximum visibility and exclusive features",
+    "afterRegistrationVerify": "After registration, you'll need to verify your account:",
+    "submitPhotosWithId": "Submit clear photos with your ID",
+    "sendVerificationTelegram": "Send verification to our Telegram channel",
+    "waitAdminApproval": "Wait for admin approval (24-48 hours)",
+    "profileGoesLive": "Your profile goes live!",
+    "cancel": "Cancel",
+    "continueRegistration": "Continue to Registration",
+    "sendMessage": "Send Message"
   },
   "myAccount": "My Account",
   "auth": {
@@ -151,7 +170,15 @@
     "new": "NEW",
     "online": "Online",
     "viewProfile": "View Profile",
-    "boost": "Boost Profile"
+    "boost": "Boost Profile",
+    "years": "years",
+    "age": "Age",
+    "publicGallery": "Public Gallery",
+    "video": "VIDEO",
+    "noPhotos": "No photos available",
+    "about": "About",
+    "tags": "Tags",
+    "availability": "Availability"
   },
   "cities": {
     "tbilisi": "Tbilisi",

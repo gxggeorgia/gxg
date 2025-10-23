@@ -26,8 +26,8 @@ export const users = pgTable('users', {
   // Subscription features (can have multiple at same time)
   isVip: boolean('is_vip').notNull().default(false),
   vipExpiresAt: timestamp('vip_expires_at'),
-  isTop: boolean('is_top').notNull().default(false),
-  topExpiresAt: timestamp('top_expires_at'),
+  isFeatured: boolean('is_featured').notNull().default(false),
+  featuredExpiresAt: timestamp('featured_expires_at'),
   isVipElite: boolean('is_vip_elite').notNull().default(false),
   vipEliteExpiresAt: timestamp('vip_elite_expires_at'),
   
@@ -118,6 +118,9 @@ export const users = pgTable('users', {
     mimeType: string;
     thumbnailUrl?: string;
   }>>().default([]),
+  
+  // Cover image - selected image to display on cards
+  coverImage: text('cover_image'),
   
   // Timestamps
   lastActive: timestamp('last_active').defaultNow(),

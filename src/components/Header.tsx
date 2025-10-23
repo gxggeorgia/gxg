@@ -2,9 +2,10 @@
 
 import { useTranslations, useLocale } from 'next-intl';
 import { Link, useRouter, usePathname } from '@/i18n/routing';
-import { Search, Mail, Menu, X, User, LogOut, ChevronDown } from 'lucide-react';
+import { Search, Mail, Menu, X, User, LogOut, ChevronDown, Heart, Home, MessageCircle } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import LoginModal from './auth/LoginModal';
+import RegistrationInfoModal from './auth/RegistrationInfoModal';
 import QuickSearchModal from './QuickSearchModal';
 import { getCachedUser, setCachedUser, clearCachedUser } from '@/lib/userCache';
 
@@ -23,6 +24,7 @@ export default function Header() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isRegistrationInfoModalOpen, setIsRegistrationInfoModalOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -82,7 +84,7 @@ export default function Header() {
               {process.env.NEXT_PUBLIC_SITE_NAME || 'EG'}
             </Link>
             <a 
-              href="https://t.me/XgeorgiaNET" 
+              href={process.env.NEXT_PUBLIC_TELEGRAM_LINK || 'https://t.me'}
               target="_blank" 
               rel="noopener noreferrer"
               className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 md:px-3 py-1 sm:py-1.5 bg-blue-600 hover:bg-blue-700 rounded-md sm:rounded-lg transition text-[10px] sm:text-xs md:text-sm font-medium"
@@ -98,20 +100,23 @@ export default function Header() {
           <nav className="hidden lg:flex items-center gap-6">
             <Link 
               href="/" 
-              className={`text-base hover:text-purple-400 transition-colors ${pathname === '/' ? 'text-purple-400 font-semibold' : ''}`}
+              className={`flex items-center gap-2 text-base transition-colors text-blue-400 hover:text-blue-300 ${pathname === '/' ? 'font-semibold' : ''}`}
             >
+              <Home size={18} />
               {t('common.home')}
             </Link>
             <Link 
-              href="/escorts" 
-              className={`text-base hover:text-purple-400 transition-colors ${pathname === '/escorts' ? 'text-purple-400 font-semibold' : ''}`}
+              href="/favorites" 
+              className={`flex items-center gap-2 text-base transition-colors text-red-400 hover:text-red-300 ${pathname === '/favorites' ? 'font-semibold' : ''}`}
             >
-              Escorts
+              <Heart size={18} />
+              {t('common.favorites')}
             </Link>
             <Link 
               href="/contact" 
-              className={`text-base hover:text-purple-400 transition-colors ${pathname === '/contact' ? 'text-purple-400 font-semibold' : ''}`}
+              className={`flex items-center gap-2 text-base transition-colors text-green-400 hover:text-green-300 ${pathname === '/contact' ? 'font-semibold' : ''}`}
             >
+              <MessageCircle size={18} />
               {t('common.contactUs')}
             </Link>
           </nav>
@@ -138,9 +143,6 @@ export default function Header() {
               aria-label="Open quick search"
             >
               <Search size={18} className="sm:w-5 sm:h-5" />
-            </button>
-            <button className="hidden md:block hover:text-purple-400 transition p-2 hover:bg-slate-700/50 rounded">
-              <Mail size={20} />
             </button>
 
             {/* Auth Buttons / User Menu - Hidden on mobile */}
@@ -215,12 +217,12 @@ export default function Header() {
               </div>
             ) : (
               <>
-                <Link
-                  href="/register"
-                  className="hidden md:flex items-center bg-purple-600 px-4 py-2 rounded-lg text-sm hover:bg-purple-700 transition font-medium shadow-md"
+                <button
+                  onClick={() => setIsRegistrationInfoModalOpen(true)}
+                  className="hidden md:flex items-center bg-purple-600 px-4 py-2 rounded-lg text-sm hover:bg-purple-700 transition font-medium shadow-md text-white"
                 >
                   {t('common.register')}
-                </Link>
+                </button>
                 
                 {/* Login Dropdown */}
                 <div className="hidden md:block relative" ref={loginDropdownRef}>
@@ -251,29 +253,28 @@ export default function Header() {
             <nav className="flex flex-col gap-3">
               <Link 
                 href="/" 
-                className="px-4 py-2 hover:bg-slate-700 rounded transition"
+                className="px-4 py-2 hover:bg-slate-700 rounded transition flex items-center gap-2 text-blue-400 hover:text-blue-300"
                 onClick={() => setIsMenuOpen(false)}
               >
+                <Home size={18} />
                 {t('common.home')}
               </Link>
               <Link 
-                href="/escorts" 
-                className="px-4 py-2 hover:bg-slate-700 rounded transition"
+                href="/favorites" 
+                className="px-4 py-2 hover:bg-slate-700 rounded transition flex items-center gap-2 text-red-400 hover:text-red-300"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Escorts
+                <Heart size={18} />
+                {t('common.favorites')}
               </Link>
               <Link 
                 href="/contact" 
-                className="px-4 py-2 hover:bg-slate-700 rounded transition"
+                className="px-4 py-2 hover:bg-slate-700 rounded transition flex items-center gap-2 text-green-400 hover:text-green-300"
                 onClick={() => setIsMenuOpen(false)}
               >
+                <MessageCircle size={18} />
                 {t('common.contactUs')}
               </Link>
-              <button className="px-4 py-2 hover:bg-slate-700 rounded transition flex items-center gap-2">
-                <Mail size={18} />
-                Messages
-              </button>
               <div className="border-t border-gray-700 my-2"></div>
               
               {user ? (
@@ -332,13 +333,15 @@ export default function Header() {
                 </>
               ) : (
                 <>
-                  <Link
-                    href="/register"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded transition font-semibold block text-center"
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setIsRegistrationInfoModalOpen(true);
+                    }}
+                    className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded transition font-semibold block text-center w-full text-white"
                   >
                     {t('common.register')}
-                  </Link>
+                  </button>
                   <button
                     onClick={() => {
                       setIsLoginModalOpen(true);
@@ -359,21 +362,19 @@ export default function Header() {
 
     <QuickSearchModal open={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
-    {/* Login Modal - Works for both mobile and desktop */}
-    {isLoginModalOpen && (
-      <LoginModal
-        isOpen={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)}
-        onSuccess={() => {
-          fetchCurrentUser();
-          setIsLoginModalOpen(false);
-        }}
-        onSwitchToRegister={() => {
-          setIsLoginModalOpen(false);
-          router.push('/register');
-        }}
-      />
-    )}
+    <LoginModal
+      isOpen={isLoginModalOpen}
+      onClose={() => setIsLoginModalOpen(false)}
+      onSwitchToRegister={() => {
+        setIsLoginModalOpen(false);
+        setIsRegistrationInfoModalOpen(true);
+      }}
+    />
+    
+    <RegistrationInfoModal
+      isOpen={isRegistrationInfoModalOpen}
+      onClose={() => setIsRegistrationInfoModalOpen(false)}
+    />
     </>
   );
 }

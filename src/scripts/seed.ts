@@ -1,0 +1,173 @@
+// seed.ts
+// npx tsx src/scripts/seed.ts 
+
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import * as fs from 'fs';
+import * as path from 'path';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
+import { users } from '@/db/schema/users';
+import { hashPassword } from '@/lib/auth';
+
+// Hardcoded credentials
+const DATABASE_URL = 'postgresql://postgres:development@db.jbhvtgnqbeowuwprymbk.supabase.co:5432/postgres';
+const R2_ACCOUNT_ID = 'ba67b6801186968b1c16d513cc2858ce';
+const R2_ACCESS_KEY_ID = '58425f21a74e5cbf9a54882cfc858fff';
+const R2_SECRET_ACCESS_KEY = 'c943a677e499f181f3a471ba14890c0494224e586458ba73cbf092956aa2578f';
+const R2_BUCKET_NAME = 'eg-dev';
+
+// Initialize database
+const client = postgres(DATABASE_URL);
+const db = drizzle(client);
+
+const imageDir = '/home/ravi/Desktop/EG/temp/uploads';
+const images = fs.readdirSync(imageDir).filter(f => /\.(jpg|jpeg|png)$/i.test(f) && fs.statSync(path.join(imageDir, f)).isFile());
+
+// R2 Client with hardcoded credentials
+const r2Client = new S3Client({
+  region: 'auto',
+  endpoint: `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: R2_ACCESS_KEY_ID,
+    secretAccessKey: R2_SECRET_ACCESS_KEY,
+  },
+});
+
+async function uploadImageToR2(filePath: string, fileName: string, userId: string): Promise<string> {
+  try {
+    const fileContent = fs.readFileSync(filePath);
+    const key = `${userId}/images/${Date.now()}-${fileName}`;
+    
+    await r2Client.send(new PutObjectCommand({
+      Bucket: R2_BUCKET_NAME,
+      Key: key,
+      Body: fileContent,
+      ContentType: 'image/jpeg'
+    }));
+    
+    return `/api/media/${key}`;
+  } catch (error) {
+    console.error(`Failed to upload ${fileName}:`, error);
+    throw error;
+  }
+}
+
+const names = ['Natalia', 'Ketevan', 'Irina', 'Mariam', 'Tamara', 'Nino', 'Elene', 'Salome', 'Lela', 'Zurab', 'Eka', 'Nata', 'Tamar', 'Giorgi', 'Sopo', 'Maia', 'Natia', 'Beqa', 'Zara', 'Lizi'];
+const cities = ['Tbilisi', 'Batumi', 'Kutaisi', 'Gori', 'Zugdidi', 'Ganja'];
+const districts = ['Vake', 'Saburtalo', 'Central', 'Downtown', 'Beach'];
+const ethnicities = ['georgian', 'russian', 'azerbaijan', 'turk', 'armenian'];
+const hairColors = ['black', 'blonde', 'brown', 'brunette', 'auburn', 'dark_blonde', 'red'];
+const bustSizes = ['small_a', 'medium_b', 'large_c', 'very_large_d'];
+const builds = ['skinny', 'slim', 'regular', 'sport'];
+// Valid service keys from en.json services translations
+const services = [
+  'oralWithoutCondom',
+  'cim',
+  'cob',
+  'dfk',
+  'classicSex',
+  'striptease',
+  'goldenShower',
+  'gfe',
+  'footFetish',
+  'cunnilingus',
+  'analRimming',
+  'oralWithCondom',
+  'cof',
+  'deepThroat',
+  'analSex',
+  'sixtynine',
+  'eroticMassage',
+  'couples',
+  'threesome',
+  'sexToys',
+  'domination'
+];
+const languages = [
+  { name: 'Georgian', level: 'fluent' as const },
+  { name: 'English', level: 'conversational' as const },
+  { name: 'Russian', level: 'fluent' as const },
+  { name: 'French', level: 'conversational' as const }
+];
+
+async function seed() {
+  console.log('🌱 Starting seed with 20 profiles and R2 uploads...');
+  
+  for (let i = 0; i < 20; i++) {
+    const name = names[i];
+    const email = `${name.toLowerCase()}${i}@example.com`;
+    const password = await hashPassword('password123');
+    
+    const userId = `user-${i}`;
+    console.log(`\n📤 Uploading images for ${name}...`);
+    const profileImages = await Promise.all(
+      images.slice(i * 10, (i + 1) * 10).map(async (img, idx) => {
+        const imagePath = path.join(imageDir, img);
+        const stats = fs.statSync(imagePath);
+        const r2Url = await uploadImageToR2(imagePath, img, userId);
+        return {
+          url: r2Url,
+          mimeType: 'image/jpeg',
+          size: stats.size,
+          isPrimary: idx === 0
+        };
+      })
+    );
+
+    const userLangs = languages.slice(0, Math.floor(Math.random() * 3) + 1);
+    // Get 5-12 random services
+    const shuffledServices = [...services].sort(() => Math.random() - 0.5);
+    const userServices = shuffledServices.slice(0, Math.floor(Math.random() * 8) + 5);
+    
+    try {
+      await db.insert(users).values({
+        email,
+        password,
+        name,
+        phone: `+995${590000000 + i}`,
+        city: cities[Math.floor(Math.random() * cities.length)],
+        district: districts[Math.floor(Math.random() * districts.length)],
+        gender: (i < 18 ? 'female' : 'male') as 'female' | 'male',
+        dateOfBirth: `${1995 + Math.floor(Math.random() * 6)}-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}` as any,
+        ethnicity: ethnicities[Math.floor(Math.random() * ethnicities.length)] as 'georgian' | 'russian' | 'azerbaijan' | 'turk' | 'armenian',
+        height: 160 + Math.floor(Math.random() * 25),
+        weight: String(50 + Math.floor(Math.random() * 30)),
+        hairColor: hairColors[Math.floor(Math.random() * hairColors.length)] as any,
+        bustSize: i < 18 ? (bustSizes[Math.floor(Math.random() * bustSizes.length)] as any) : undefined,
+        build: builds[Math.floor(Math.random() * builds.length)] as any,
+        aboutYou: `Professional escort offering premium companionship services. Fluent in multiple languages, discreet and professional.`,
+        whatsappAvailable: Math.random() > 0.3,
+        viberAvailable: Math.random() > 0.4,
+        instagram: `@${name.toLowerCase()}_escort`,
+        incallAvailable: Math.random() > 0.2,
+        outcallAvailable: Math.random() > 0.1,
+        languages: userLangs,
+        services: userServices as any,
+        tags: ['Professional', 'Discreet', 'Verified'] as any,
+        currency: 'GEL',
+        rates: {
+          incall: { oneHour: String(100 + i * 5), twoHours: String(180 + i * 10), threeHours: String(260 + i * 15) },
+          outcall: { oneHour: String(140 + i * 5), twoHours: String(260 + i * 10), threeHours: String(380 + i * 15) }
+        },
+        images: profileImages,
+        videos: [],
+        coverImage: profileImages[0]?.url,
+        status: 'public' as 'public' | 'private' | 'suspended' | 'pending',
+        role: 'escort' as 'user' | 'escort' | 'admin',
+        isFeatured: Math.random() > 0.7,
+        isVip: Math.random() > 0.8
+      });
+      console.log(`✅ Created profile: ${name} with ${profileImages.length} images uploaded to R2`);
+    } catch (error) {
+      console.error(`❌ Error creating ${name}:`, error);
+    }
+  }
+  
+  console.log('\n✅ Seed completed! 20 profiles created with R2 images.');
+  process.exit(0);
+}
+
+seed().catch(err => {
+  console.error('Seed failed:', err);
+  process.exit(1);
+});

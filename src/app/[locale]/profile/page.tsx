@@ -17,12 +17,13 @@ interface UserProfile extends Omit<RegisterFormData, 'password' | 'confirmPasswo
   statusMessage: string | null;
   role: 'user' | 'escort' | 'admin';
   isVip: boolean;
-  isTop: boolean;
+  isFeatured: boolean;
   isVipElite: boolean;
   vipExpiresAt: string | null;
-  topExpiresAt: string | null;
+  featuredExpiresAt: string | null;
   vipEliteExpiresAt: string | null;
   createdAt: string;
+  coverImage?: string | null;
   rates?: {
     incall?: {
       thirtyMin?: string;
@@ -63,6 +64,7 @@ export default function ProfilePage() {
   const [deletingImages, setDeletingImages] = useState<Set<string>>(new Set());
   const [deletingVideo, setDeletingVideo] = useState(false);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [settingCoverImage, setSettingCoverImage] = useState(false);
 
   useEffect(() => {
     fetchProfile();
@@ -81,6 +83,33 @@ export default function ProfilePage() {
       setError('Failed to load profile');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const setCoverImage = async (imageUrl: string) => {
+    setSettingCoverImage(true);
+    setNotification({ type: 'success', message: 'Setting cover image...' });
+    try {
+      const response = await fetch('/api/profile/update', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ coverImage: imageUrl }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setProfile(data.user);
+        setNotification({ type: 'success', message: 'Cover image updated successfully!' });
+        setTimeout(() => setNotification(null), 3000);
+      } else {
+        setNotification({ type: 'error', message: 'Failed to set cover image' });
+        setTimeout(() => setNotification(null), 3000);
+      }
+    } catch (error) {
+      setNotification({ type: 'error', message: 'Error setting cover image' });
+      setTimeout(() => setNotification(null), 3000);
+    } finally {
+      setSettingCoverImage(false);
     }
   };
 
@@ -384,25 +413,36 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 py-8">
       {/* Notification Toast */}
       {notification && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4">
-          <div className={`rounded-lg shadow-lg p-4 flex items-center justify-between ${
-            notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4 animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className={`rounded-2xl shadow-2xl p-5 flex items-center justify-between backdrop-blur-sm border ${
+            notification.type === 'success' 
+              ? 'bg-gradient-to-r from-green-500 to-emerald-500 border-green-400/50' 
+              : 'bg-gradient-to-r from-red-500 to-rose-500 border-red-400/50'
           } text-white`}>
             <div className="flex items-center gap-3">
               {notification.type === 'success' ? (
-                <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
+                <div className="flex-shrink-0 animate-bounce">
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                </div>
               ) : (
                 <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
               )}
-              <p className="text-sm font-medium">{notification.message}</p>
+              <div>
+                <p className="text-sm font-bold">
+                  {notification.message.includes('Setting') && (
+                    <span className="inline-block animate-spin mr-2">⏳</span>
+                  )}
+                  {notification.message}
+                </p>
+              </div>
             </div>
             <button
               onClick={() => setNotification(null)}
-              className="ml-4 flex-shrink-0 hover:bg-white/20 rounded p-1 transition"
+              className="ml-4 flex-shrink-0 hover:bg-white/20 rounded-full p-1 transition duration-200 hover:scale-110"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -453,16 +493,16 @@ export default function ProfilePage() {
                 </div>
               )}
               
-              {/* TOP Badge */}
-              {profile.isTop && (
+              {/* FEATURED Badge */}
+              {profile.isFeatured && (
                 <div className="px-2 md:px-3 py-1.5 md:py-2 rounded-md bg-blue-700 border-2 border-blue-400 shadow-lg flex-shrink-0">
                   <div className="flex items-center gap-1.5">
                     <Star size={14} className="text-white md:w-4 md:h-4 fill-white" />
                     <div className="flex flex-col">
-                      <span className="text-white font-bold text-[10px] md:text-xs leading-tight whitespace-nowrap">TOP</span>
-                      {profile.topExpiresAt && (
+                      <span className="text-white font-bold text-[10px] md:text-xs leading-tight whitespace-nowrap">FEATURED</span>
+                      {profile.featuredExpiresAt && (
                         <span className="text-blue-100 text-[8px] md:text-[10px] leading-tight whitespace-nowrap">
-                          {new Date(profile.topExpiresAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                          {new Date(profile.featuredExpiresAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                         </span>
                       )}
                     </div>
@@ -635,6 +675,24 @@ export default function ProfilePage() {
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>
                               </div>
+                            </button>
+                            {/* Set as Cover Button */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setCoverImage(image.url);
+                              }}
+                              disabled={settingCoverImage}
+                              className={`absolute bottom-1 left-1 rounded-full p-2 transition shadow-lg md:opacity-0 md:group-hover:opacity-100 ${
+                                profile?.coverImage === image.url
+                                  ? 'bg-blue-600 text-white'
+                                  : 'bg-gray-600 text-white hover:bg-blue-600'
+                              }`}
+                              title={profile?.coverImage === image.url ? 'Cover image' : 'Set as cover'}
+                            >
+                              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                              </svg>
                             </button>
                             <button
                               onClick={(e) => {

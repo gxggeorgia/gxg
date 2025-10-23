@@ -33,6 +33,7 @@ export function verifyToken(token: string): JWTPayload | null {
   try {
     return jwt.verify(token, JWT_SECRET) as JWTPayload;
   } catch (error) {
+    console.error('Token verification error:', error instanceof Error ? error.message : error);
     return null;
   }
 }
@@ -62,25 +63,32 @@ export async function getAuthToken(): Promise<string | null> {
 
 // Get current user from token
 export async function getCurrentUser() {
-  const token = await getAuthToken();
-  if (!token) return null;
-
-  const payload = verifyToken(token);
-  if (!payload) return null;
-
   try {
+    const token = await getAuthToken();
+    if (!token) {
+      return null;
+    }
+
+    const payload = verifyToken(token);
+    if (!payload) {
+      return null;
+    }
+
     const [user] = await db
       .select()
       .from(users)
       .where(eq(users.id, payload.userId))
       .limit(1);
 
-    if (!user) return null;
+    if (!user) {
+      return null;
+    }
 
     // Don't return password
     const { password, ...userWithoutPassword } = user;
     return userWithoutPassword;
   } catch (error) {
+    console.error('Error in getCurrentUser:', error);
     return null;
   }
 }

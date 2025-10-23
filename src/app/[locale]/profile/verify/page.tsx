@@ -76,7 +76,7 @@ export default function VerifyPage() {
                   {t('common.sendToTelegramDesc')}
                 </p>
                 <a
-                  href="https://t.me/your_verification_channel"
+                  href={process.env.NEXT_PUBLIC_TELEGRAM_LINK || 'https://t.me'}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 md:px-6 md:py-3 rounded-lg text-sm md:text-base font-semibold transition shadow-md"
@@ -158,7 +158,7 @@ export default function VerifyPage() {
               <span className="truncate">{t('common.backToProfile')}</span>
             </Link>
             <a
-              href="https://t.me/your_verification_channel"
+              href={process.env.NEXT_PUBLIC_TELEGRAM_LINK || 'https://t.me'}
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 inline-flex items-center justify-center gap-1.5 md:gap-2 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2.5 md:px-4 md:py-3 rounded-lg font-semibold transition text-xs md:text-sm"

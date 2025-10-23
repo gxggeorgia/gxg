@@ -18,39 +18,45 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
 
     // Only update allowed fields (exclude email, password, role, etc.)
+    // Only include fields that are actually provided to avoid setting required fields to null
     const allowedFields: any = {
-      name: body.name || null,
-      phone: body.phone,
-      whatsappAvailable: body.whatsappAvailable || false,
-      viberAvailable: body.viberAvailable || false,
-      website: body.website || null,
-      instagram: body.instagram || null,
-      snapchat: body.snapchat || null,
-      twitter: body.twitter || null,
-      facebook: body.facebook || null,
-      city: body.city,
-      district: body.district || null,
-      gender: body.gender,
-      dateOfBirth: body.dateOfBirth,
-      ethnicity: body.ethnicity,
-      height: body.height ? parseInt(body.height) : null,
-      weight: body.weight ? body.weight.toString() : null,
-      aboutYou: body.aboutYou,
-      hairColor: body.hairColor || null,
-      bustSize: body.bustSize || null,
-      build: body.build || null,
-      incallAvailable: body.incallAvailable || false,
-      outcallAvailable: body.outcallAvailable || false,
-      currency: body.currency || 'GEL',
-      rates: {
-        incall: body.incallRates || {},
-        outcall: body.outcallRates || {},
-      },
-      languages: (body.languages || []).filter((l: any) => l.name && l.level),
-      services: body.services || [],
-      tags: body.tags || [],
       updatedAt: new Date(),
     };
+
+    // Add optional fields if provided
+    if (body.name !== undefined) allowedFields.name = body.name || null;
+    if (body.phone !== undefined) allowedFields.phone = body.phone;
+    if (body.whatsappAvailable !== undefined) allowedFields.whatsappAvailable = body.whatsappAvailable || false;
+    if (body.viberAvailable !== undefined) allowedFields.viberAvailable = body.viberAvailable || false;
+    if (body.website !== undefined) allowedFields.website = body.website || null;
+    if (body.instagram !== undefined) allowedFields.instagram = body.instagram || null;
+    if (body.snapchat !== undefined) allowedFields.snapchat = body.snapchat || null;
+    if (body.twitter !== undefined) allowedFields.twitter = body.twitter || null;
+    if (body.facebook !== undefined) allowedFields.facebook = body.facebook || null;
+    if (body.city !== undefined) allowedFields.city = body.city;
+    if (body.district !== undefined) allowedFields.district = body.district || null;
+    if (body.gender !== undefined) allowedFields.gender = body.gender;
+    if (body.dateOfBirth !== undefined) allowedFields.dateOfBirth = body.dateOfBirth;
+    if (body.ethnicity !== undefined) allowedFields.ethnicity = body.ethnicity;
+    if (body.height !== undefined) allowedFields.height = body.height ? parseInt(body.height) : null;
+    if (body.weight !== undefined) allowedFields.weight = body.weight ? body.weight.toString() : null;
+    if (body.aboutYou !== undefined) allowedFields.aboutYou = body.aboutYou;
+    if (body.hairColor !== undefined) allowedFields.hairColor = body.hairColor || null;
+    if (body.bustSize !== undefined) allowedFields.bustSize = body.bustSize || null;
+    if (body.build !== undefined) allowedFields.build = body.build || null;
+    if (body.incallAvailable !== undefined) allowedFields.incallAvailable = body.incallAvailable || false;
+    if (body.outcallAvailable !== undefined) allowedFields.outcallAvailable = body.outcallAvailable || false;
+    if (body.currency !== undefined) allowedFields.currency = body.currency || 'GEL';
+    if (body.incallRates !== undefined || body.outcallRates !== undefined) {
+      allowedFields.rates = {
+        incall: body.incallRates || {},
+        outcall: body.outcallRates || {},
+      };
+    }
+    if (body.languages !== undefined) allowedFields.languages = (body.languages || []).filter((l: any) => l.name && l.level);
+    if (body.services !== undefined) allowedFields.services = body.services || [];
+    if (body.tags !== undefined) allowedFields.tags = body.tags || [];
+    if (body.coverImage !== undefined) allowedFields.coverImage = body.coverImage || null;
 
     // Update user with allowed fields
     const [updatedUser] = await db

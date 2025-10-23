@@ -49,7 +49,7 @@ async function createAdmin() {
         email,
         password: hashedPassword,
         name: 'Admin',
-        phone: '+995000000000',
+        phone: '+990000000000',
         role: 'admin',
         status: 'private',
         statusMessage: null,
@@ -85,3 +85,5 @@ async function createAdmin() {
 }
 
 createAdmin();
+
+// npx tsx src/scripts/create-admin.ts

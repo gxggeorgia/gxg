@@ -5,6 +5,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import Header from '@/components/Header';
+import UserStatusBar from '@/components/UserStatusBar';
 import "../globals.css";
 
 const geistSans = Geist({
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
     description: "Find verified escorts and companions in Georgia. Browse profiles, rates, and services.",
     images: [
       {
-        url: `${baseUrl}/logo.png`,
+        url: `${baseUrl}/icons/logo.png`,
         width: 1200,
         height: 630,
         alt: "Escort Directory Georgia Logo",
@@ -51,7 +52,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Escort Directory Georgia | Verified Escorts & Companions",
     description: "Find verified escorts and companions in Georgia.",
-    images: [`${baseUrl}/logo.png`],
+    images: [`${baseUrl}/icons/logo.png`],
     creator: "@escortdirectoryga",
   },
   icons: {
@@ -103,7 +104,7 @@ export default async function LocaleLayout({
     '@type': 'Organization',
     name: 'Escort Directory Georgia',
     url: baseUrl,
-    logo: `${baseUrl}/logo.png`,
+    logo: `${baseUrl}/icons/logo.png`,
     description: 'Find verified escorts and companions in Georgia',
     sameAs: [
       'https://www.facebook.com/escortdirectoryga',
@@ -150,6 +151,7 @@ export default async function LocaleLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider messages={messages}>
+          <UserStatusBar />
           <Header />
           {children}
         </NextIntlClientProvider>

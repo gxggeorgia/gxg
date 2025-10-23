@@ -15,10 +15,10 @@ interface User {
   status: 'private' | 'public' | 'suspended' | 'pending';
   statusMessage: string | null;
   isVip: boolean;
-  isTop: boolean;
+  isFeatured: boolean;
   isVipElite: boolean;
   vipExpiresAt: string | null;
-  topExpiresAt: string | null;
+  featuredExpiresAt: string | null;
   vipEliteExpiresAt: string | null;
 }
 
@@ -152,7 +152,7 @@ export default function AdminPage() {
           </div>
           <div className="bg-white rounded-lg shadow p-2 md:p-4">
             <div className="text-[10px] md:text-sm text-gray-600">VIP</div>
-            <div className="text-lg md:text-2xl font-bold text-purple-600">{users.filter(u => u.isVip || u.isTop || u.isVipElite).length}</div>
+            <div className="text-lg md:text-2xl font-bold text-purple-600">{users.filter(u => u.isVip || u.isFeatured || u.isVipElite).length}</div>
           </div>
           <div className="bg-white rounded-lg shadow p-2 md:p-4">
             <div className="text-[10px] md:text-sm text-gray-600">Banned</div>
@@ -204,10 +204,10 @@ export default function AdminPage() {
                             <span className="text-xs font-medium text-purple-600">VIP</span>
                           </div>
                         )}
-                        {user.isTop && (
+                        {user.isFeatured && (
                           <div className="flex items-center gap-1">
                             <Star className="w-4 h-4 text-blue-600 fill-blue-600" />
-                            <span className="text-xs font-medium text-blue-600">TOP</span>
+                            <span className="text-xs font-medium text-blue-600">FEATURED</span>
                           </div>
                         )}
                         {user.isVipElite && (
@@ -216,7 +216,7 @@ export default function AdminPage() {
                             <span className="text-xs font-medium text-yellow-600">ELITE</span>
                           </div>
                         )}
-                        {!user.isVip && !user.isTop && !user.isVipElite && (
+                        {!user.isVip && !user.isFeatured && !user.isVipElite && (
                           <span className="text-xs text-gray-500">None</span>
                         )}
                       </div>

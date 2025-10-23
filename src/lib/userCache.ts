@@ -39,7 +39,7 @@ interface CachedUser {
     services?: string[];
     tags?: string[];
     isVip?: boolean;
-    isTop?: boolean;
+    isFeatured?: boolean;
     isVipElite?: boolean;
     createdAt: string;
     updatedAt: string;
