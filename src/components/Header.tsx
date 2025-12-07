@@ -78,34 +78,36 @@ export default function Header() {
       <header className="bg-black text-white w-full   z-50 shadow-lg border-b border-slate-700/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Mobile Header (2 Rows) */}
-          <div className="md:hidden flex flex-col py-2 gap-2">
-            {/* Row 1: Logo, Telegram, Language, Search */}
-            <div className="flex items-center justify-between gap-1">
-              <div className="flex items-center gap-2 shrink-0">
-                <Link href="/" className="flex items-center">
-                  <img
-                    src="/icons/logo-bgless.png"
-                    alt={process.env.NEXT_PUBLIC_SITE_NAME || 'EG'}
-                    className="h-12 w-auto object-contain"
-                  />
-                </Link>
-                <a
-                  href={process.env.NEXT_PUBLIC_TELEGRAM_LINK || 'https://t.me'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-md text-xs font-medium"
-                >
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z" />
-                  </svg>
-                  <span>{t('common.telegram')}</span>
-                </a>
-              </div>
+          <div className="md:hidden flex flex-col pb-2 gap-2">
+            {/* Row 1: Logo */}
+            <div className="flex justify-center border-b border-slate-800/50">
+              <Link href="/" className="flex items-center">
+                <img
+                  src="/icons/logo-bgless.png"
+                  alt={process.env.NEXT_PUBLIC_SITE_NAME || 'EG'}
+                  className="h-20 w-auto object-contain"
+                />
+              </Link>
+            </div>
 
-              <div className="flex items-center gap-2 shrink-0">
+            {/* Row 2: Telegram, Language, Search */}
+            <div className="flex items-center justify-between gap-2 px-1">
+              <a
+                href={process.env.NEXT_PUBLIC_TELEGRAM_LINK || 'https://t.me'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-2 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-md text-xs font-medium flex-1 justify-center h-[32px]"
+              >
+                <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z" />
+                </svg>
+                <span className="truncate">{t('common.telegram')}</span>
+              </a>
+
+              <div className="relative flex-1 h-[32px]">
                 <select
                   value={locale}
-                  className="bg-slate-700/50 text-white px-2 py-1.5 rounded text-xs font-medium border border-slate-600"
+                  className="w-full h-full bg-slate-700/50 text-white pl-2 pr-6 py-1.5 rounded text-xs font-medium border border-slate-600 appearance-none text-center"
                   onChange={(e) => {
                     const newLocale = e.target.value as 'en' | 'ka' | 'ru';
                     router.replace(pathname, { locale: newLocale });
@@ -115,17 +117,21 @@ export default function Header() {
                   <option value="ka">ქართული</option>
                   <option value="ru">Русский</option>
                 </select>
-                <button
-                  onClick={() => setIsSearchOpen(true)}
-                  className="flex items-center gap-1.5 bg-slate-700/50 px-2.5 py-1.5 rounded text-xs font-medium border border-slate-600"
-                >
-                  <Search size={14} />
-                  <span>Search</span>
-                </button>
+                <div className="absolute inset-y-0 right-1 flex items-center pointer-events-none text-gray-400">
+                  <ChevronDown size={12} />
+                </div>
               </div>
+
+              <button
+                onClick={() => setIsSearchOpen(true)}
+                className="flex items-center gap-1.5 bg-slate-700/50 px-2 py-1.5 rounded text-xs font-medium border border-slate-600 h-[32px] flex-1 justify-center"
+              >
+                <Search size={14} className="shrink-0" />
+                <span>Search</span>
+              </button>
             </div>
 
-            {/* Row 2: Menu, Login/User */}
+            {/* Row 3: Menu, Login/User */}
             <div className="flex items-center justify-between gap-2">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}

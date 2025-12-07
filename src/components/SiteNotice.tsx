@@ -8,7 +8,7 @@ export default function SiteNotice() {
     const t = useTranslations('siteNotice');
     const telegramUsername = process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || '@gogoxgeorgia';
     const telegramLink = process.env.NEXT_PUBLIC_TELEGRAM_LINK || 'https://t.me/gogoxgeorgia';
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'xgeorgia.me';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'gogoxgeorgia.ge';
     const domain = siteUrl.replace(/^https?:\/\//, '').replace(/\/$/, '').toUpperCase();
 
     const [isExpanded, setIsExpanded] = useState(true);

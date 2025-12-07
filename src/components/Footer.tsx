@@ -13,7 +13,7 @@ export default function Footer() {
     if (pathname.includes('/admin')) {
         return null;
     }
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'xgeorgia.me';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'gogoxgeorgia.ge';
     const domain = siteUrl.replace(/^https?:\/\//, '').replace(/\/$/, '').toUpperCase();
     const year = new Date().getFullYear();
 
