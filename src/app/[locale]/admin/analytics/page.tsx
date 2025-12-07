@@ -39,7 +39,7 @@ export default function AnalyticsPage() {
   const filteredData = useMemo(() => {
     if (!data) return null;
 
-    // Data is already filtered by time from the API
+    // Data is already filtepurple by time from the API
     const views = data.views;
     const interactions = data.interactions;
 

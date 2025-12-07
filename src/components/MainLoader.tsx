@@ -60,7 +60,7 @@ export default function MainLoader({
                 ))}
               </div>
               <div className="bg-white px-2.5 py-1.5 rounded-full w-12 h-7"></div>
-              <div className="bg-purple-200 p-2.5 rounded-full w-9 h-9"></div>
+              <div className="bg-red-200 p-2.5 rounded-full w-9 h-9"></div>
             </div>
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function MainLoader({
             <div className="flex justify-center items-center gap-2 mt-8 animate-pulse">
               <div className="w-10 h-10 bg-gray-200 rounded"></div>
               <div className="w-10 h-10 bg-gray-200 rounded"></div>
-              <div className="w-10 h-10 bg-purple-200 rounded"></div>
+              <div className="w-10 h-10 bg-red-200 rounded"></div>
               <div className="w-10 h-10 bg-gray-200 rounded"></div>
               <div className="w-10 h-10 bg-gray-200 rounded"></div>
             </div>

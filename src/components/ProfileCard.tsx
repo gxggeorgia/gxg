@@ -80,7 +80,7 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
               </div>
             </>
           ) : (
-            <div className="w-full h-full bg-linear-to-br from-pink-200 to-purple-200 flex items-center justify-center">
+            <div className="w-full h-full bg-linear-to-br from-pink-200 to-red-200 flex items-center justify-center">
               <span className="text-6xl">👤</span>
             </div>
           )}
@@ -88,7 +88,7 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
           {/* Badges */}
           <div className="absolute top-2 left-2 md:top-2 md:left-2 flex flex-col gap-0.5">
             {profile.isVipElite && (
-              <span className="bg-purple-600 text-white text-[9px] md:text-[10px] font-bold px-1 md:px-1.5 py-0.5 rounded whitespace-nowrap">
+              <span className="bg-red-600 text-white text-[9px] md:text-[10px] font-bold px-1 md:px-1.5 py-0.5 rounded whitespace-nowrap">
                 Elite VIP
               </span>
             )}
@@ -109,21 +109,21 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
           )}
 
           {/* Online Status */}
-          {profile.isOnline && (
+          {/* {profile.isOnline && (
             <div className="absolute bottom-2 left-2 md:left-2">
               <span className="bg-green-500 text-white text-[10px] md:text-xs font-bold px-1.5 md:px-2 py-0.5 md:py-1 rounded-full flex items-center gap-0.5 md:gap-1 whitespace-nowrap">
                 <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-white rounded-full animate-pulse"></span>
                 {t('profile.online')}
               </span>
             </div>
-          )}
+          )} */}
 
           {/* Like Button */}
           <button
             onClick={handleLike}
             className={`absolute bottom-2 right-2 md:right-3 p-1.5 md:p-2 rounded-full transition backdrop-blur-sm ${isFavorite
-                ? 'bg-red-500 hover:bg-red-600 text-white'
-                : 'bg-black/40 hover:bg-red-500 text-white hover:text-white'
+              ? 'bg-red-500 hover:bg-red-600 text-white'
+              : 'bg-black/40 hover:bg-red-500 text-white hover:text-white'
               }`}
             aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
           >

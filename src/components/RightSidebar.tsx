@@ -55,15 +55,15 @@ export default function RightSidebar() {
   };
 
   return (
-    <div className="bg-purple-50 border border-purple-200 rounded-lg">
+    <div className="bg-red-50 border border-red-200 rounded-lg">
       {/* Header - Clickable on mobile */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full p-4 sm:p-6 flex items-center justify-between lg:cursor-default"
       >
-        <h3 className="text-lg sm:text-xl font-bold text-purple-700">Search</h3>
+        <h3 className="text-lg sm:text-xl font-bold text-red-700">Search</h3>
         <ChevronDown
-          className={`lg:hidden transition-transform text-purple-700 ${isOpen ? 'rotate-180' : ''}`}
+          className={`lg:hidden transition-transform text-red-700 ${isOpen ? 'rotate-180' : ''}`}
           size={20}
         />
       </button>
@@ -78,7 +78,7 @@ export default function RightSidebar() {
             <select
               value={filters.city}
               onChange={(e) => handleCityChange(e.target.value)}
-              className="w-full px-2 py-2 bg-white border-2 border-gray-200 rounded-lg text-xs font-medium text-gray-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
+              className="w-full px-2 py-2 bg-white border-2 border-gray-200 rounded-lg text-xs font-medium text-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition"
             >
               <option value="">All Cities</option>
               {locations.map(city => (
@@ -94,7 +94,7 @@ export default function RightSidebar() {
               value={filters.district}
               onChange={(e) => setFilters(prev => ({ ...prev, district: e.target.value }))}
               disabled={!filters.city || districts.length === 0}
-              className="w-full px-2 py-2 bg-white border-2 border-gray-200 rounded-lg text-xs font-medium text-gray-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-2 py-2 bg-white border-2 border-gray-200 rounded-lg text-xs font-medium text-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <option value="">All Districts</option>
               {districts.map(district => (
@@ -110,7 +110,7 @@ export default function RightSidebar() {
           <select
             value={filters.gender}
             onChange={(e) => setFilters(prev => ({ ...prev, gender: e.target.value }))}
-            className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
+            className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition"
           >
             <option value="">All Genders</option>
             <option value="female">{t('gender.female')}</option>
@@ -121,57 +121,57 @@ export default function RightSidebar() {
 
         {/* Filters */}
         <div className="grid grid-cols-2 gap-2">
-          <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition">
+          <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-red-300 transition">
             <input
               type="checkbox"
               checked={filters.vipOnly}
               onChange={() => handleCheckboxChange('vipOnly')}
-              className="w-4 h-4 text-purple-600 accent-purple-600 rounded"
+              className="w-4 h-4 text-red-600 accent-red-600 rounded"
             />
             <span className="text-xs sm:text-sm text-gray-700 font-medium">VIP</span>
           </label>
-          <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition">
+          <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-red-300 transition">
             <input
               type="checkbox"
               checked={filters.vipEliteOnly}
               onChange={() => handleCheckboxChange('vipEliteOnly')}
-              className="w-4 h-4 text-purple-600 accent-purple-600 rounded"
+              className="w-4 h-4 text-red-600 accent-red-600 rounded"
             />
             <span className="text-xs sm:text-sm text-gray-700 font-medium">VIP Elite</span>
           </label>
-          <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition">
+          <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-red-300 transition">
             <input
               type="checkbox"
               checked={filters.topOnly}
               onChange={() => handleCheckboxChange('topOnly')}
-              className="w-4 h-4 text-purple-600 accent-purple-600 rounded"
+              className="w-4 h-4 text-red-600 accent-red-600 rounded"
             />
             <span className="text-xs sm:text-sm text-gray-700 font-medium">TOP</span>
           </label>
-          <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition">
+          <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-red-300 transition">
             <input
               type="checkbox"
               checked={filters.verifiedOnly}
               onChange={() => handleCheckboxChange('verifiedOnly')}
-              className="w-4 h-4 text-purple-600 accent-purple-600 rounded"
+              className="w-4 h-4 text-red-600 accent-red-600 rounded"
             />
             <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.verifiedOnly')}</span>
           </label>
-          <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition">
+          <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-red-300 transition">
             <input
               type="checkbox"
               checked={filters.newOnly}
               onChange={() => handleCheckboxChange('newOnly')}
-              className="w-4 h-4 text-purple-600 accent-purple-600 rounded"
+              className="w-4 h-4 text-red-600 accent-red-600 rounded"
             />
             <span className="text-xs sm:text-sm text-gray-700 font-medium">New</span>
           </label>
-          <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition">
+          <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-red-300 transition">
             <input
               type="checkbox"
               checked={filters.onlineOnly}
               onChange={() => handleCheckboxChange('onlineOnly')}
-              className="w-4 h-4 text-purple-600 accent-purple-600 rounded"
+              className="w-4 h-4 text-red-600 accent-red-600 rounded"
             />
             <span className="text-xs sm:text-sm text-gray-700 font-medium">Online</span>
           </label>
@@ -180,13 +180,13 @@ export default function RightSidebar() {
         {/* Search Button */}
         <button
           onClick={handleSearch}
-          className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition flex items-center justify-center gap-2 text-sm sm:text-base shadow-md"
+          className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition flex items-center justify-center gap-2 text-sm sm:text-base shadow-md"
         >
           <Search size={18} className="sm:w-5 sm:h-5" />
           {t('search.searchButton')}
         </button>
 
-      
+
       </div>
     </div>
   );

@@ -185,7 +185,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                                                 </span>
                                             )}
                                             {profile.isVip && !profile.isVipElite && (
-                                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800">
+                                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-800">
                                                     VIP
                                                 </span>
                                             )}
@@ -286,7 +286,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 onClick={() => trackInteraction('viber')}
-                                                className="flex items-center gap-2 text-gray-700 p-2.5 bg-purple-50 rounded-lg hover:bg-purple-100 text-sm"
+                                                className="flex items-center gap-2 text-gray-700 p-2.5 bg-red-50 rounded-lg hover:bg-red-100 text-sm"
                                             >
                                                 <Image src="/icons/viber_logo-170x170.png" alt="Viber" width={16} height={16} />
                                                 <span className="font-medium flex-1">{tCommon('viber')}</span>
@@ -298,7 +298,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                                     {isOwnProfile ? (
                                         <button
                                             onClick={() => router.push('/profile/edit')}
-                                            className="w-full mt-3 bg-white text-purple-700 hover:bg-purple-50 transition-colors py-2.5 px-4 rounded-lg font-medium text-sm border border-purple-200 flex items-center justify-center gap-2"
+                                            className="w-full mt-3 bg-white text-red-700 hover:bg-red-50 transition-colors py-2.5 px-4 rounded-lg font-medium text-sm border border-red-200 flex items-center justify-center gap-2"
                                         >
                                             <Edit2 size={14} />
                                             {tCommon('editProfile')}
@@ -332,7 +332,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                 {/* Images & Videos Section */}
                 <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 border border-gray-200 mb-6">
                     <h3 className="text-base md:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                        <svg className="w-4 h-4 md:w-5 md:h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 md:w-5 md:h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                         {tProfile('publicGallery')} ({(profile.images?.length || 0) + (profile.videos?.length || 0)})
@@ -344,7 +344,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                             {profile.videos?.map((video, index) => (
                                 <div
                                     key={`vid-${index}`}
-                                    className="relative group overflow-hidden rounded-lg w-full sm:w-[calc(50%-0.5rem)] md:w-[calc(50%-0.5rem)] border-2 border-purple-300"
+                                    className="relative group overflow-hidden rounded-lg w-full sm:w-[calc(50%-0.5rem)] md:w-[calc(50%-0.5rem)] border-2 border-red-300"
                                 >
                                     <video
                                         src={video.url}
@@ -356,7 +356,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                                         Your browser does not support the video tag.
                                     </video>
                                     {/* Video Badge */}
-                                    <div className="absolute top-2 right-2 bg-purple-600 text-white px-3 py-1.5 rounded-md text-sm font-bold flex items-center gap-1.5">
+                                    <div className="absolute top-2 right-2 bg-red-600 text-white px-3 py-1.5 rounded-md text-sm font-bold flex items-center gap-1.5">
                                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M8 5v14l11-7z" />
                                         </svg>
@@ -432,15 +432,15 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
 
                         {/* Services */}
                         {profile.services && profile.services.length > 0 && (
-                            <div className="bg-white rounded-2xl shadow-lg p-6 border border-purple-100">
+                            <div className="bg-white rounded-2xl shadow-lg p-6 border border-red-100">
                                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                                    <Star className="w-6 h-6 text-purple-600" />
+                                    <Star className="w-6 h-6 text-red-600" />
                                     {tAuth('services')}
                                 </h2>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     {profile.services.map((service, index) => (
-                                        <div key={service} className="flex items-start gap-3 p-3 bg-linear-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-100 hover:shadow-md transition-shadow">
-                                            <span className="shrink-0 w-7 h-7 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                                        <div key={service} className="flex items-start gap-3 p-3 bg-linear-to-r from-red-50 to-blue-50 rounded-lg border border-red-100 hover:shadow-md transition-shadow">
+                                            <span className="shrink-0 w-7 h-7 bg-red-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
                                                 {index + 1}
                                             </span>
                                             <span className="flex-1 text-gray-800 font-medium text-sm leading-relaxed">
@@ -478,7 +478,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                                         <thead>
                                             <tr className="border-b-2 border-gray-200">
                                                 <th className="text-left py-3 px-4 font-semibold text-gray-700">{tAuth('duration')}</th>
-                                                {profile.incallAvailable && <th className="text-center py-3 px-4 font-semibold text-purple-700">{tAuth('incall')}</th>}
+                                                {profile.incallAvailable && <th className="text-center py-3 px-4 font-semibold text-red-700">{tAuth('incall')}</th>}
                                                 {profile.outcallAvailable && <th className="text-center py-3 px-4 font-semibold text-blue-700">{tAuth('outcall')}</th>}
                                             </tr>
                                         </thead>
@@ -494,7 +494,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                                                         {profile.incallAvailable && (
                                                             <td className="py-3 px-4 text-center">
                                                                 {incallPrice && incallPrice !== '0' ? (
-                                                                    <span className="font-bold text-purple-900">{incallPrice} {profile.currency}</span>
+                                                                    <span className="font-bold text-red-900">{incallPrice} {profile.currency}</span>
                                                                 ) : (
                                                                     <span className="text-gray-400">-</span>
                                                                 )}
@@ -524,16 +524,16 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
 
                         {/* Languages */}
                         {profile.languages && profile.languages.length > 0 && (
-                            <div className="bg-white rounded-2xl shadow-lg p-6 border border-purple-100">
+                            <div className="bg-white rounded-2xl shadow-lg p-6 border border-red-100">
                                 <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                    <LanguagesIcon size={20} className="text-purple-600" />
+                                    <LanguagesIcon size={20} className="text-red-600" />
                                     {tAuth('languagesSpoken')}
                                 </h2>
                                 <div className="space-y-2">
                                     {profile.languages.map((lang, idx) => (
-                                        <div key={idx} className="flex items-center justify-between p-3 bg-purple-50 rounded-lg border border-purple-100">
+                                        <div key={idx} className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-100">
                                             <span className="font-medium text-gray-900">{lang.name}</span>
-                                            <span className="text-sm text-purple-700 capitalize font-medium">{lang.level}</span>
+                                            <span className="text-sm text-red-700 capitalize font-medium">{lang.level}</span>
                                         </div>
                                     ))}
                                 </div>

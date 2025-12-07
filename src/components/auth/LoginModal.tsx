@@ -46,7 +46,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess, onSwitchToRegis
       setPassword('');
       onSuccess?.();
       onClose();
-      
+
       // Reload to update UI with user data
       window.location.reload();
     } catch (err) {
@@ -58,31 +58,31 @@ export default function LoginModal({ isOpen, onClose, onSuccess, onSwitchToRegis
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div
       className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
       onClick={onClose}
     >
       {/* Modal */}
-      <div 
+      <div
         className="w-full max-w-md bg-white rounded-lg shadow-2xl border border-gray-200"
         onClick={(e) => e.stopPropagation()}
       >
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200">
-        <h2 className="text-lg font-bold text-gray-900">{t('common.login')}</h2>
-        <button
-          onClick={onClose}
-          className="text-gray-400 hover:text-gray-600 transition"
-          disabled={isLoading}
-        >
-          <X size={20} />
-        </button>
-      </div>
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <h2 className="text-lg font-bold text-gray-900">{t('common.login')}</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 transition"
+            disabled={isLoading}
+          >
+            <X size={20} />
+          </button>
+        </div>
 
-      {/* Form */}
-      <form onSubmit={handleSubmit} className="p-4 space-y-3">
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="p-4 space-y-3">
           {error && (
-            <div className="bg-purple-50 border border-purple-200 text-purple-700 px-4 py-3 rounded">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
               {error}
             </div>
           )}
@@ -98,7 +98,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess, onSwitchToRegis
               onChange={(e) => setEmail(e.target.value)}
               required
               disabled={isLoading}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed text-gray-900"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed text-gray-900"
               placeholder="your@email.com"
             />
           </div>
@@ -115,7 +115,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess, onSwitchToRegis
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={isLoading}
-                className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed text-gray-900"
+                className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed text-gray-900"
                 placeholder="••••••••"
               />
               <button
@@ -132,7 +132,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess, onSwitchToRegis
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
+            className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
           >
             {isLoading ? (
               <>
@@ -148,21 +148,21 @@ export default function LoginModal({ isOpen, onClose, onSuccess, onSwitchToRegis
           </button>
         </form>
 
-      {/* Footer */}
-      <div className="px-4 pb-4 text-center text-sm text-gray-600">
-        {t('auth.dontHaveAccount')}{' '}
-        <button
-          onClick={() => {
-            onClose();
-            onSwitchToRegister?.();
-          }}
-          className="text-purple-600 hover:text-purple-700 font-semibold"
-          disabled={isLoading}
-        >
-          {t('common.register')}
-        </button>
+        {/* Footer */}
+        <div className="px-4 pb-4 text-center text-sm text-gray-600">
+          {t('auth.dontHaveAccount')}{' '}
+          <button
+            onClick={() => {
+              onClose();
+              onSwitchToRegister?.();
+            }}
+            className="text-red-600 hover:text-red-700 font-semibold"
+            disabled={isLoading}
+          >
+            {t('common.register')}
+          </button>
+        </div>
       </div>
-    </div>
     </div>
   );
 }

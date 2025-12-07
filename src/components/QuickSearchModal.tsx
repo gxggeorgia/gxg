@@ -116,17 +116,17 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
 
   return (
     <div className="fixed inset-0 z-60 flex items-start justify-center bg-slate-900/80 backdrop-blur-sm px-4 py-6 sm:py-10">
-      <div className="w-full max-w-3xl rounded-2xl bg-white shadow-2xl border border-purple-100 overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-4 sm:px-6 sm:py-5 border-b border-purple-100 bg-purple-50">
+      <div className="w-full max-w-3xl rounded-2xl bg-white shadow-2xl border border-red-100 overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 sm:px-6 sm:py-5 border-b border-red-100 bg-red-50">
           <div className="flex items-center gap-2">
-            <Search className="text-purple-700" size={20} />
-            <h2 className="text-lg sm:text-xl font-semibold text-purple-800">
+            <Search className="text-red-700" size={20} />
+            <h2 className="text-lg sm:text-xl font-semibold text-red-800">
               {t('search.quickSearch')}
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="rounded-full bg-white text-purple-700 hover:bg-purple-100 transition p-2"
+            className="rounded-full bg-white text-red-700 hover:bg-red-100 transition p-2"
             aria-label="Close search modal"
           >
             <X size={18} />
@@ -141,7 +141,7 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
               value={filters.search}
               onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value }))}
               placeholder="Search escorts..."
-              className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
+              className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition"
             />
           </div>
 
@@ -154,7 +154,7 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
                   const cityId = event.target.value;
                   setFilters((prev) => ({ ...prev, city: cityId, district: '' }));
                 }}
-                className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
+                className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition"
               >
                 <option value="">{t('search.allCities')}</option>
                 {locations.map((city) => (
@@ -170,7 +170,7 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
                 value={filters.district}
                 onChange={(event) => setFilterValue('district', event.target.value)}
                 disabled={!filters.city || districts.length === 0}
-                className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 <option value="">{t('search.allDistricts')}</option>
                 {districts.map((district) => (
@@ -187,7 +187,7 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
             <select
               value={filters.gender}
               onChange={(event) => setFilterValue('gender', event.target.value)}
-              className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
+              className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition"
             >
               <option value="">{t('search.allGenders')}</option>
               <option value="female">{t('gender.female')}</option>

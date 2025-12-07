@@ -43,8 +43,8 @@ export default function RegistrationInfoModal({ isOpen, onClose }: RegistrationI
                   <p className="text-sm text-gray-600">{t('getFeaturedFirstMonth') || 'Get featured for your first month'}</p>
                 </div>
               </div>
-              <div className="flex gap-3 p-3 bg-purple-50 rounded-lg border border-purple-200">
-                <Star size={20} className="text-purple-600 flex-shrink-0 mt-0.5" />
+              <div className="flex gap-3 p-3 bg-red-50 rounded-lg border border-red-200">
+                <Star size={20} className="text-red-600 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="font-semibold text-gray-900">{t('vipPass') || 'VIP Pass'}</p>
                   <p className="text-sm text-gray-600">{t('vipPassDesc') || 'Premium visibility and features'}</p>

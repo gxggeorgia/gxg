@@ -138,7 +138,7 @@ export default function Header() {
               {user ? (
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)} // Open menu to show user options
-                  className="flex items-center gap-2 px-3 py-1.5 bg-purple-600 rounded text-sm font-medium flex-1 justify-center truncate"
+                  className="flex items-center gap-2 px-3 py-1.5 bg-red-600 rounded text-sm font-medium flex-1 justify-center truncate"
                 >
                   <User size={16} />
                   <span className="truncate">{user.name || 'Profile'}</span>
@@ -153,7 +153,7 @@ export default function Header() {
                   </button>
                   <button
                     onClick={() => setIsRegistrationInfoModalOpen(true)}
-                    className="flex items-center gap-2 px-3 py-1.5 bg-purple-600 rounded text-sm font-medium flex-1 justify-center"
+                    className="flex items-center gap-2 px-3 py-1.5 bg-red-600 rounded text-sm font-medium flex-1 justify-center"
                   >
                     <span>{t('common.register')}</span>
                   </button>
@@ -228,7 +228,7 @@ export default function Header() {
 
               <button
                 onClick={() => setIsSearchOpen(true)}
-                className="hover:text-purple-400 transition p-2 hover:bg-slate-700/50 rounded"
+                className="hover:text-red-400 transition p-2 hover:bg-slate-700/50 rounded"
                 aria-label="Open quick search"
               >
                 <Search size={20} />
@@ -247,10 +247,10 @@ export default function Header() {
 
                   {isUserMenuOpen && (
                     <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50">
-                      <div className="px-4 py-3 bg-gradient-to-r from-purple-50 to-blue-50 border-b border-gray-200">
+                      <div className="px-4 py-3 bg-gradient-to-r from-red-50 to-blue-50 border-b border-gray-200">
                         <div className="flex items-center gap-2 mb-1">
                           <p className="text-sm font-bold text-gray-900">{user.name || 'User'}</p>
-                          <span className="px-2 py-0.5 text-xs font-semibold bg-purple-600 text-white rounded-full capitalize">
+                          <span className="px-2 py-0.5 text-xs font-semibold bg-red-600 text-white rounded-full capitalize">
                             {user.role}
                           </span>
                         </div>
@@ -259,7 +259,7 @@ export default function Header() {
                       <div className="py-1">
                         <Link
                           href="/profile"
-                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition"
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-red-50 hover:text-red-700 transition"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
                           <User size={16} />
@@ -293,7 +293,7 @@ export default function Header() {
                       <div className="border-t border-gray-200">
                         <button
                           onClick={handleLogout}
-                          className="w-full text-left px-4 py-2.5 text-sm text-purple-600 hover:bg-purple-50 font-medium flex items-center gap-2 transition"
+                          className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 font-medium flex items-center gap-2 transition"
                         >
                           <LogOut size={16} />
                           Logout
@@ -306,7 +306,7 @@ export default function Header() {
                 <>
                   <button
                     onClick={() => setIsRegistrationInfoModalOpen(true)}
-                    className="flex items-center bg-purple-600 px-4 py-2 rounded-lg text-sm hover:bg-purple-700 transition font-medium shadow-md text-white"
+                    className="flex items-center bg-red-600 px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition font-medium shadow-md text-white"
                   >
                     {t('common.register')}
                   </button>
@@ -359,7 +359,7 @@ export default function Header() {
                     <div className="px-4 py-3 bg-slate-700 rounded-lg">
                       <div className="flex items-center gap-2 mb-1">
                         <p className="font-bold text-white">{user.name || 'User'}</p>
-                        <span className="px-2 py-0.5 text-xs font-semibold bg-purple-600 text-white rounded-full capitalize">
+                        <span className="px-2 py-0.5 text-xs font-semibold bg-red-600 text-white rounded-full capitalize">
                           {user.role}
                         </span>
                       </div>

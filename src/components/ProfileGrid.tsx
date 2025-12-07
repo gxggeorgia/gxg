@@ -191,11 +191,10 @@ export default function ProfileGrid() {
                   <button
                     key={page}
                     onClick={() => setCurrentPage(page)}
-                    className={`w-10 h-10 rounded-lg font-medium transition ${
-                      page === currentPage
-                        ? 'bg-purple-600 text-white shadow-md'
-                        : 'bg-white text-gray-700 border border-gray-300 hover:border-purple-300 hover:text-purple-600'
-                    }`}
+                    className={`w-10 h-10 rounded-lg font-medium transition ${page === currentPage
+                        ? 'bg-red-600 text-white shadow-md'
+                        : 'bg-white text-gray-700 border border-gray-300 hover:border-red-300 hover:text-red-600'
+                      }`}
                     aria-current={page === currentPage ? 'page' : undefined}
                   >
                     {page}
