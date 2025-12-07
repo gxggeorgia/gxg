@@ -78,8 +78,8 @@ export default function LeftSidebar() {
                 <div
                   onClick={() => city.districts.length > 0 && setExpandedCity(expandedCity === city.id ? null : city.id)}
                   className={`flex-1 flex items-center justify-between px-3 py-2 rounded text-left text-sm transition cursor-pointer ${isCityActive && !currentDistrict
-                      ? 'bg-red-50 text-red-700 font-bold'
-                      : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
+                    ? 'bg-red-50 text-red-700 font-bold'
+                    : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
                     }`}
                 >
                   <span
@@ -112,8 +112,8 @@ export default function LeftSidebar() {
                         <button
                           onClick={() => handleFilter(city.id, district.id)}
                           className={`w-full text-left px-3 py-1.5 text-sm rounded transition ${isDistrictActive
-                              ? 'text-red-700 font-bold bg-red-50'
-                              : 'text-gray-600 hover:bg-red-50 hover:text-red-600'
+                            ? 'text-red-700 font-bold bg-red-50'
+                            : 'text-gray-600 hover:bg-red-50 hover:text-red-600'
                             }`}
                         >
                           {district.name[locale]}
@@ -138,8 +138,13 @@ export default function LeftSidebar() {
           </div>
           <div>
             <p className="text-xs text-gray-600">Contact us on</p>
-            <a href="https://t.me/XgeorgiaNET" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-semibold hover:underline">
-              @XgeorgiaNET
+            <a
+              href={process.env.NEXT_PUBLIC_TELEGRAM_LINK || 'https://t.me/gogoxgeorgia'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 font-semibold hover:underline"
+            >
+              {process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || (process.env.NEXT_PUBLIC_TELEGRAM_LINK ? `@${process.env.NEXT_PUBLIC_TELEGRAM_LINK.split('/').pop()}` : '@gogoxgeorgia')}
             </a>
           </div>
         </div>
