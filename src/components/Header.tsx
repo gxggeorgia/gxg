@@ -75,11 +75,97 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-black text-white w-full sticky top-0 z-50 shadow-lg border-b border-slate-700/50">
+      <header className="bg-black text-white w-full   z-50 shadow-lg border-b border-slate-700/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          {/* Mobile Header (2 Rows) */}
+          <div className="md:hidden flex flex-col py-2 gap-2">
+            {/* Row 1: Logo, Telegram, Language, Search */}
+            <div className="flex items-center justify-between gap-1">
+              <div className="flex items-center gap-2 shrink-0">
+                <Link href="/" className="flex items-center">
+                  <img
+                    src="/icons/logo-bgless.png"
+                    alt={process.env.NEXT_PUBLIC_SITE_NAME || 'EG'}
+                    className="h-12 w-auto object-contain"
+                  />
+                </Link>
+                <a
+                  href={process.env.NEXT_PUBLIC_TELEGRAM_LINK || 'https://t.me'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-md text-xs font-medium"
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z" />
+                  </svg>
+                  <span>{t('common.telegram')}</span>
+                </a>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <select
+                  value={locale}
+                  className="bg-slate-700/50 text-white px-2 py-1.5 rounded text-xs font-medium border border-slate-600"
+                  onChange={(e) => {
+                    const newLocale = e.target.value as 'en' | 'ka' | 'ru';
+                    router.replace(pathname, { locale: newLocale });
+                  }}
+                >
+                  <option value="en">English</option>
+                  <option value="ka">ქართული</option>
+                  <option value="ru">Русский</option>
+                </select>
+                <button
+                  onClick={() => setIsSearchOpen(true)}
+                  className="flex items-center gap-1.5 bg-slate-700/50 px-2.5 py-1.5 rounded text-xs font-medium border border-slate-600"
+                >
+                  <Search size={14} />
+                  <span>Search</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Row 2: Menu, Login/User */}
+            <div className="flex items-center justify-between gap-2">
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 rounded text-sm font-medium flex-1 justify-center"
+              >
+                {isMenuOpen ? <X size={16} /> : <Menu size={16} />}
+                <span>{t('common.menu')}</span>
+              </button>
+
+              {user ? (
+                <button
+                  onClick={() => setIsMenuOpen(!isMenuOpen)} // Open menu to show user options
+                  className="flex items-center gap-2 px-3 py-1.5 bg-purple-600 rounded text-sm font-medium flex-1 justify-center truncate"
+                >
+                  <User size={16} />
+                  <span className="truncate">{user.name || 'Profile'}</span>
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setIsLoginModalOpen(true)}
+                    className="flex items-center gap-2 px-3 py-1.5 bg-slate-700 rounded text-sm font-medium flex-1 justify-center"
+                  >
+                    <span>{t('common.login')}</span>
+                  </button>
+                  <button
+                    onClick={() => setIsRegistrationInfoModalOpen(true)}
+                    className="flex items-center gap-2 px-3 py-1.5 bg-purple-600 rounded text-sm font-medium flex-1 justify-center"
+                  >
+                    <span>{t('common.register')}</span>
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Desktop Header (Hidden on Mobile) */}
+          <div className="hidden md:flex items-center justify-between h-16">
             {/* Logo and Telegram */}
-            <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+            <div className="flex items-center gap-4">
               <Link href="/" className="flex items-center">
                 <img
                   src="/icons/logo-bgless.png"
@@ -91,17 +177,17 @@ export default function Header() {
                 href={process.env.NEXT_PUBLIC_TELEGRAM_LINK || 'https://t.me'}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 md:px-3 py-1 sm:py-1.5 bg-blue-600 hover:bg-blue-700 rounded-md sm:rounded-lg transition text-[10px] sm:text-xs md:text-sm font-medium"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-lg transition text-sm font-medium"
               >
-                <svg className="w-5 h-5 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z" />
                 </svg>
-                <span className="hidden sm:inline">{t('common.telegram')}</span>
+                <span>{t('common.telegram')}</span>
               </a>
             </div>
 
-            {/* Navigation - Hidden on mobile */}
-            <nav className="hidden lg:flex items-center gap-6">
+            {/* Navigation */}
+            <nav className="flex items-center gap-6">
               <Link
                 href="/"
                 className={`flex items-center gap-2 text-base transition-colors text-blue-400 hover:text-blue-300 ${pathname === '/' ? 'font-semibold' : ''}`}
@@ -126,11 +212,10 @@ export default function Header() {
             </nav>
 
             {/* Right Section */}
-            <div className="flex items-center gap-2 sm:gap-3">
-              {/* Language Dropdown */}
+            <div className="flex items-center gap-3">
               <select
                 value={locale}
-                className="bg-slate-700/50 text-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm border border-slate-600 hover:bg-slate-600 transition shadow-md cursor-pointer"
+                className="bg-slate-700/50 text-white px-4 py-2 rounded-lg text-sm border border-slate-600 hover:bg-slate-600 transition shadow-md cursor-pointer"
                 onChange={(e) => {
                   const newLocale = e.target.value as 'en' | 'ka' | 'ru';
                   router.replace(pathname, { locale: newLocale });
@@ -143,15 +228,14 @@ export default function Header() {
 
               <button
                 onClick={() => setIsSearchOpen(true)}
-                className="hover:text-purple-400 transition p-1.5 sm:p-2 hover:bg-slate-700/50 rounded"
+                className="hover:text-purple-400 transition p-2 hover:bg-slate-700/50 rounded"
                 aria-label="Open quick search"
               >
-                <Search size={18} className="sm:w-5 sm:h-5" />
+                <Search size={20} />
               </button>
 
-              {/* Auth Buttons / User Menu - Hidden on mobile */}
               {user ? (
-                <div className="hidden md:block relative">
+                <div className="relative">
                   <button
                     onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                     className="flex items-center gap-2 bg-slate-700/50 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm transition border border-slate-600 shadow-md"
@@ -161,7 +245,6 @@ export default function Header() {
                     <ChevronDown size={16} className={`transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />
                   </button>
 
-                  {/* User Dropdown */}
                   {isUserMenuOpen && (
                     <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50">
                       <div className="px-4 py-3 bg-gradient-to-r from-purple-50 to-blue-50 border-b border-gray-200">
@@ -223,13 +306,12 @@ export default function Header() {
                 <>
                   <button
                     onClick={() => setIsRegistrationInfoModalOpen(true)}
-                    className="hidden md:flex items-center bg-purple-600 px-4 py-2 rounded-lg text-sm hover:bg-purple-700 transition font-medium shadow-md text-white"
+                    className="flex items-center bg-purple-600 px-4 py-2 rounded-lg text-sm hover:bg-purple-700 transition font-medium shadow-md text-white"
                   >
                     {t('common.register')}
                   </button>
 
-                  {/* Login Dropdown */}
-                  <div className="hidden md:block relative" ref={loginDropdownRef}>
+                  <div className="relative" ref={loginDropdownRef}>
                     <button
                       onClick={() => setIsLoginModalOpen(!isLoginModalOpen)}
                       className="flex items-center gap-2 bg-slate-700/50 px-4 py-2 rounded-lg text-sm hover:bg-slate-600 transition border border-slate-600 shadow-md"
@@ -240,17 +322,8 @@ export default function Header() {
                   </div>
                 </>
               )}
-
-              {/* Hamburger Menu - Mobile only */}
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="md:hidden p-2 hover:bg-red-600 rounded transition"
-              >
-                {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-              </button>
             </div>
           </div>
-
           {/* Mobile Menu */}
           {isMenuOpen && (
             <div className="md:hidden border-t border-gray-700 py-4">
@@ -361,7 +434,6 @@ export default function Header() {
             </div>
           )}
         </div>
-
       </header>
 
       <QuickSearchModal open={isSearchOpen} onClose={() => setIsSearchOpen(false)} />

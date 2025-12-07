@@ -63,7 +63,8 @@
     "website": "Вебсайт",
     "snapchat": "Снэпчат",
     "twitter": "Твиттер",
-    "facebook": "Фейсбук"
+    "facebook": "Фейсбук",
+    "menu": "Меню"
   },
   "myAccount": "Мой аккаунт",
   "auth": {
@@ -235,5 +236,14 @@
     "threesome": "Секс втроем",
     "sexToys": "Секс-игрушки",
     "domination": "Доминирование"
+  },
+  "footer": {
+    "copyright": "© {year} {domain} | {domain} Эскорт девушки, eskort gogoebi, xgeorgia, batumi escort, eskort batumi, escort batumi, эскорт девушки, эскорт тбилиси, эскорт батуми, escort tbilisi, шлюхи тбилиси, eskortebi, эскорт, x georgia tbilisi, escortebi, xgeorgiame.link, xgeorgia.info, эскорт батуми, эскорт Батуми, escort kutaisi, bozebis saiti, eskortebi Telavi, грузинский эскорт, kama ji kama ge, xgeo vip, escort x georgia, xgeorgia link, intim gacnoba, грузинский эскорт, gogoebi tbilisi batumi kutaisi, эскорт тбилиси, грузинский сайт знакомств, bozebis nomrebi, bozebi batumi gamodzaxebit, эскорт Грузия 18+"
+  },
+  "siteNotice": {
+    "vpnWarning": "Внимание!!! Линки сайта блокируют, чтобы зайти используйте VPN.",
+    "vpnInstructions": "Внимание!!! Чтобы обойти блокировку сайта, зайдите в ваш магазин приложений телефона IPhone App Store или Android Google Play введите в поиске слово VPN Cкачайте любую VPN программу запустите её и зайдите на сайт.",
+    "telegramInfo": "Наш TELEGRAM чат только этот: {telegramUsername} Другого номера нету.",
+    "siteInfo": "Наш сайт только {domain} других сайтов нету. В случае блокировки сайта, рабочий и актуальный линк будет в группе, нажмите и подписывайтесь:"
   }
 }

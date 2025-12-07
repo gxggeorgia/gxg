@@ -61,7 +61,7 @@ export default function RightSidebar() {
         onClick={() => setIsOpen(!isOpen)}
         className="w-full p-4 sm:p-6 flex items-center justify-between lg:cursor-default"
       >
-        <h3 className="text-lg sm:text-xl font-bold text-purple-700">Quick Search</h3>
+        <h3 className="text-lg sm:text-xl font-bold text-purple-700">Search</h3>
         <ChevronDown
           className={`lg:hidden transition-transform text-purple-700 ${isOpen ? 'rotate-180' : ''}`}
           size={20}
@@ -186,10 +186,7 @@ export default function RightSidebar() {
           {t('search.searchButton')}
         </button>
 
-        {/* Advanced Search Link */}
-        <button className="w-full text-purple-600 text-xs sm:text-sm hover:underline font-medium">
-          {t('search.advancedSearch')}
-        </button>
+      
       </div>
     </div>
   );

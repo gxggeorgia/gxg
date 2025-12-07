@@ -67,7 +67,8 @@
     "website": "ვებსაიტი",
     "snapchat": "სნეპჩატი",
     "twitter": "ტვიტერი",
-    "facebook": "ფეისბუქი"
+    "facebook": "ფეისბუქი",
+    "menu": "მენიუ"
   },
   "auth": {
     "email": "ელ-ფოსტა",
@@ -233,5 +234,14 @@
     "threesome": "სამეული",
     "sexToys": "სექს სათამაშოები",
     "domination": "დომინირება"
+  },
+  "footer": {
+    "copyright": "© {year} {domain} | {domain} ესკორტ გოგოები, eskort gogoebi, xgeorgia, batumi escort, eskort batumi, escort batumi, ესკორტი გოგონები, эскорт тбилиси, эскорт батуми, escort tbilisi, ბოზები თბილისი, eskortebi, ესკორტები, x georgia tbilisi, escortebi, xgeorgiame.link, xgeorgia.info, ესკორტი ბათუმი, эскорт Батуми, escort kutaisi, bozebis saiti, eskortebi Telavi, ქართული ესკორტი, kama ji kama ge, xgeo vip, escort x georgia, xgeorgia link, intim gacnoba, ქართული ესკორტი, gogoebi tbilisi batumi kutaisi, ესკორტი თბილისი, ქართული ინტიმ გაცნობის საიტი, ბოზების nomrebi, bozebi batumi gamodzaxebit, эскорт Грузия 18+"
+  },
+  "siteNotice": {
+    "vpnWarning": "ყურადღება!!! საიტის ლინკებს ბლოკავენ, რომ მოახერხოთ შესვლა გამოიყენეთ VPN.",
+    "vpnInstructions": "საიტის დაბლოკვის დროს, რომ მოახერხოთ შესვლა შედით თქვენი ტელეფონის app მარკეტში და ჩაწერეთ ძიების ველში სიტყვა VPN და გადმოიწერეთ რომელიმე VPN აპლიკაცია IPhone App Store ან Android Google Play მარკეტიდან, ჩართეთ ეს აპლიკაცია და შედით საიტზე.",
+    "telegramInfo": "ჩვენი საიტის TELEGRAM ჩატი არის მარტო ეს: {telegramUsername} სხვა ნომერი არ გვაქვს.",
+    "siteInfo": "ჩვენი 18+ საიტი არის მარტო {domain} სხვა საიტები არ გვაქვს. ყოველთვის მუშა და აქტუალური საიტის ლინკი იქნება ჩვენ ჯგუფში. დააწკაპუნეთ და შემოგვიერთდით:"
   }
 }

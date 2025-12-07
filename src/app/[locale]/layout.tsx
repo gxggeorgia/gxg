@@ -5,7 +5,9 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import UserStatusBar from '@/components/UserStatusBar';
+import ScrollToTop from '@/components/ScrollToTop';
 import "../globals.css";
 
 const geistSans = Geist({
@@ -152,9 +154,15 @@ export default async function LocaleLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider messages={messages}>
-          <UserStatusBar />
-          <Header />
-          {children}
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <UserStatusBar />
+            <main className="flex-grow">
+              {children}
+            </main>
+            <Footer />
+            <ScrollToTop />
+          </div>
         </NextIntlClientProvider>
       </body>
     </html>
