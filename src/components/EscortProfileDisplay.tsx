@@ -210,6 +210,21 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                                             <span className="font-medium capitalize">{profile.gender}</span>
                                         </div>
 
+                                        {/* Analytics Stats (Inline) */}
+                                        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
+                                            <div className="flex items-center gap-1.5">
+                                                <Eye className="w-4 h-4 text-gray-500" />
+                                                <span className="font-medium">{tProfile('totalViews')}:</span>
+                                                <span className="font-bold text-gray-900">{totalViews}</span>
+                                            </div>
+                                            <div className="w-px h-4 bg-gray-300"></div>
+                                            <div className="flex items-center gap-1.5">
+                                                <TrendingUp className="w-4 h-4 text-green-600" />
+                                                <span className="font-medium">{tProfile('dailyViews')}:</span>
+                                                <span className="font-bold text-green-700">{dailyViews}</span>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
 
@@ -247,6 +262,9 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                                     )}
                                 </div>
                             </div>
+
+                            {/* Analytics Stats (Moved here) */}
+
 
                             {/* Right Column - Contact & Actions */}
                             <div className="w-full lg:w-64 shrink-0">
@@ -607,25 +625,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                             </div>
                         )}
 
-                        {/* Analytics Stats (Bottom) */}
-                        <div className="bg-white rounded-2xl shadow-lg p-3 border border-gray-200">
-                            <div className="flex flex-col gap-3">
-                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100">
-                                    <span className="text-gray-600 font-medium flex items-center gap-2">
-                                        <Eye size={18} />
-                                        {tProfile('totalViews')}
-                                    </span>
-                                    <span className="text-gray-900 font-bold text-lg">{totalViews}</span>
-                                </div>
-                                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-100">
-                                    <span className="text-green-700 font-medium flex items-center gap-2">
-                                        <TrendingUp size={18} />
-                                        {tProfile('dailyViews')}
-                                    </span>
-                                    <span className="text-green-900 font-bold text-lg">{dailyViews}</span>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>

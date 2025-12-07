@@ -34,15 +34,15 @@ export default function RegistrationInfoModal({ isOpen, onClose }: RegistrationI
         <div className="space-y-6">
           {/* Subscription Packages */}
           <div>
-            <h3 className="text-lg font-bold text-gray-900 mb-4">💎 {t('subscriptionPackages') || 'Subscription Packages'}</h3>
+            {/* <h3 className="text-lg font-bold text-gray-900 mb-4">💎 {t('subscriptionPackages') || 'Subscription Packages'}</h3> */}
             <div className="space-y-3">
-              <div className="flex gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+              {/* <div className="flex gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
                 <CheckCircle size={20} className="text-blue-600 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="font-semibold text-gray-900">{t('freeOneFeatured') || 'Free - 1 Month Featured'}</p>
                   <p className="text-sm text-gray-600">{t('getFeaturedFirstMonth') || 'Get featured for your first month'}</p>
                 </div>
-              </div>
+              </div> */}
               <div className="flex gap-3 p-3 bg-red-50 rounded-lg border border-red-200">
                 <Star size={20} className="text-red-600 flex-shrink-0 mt-0.5" />
                 <div>
