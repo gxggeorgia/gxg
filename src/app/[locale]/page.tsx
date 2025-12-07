@@ -1,22 +1,45 @@
 
 import FeaturedProfileSlider from '@/components/FeaturedProfileSlider';
+import LeftSidebar from '@/components/LeftSidebar';
 import ProfileGrid from '@/components/ProfileGrid';
+import RightSidebar from '@/components/RightSidebar';
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      
-      <FeaturedProfileSlider />
-      
-      <div className="w-full">
-        <div className="px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6">
 
-          <div className="flex flex-col lg:flex-row gap-3 sm:gap-4">
-            <main className="flex-1 min-w-0">
-              <div className="mb-6 sm:mb-8"> 
-                <ProfileGrid />
-              </div>
-            </main>
+      {/* Featured Slider - Full Width */}
+      <div className="w-full border-b border-gray-200 bg-white mb-6">
+        <FeaturedProfileSlider />
+      </div>
+
+      <div className="mx-auto lg:px-8 pb-8">
+        <div className="flex flex-col lg:grid lg:grid-cols-[280px_1fr_280px] lg:gap-6 items-start">
+
+          {/* Left Sidebar - Desktop Only */}
+          <div className="hidden lg:block lg:sticky lg:top-24 lg:h-fit lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto scrollbar-hide">
+            <LeftSidebar />
+          </div>
+
+          {/* Main Content */}
+          <main className="space-y-6 min-w-0 w-full lg:px-0 p-2">
+
+            {/* Right Sidebar - Mobile Only (Search) */}
+            <div className="lg:hidden">
+              <RightSidebar />
+            </div>
+
+            <ProfileGrid />
+
+            {/* Left Sidebar - Mobile Only (Cities) */}
+            <div className="lg:hidden">
+              <LeftSidebar />
+            </div>
+          </main>
+
+          {/* Right Sidebar - Desktop Only */}
+          <div className="hidden lg:block lg:sticky lg:top-24 lg:h-fit lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto scrollbar-hide">
+            <RightSidebar />
           </div>
 
         </div>

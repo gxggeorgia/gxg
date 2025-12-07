@@ -4,23 +4,37 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import * as fs from 'fs';
 import * as path from 'path';
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
 import { users } from '@/db/schema/users';
 import { hashPassword } from '@/lib/auth';
 import { generateSlug } from '@/lib/slug';
-import { eq } from 'drizzle-orm';
 
-// Hardcoded credentials
-const DATABASE_URL = 'postgresql://postgres:development@db.jbhvtgnqbeowuwprymbk.supabase.co:5432/postgres';
-const R2_ACCOUNT_ID = 'ba67b6801186968b1c16d513cc2858ce';
-const R2_ACCESS_KEY_ID = '58425f21a74e5cbf9a54882cfc858fff';
-const R2_SECRET_ACCESS_KEY = 'c943a677e499f181f3a471ba14890c0494224e586458ba73cbf092956aa2578f';
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+// Use environment variable
+const DATABASE_URL = process.env.DATABASE_URL!;
+
+if (!DATABASE_URL) {
+  throw new Error('DATABASE_URL is not defined in environment variables');
+}
+
+
+const R2_ACCOUNT_ID = 'a725b00d5ad140eee93f0d2d7499068a';
+const R2_ACCESS_KEY_ID = 'b4bfcde1ecd679f4f52161b3a89c8e83';
+const R2_SECRET_ACCESS_KEY = '9cddfd9cd9873b9a944101cfc5da1bb531bab2988f83163b332217510dc8f229';
 const R2_BUCKET_NAME = 'eg-dev';
 
 // Initialize database
-const client = postgres(DATABASE_URL);
-const db = drizzle(client);
+async function getDbConnection() {
+  // Force use of Supabase connection pooler port 6543 which supports IPv4
+  const connectionString = DATABASE_URL.replace(':5432', ':6543');
+  console.log('Connecting to database using pooler port 6543...');
+
+  const pool = new Pool({ connectionString });
+  return drizzle(pool);
+}
 
 const imageDir = '/home/ravi/Desktop/EG/temp/uploads';
 const images = fs.readdirSync(imageDir).filter(f => /\.(jpg|jpeg|png)$/i.test(f) && fs.statSync(path.join(imageDir, f)).isFile());
@@ -39,14 +53,14 @@ async function uploadImageToR2(filePath: string, fileName: string, userId: strin
   try {
     const fileContent = fs.readFileSync(filePath);
     const key = `${userId}/images/${Date.now()}-${fileName}`;
-    
+
     await r2Client.send(new PutObjectCommand({
       Bucket: R2_BUCKET_NAME,
       Key: key,
       Body: fileContent,
       ContentType: 'image/jpeg'
     }));
-    
+
     return `/api/media/${key}`;
   } catch (error) {
     console.error(`Failed to upload ${fileName}:`, error);
@@ -93,13 +107,14 @@ const languages = [
 ];
 
 async function seed() {
+  const db = await getDbConnection();
   console.log('🌱 Starting seed with 20 profiles and R2 uploads...');
-  
+
   for (let i = 0; i < 20; i++) {
     const name = names[i];
     const email = `${name.toLowerCase()}${i}@example.com`;
     const password = await hashPassword('password123');
-    
+
     const userId = `user-${i}`;
     console.log(`\n📤 Uploading images for ${name}...`);
     const profileImages = await Promise.all(
@@ -120,11 +135,11 @@ async function seed() {
     // Get 5-12 random services
     const shuffledServices = [...services].sort(() => Math.random() - 0.5);
     const userServices = shuffledServices.slice(0, Math.floor(Math.random() * 8) + 5);
-    
+
     const city = cities[Math.floor(Math.random() * cities.length)];
     // Generate slug (8 random chars makes collisions extremely unlikely)
     const slug = generateSlug(name, city);
-    
+
     try {
       await db.insert(users).values({
         email,
@@ -169,7 +184,7 @@ async function seed() {
       console.error(`❌ Error creating ${name}:`, error);
     }
   }
-  
+
   console.log('\n✅ Seed completed! 20 profiles created with R2 images.');
   process.exit(0);
 }

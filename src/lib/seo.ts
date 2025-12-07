@@ -43,11 +43,11 @@ export const defaultMetadata: Metadata = {
     description,
     images: [
       {
-        url: `${baseUrl}/icons/logo.png`,
+        url: `${baseUrl}/icons/logo.jpeg`,
         width: 1200,
         height: 630,
         alt: `${siteName} Logo`,
-        type: 'image/png',
+        type: 'image/jpeg',
       },
     ],
   },
@@ -55,7 +55,7 @@ export const defaultMetadata: Metadata = {
     card: 'summary_large_image',
     title: `${siteName} | Verified Escorts & Companions`,
     description,
-    images: [`${baseUrl}/icons/logo.png`],
+    images: [`${baseUrl}/icons/logo.jpeg`],
     creator: '@escortdirectoryga',
   },
   icons: {
@@ -106,7 +106,7 @@ export function generatePageMetadata(
   image?: string
 ): Metadata {
   const url = `${baseUrl}${path}`;
-  const ogImage = image || `${baseUrl}/icons/logo.png`;
+  const ogImage = image || `${baseUrl}/icons/logo.jpeg`;
 
   return {
     title,

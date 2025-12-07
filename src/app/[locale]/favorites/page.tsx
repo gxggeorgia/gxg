@@ -80,9 +80,6 @@ export default function FavoritesPage() {
                 ? 'No favorites yet. Start adding escorts to your favorites!'
                 : `You have ${favorites.length} favorite escort${favorites.length !== 1 ? 's' : ''}`}
             </p>
-            <p className="text-xs text-gray-500 mt-2">
-              (Stored locally in browser)
-            </p>
           </div>
 
           {/* Favorites Grid */}

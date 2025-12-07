@@ -1,10 +1,10 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
 import * as schema from './schema';
 
 // Create the connection
-const connectionString = process.env.DATABASE_URL!;
+// Force use of Supabase connection pooler port 6543 which supports IPv4
+const connectionString = process.env.DATABASE_URL!.replace(':5432', ':6543');
 
-// Disable prefetch as it is not supported for "Transaction" pool mode
-export const client = postgres(connectionString, { prepare: false });
-export const db = drizzle(client, { schema });
+const pool = new Pool({ connectionString });
+export const db = drizzle(pool, { schema });

@@ -151,14 +151,14 @@ export default function FeaturedProfileSlider() {
     return (
       <div className="w-full bg-linear-to-br from-slate-50 via-white to-slate-50 py-6 flex justify-center">
         <div className="w-full max-w-[1920px] px-3 sm:px-4 md:px-6 lg:px-8">
-          <div className="mb-6 animate-pulse">
+          <div className="mb-6">
             <div className="h-10 sm:h-12 md:h-14 bg-gray-200 rounded w-64 sm:w-80 mb-3"></div>
             <div className="h-4 sm:h-5 bg-gray-200 rounded w-48 sm:w-64"></div>
           </div>
           <div className="flex gap-3 sm:gap-4">
             {[1, 2, 3, 4, 5].map((i) => (
               <div key={i} className="shrink-0 w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.5rem)] md:w-[calc(33.333%-0.667rem)] lg:w-[calc(25%-0.75rem)] xl:w-[calc(20%-0.8rem)]">
-                <div className="bg-white rounded-lg shadow overflow-hidden animate-pulse">
+                <div className="bg-white rounded-lg shadow overflow-hidden">
                   <div className="relative w-full bg-gray-200" style={{ aspectRatio: '3/4' }}></div>
                   <div className="p-2.5 space-y-1.5">
                     <div className="h-4 bg-gray-200 rounded w-3/4"></div>

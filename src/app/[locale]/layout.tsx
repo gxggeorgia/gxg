@@ -41,11 +41,11 @@ export const metadata: Metadata = {
     description: "Find verified escorts and companions in Georgia. Browse profiles, rates, and services.",
     images: [
       {
-        url: `${baseUrl}/icons/logo.png`,
+        url: `${baseUrl}/icons/logo.jpeg`,
         width: 1200,
         height: 630,
         alt: "Escort Directory Georgia Logo",
-        type: "image/png",
+        type: "image/jpeg",
       },
     ],
   },
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Escort Directory Georgia | Verified Escorts & Companions",
     description: "Find verified escorts and companions in Georgia.",
-    images: [`${baseUrl}/icons/logo.png`],
+    images: [`${baseUrl}/icons/logo.jpeg`],
     creator: "@escortdirectoryga",
   },
   icons: {
@@ -105,7 +105,7 @@ export default async function LocaleLayout({
     '@type': 'Organization',
     name: 'Escort Directory Georgia',
     url: baseUrl,
-    logo: `${baseUrl}/icons/logo.png`,
+    logo: `${baseUrl}/icons/logo.jpeg`,
     description: 'Find verified escorts and companions in Georgia',
     sameAs: [
       'https://www.facebook.com/escortdirectoryga',

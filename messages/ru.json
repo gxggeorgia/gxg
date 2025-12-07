@@ -55,7 +55,15 @@
     "profileGoesLive": "Ваш профиль выходит в эфир!",
     "cancel": "Отменить",
     "continueRegistration": "Продолжить регистрацию",
-    "sendMessage": "Отправить сообщение"
+    "sendMessage": "Отправить сообщение",
+    "whatsapp": "Ватсап",
+    "viber": "Вайбер",
+    "telegram": "Телеграм",
+    "instagram": "Инстаграм",
+    "website": "Вебсайт",
+    "snapchat": "Снэпчат",
+    "twitter": "Твиттер",
+    "facebook": "Фейсбук"
   },
   "myAccount": "Мой аккаунт",
   "auth": {
@@ -105,11 +113,6 @@
     "privacyPolicy": "Политикой конфиденциальности",
     "ofThisWebsite": "этого сайта",
     "pleaseSelectCityFirst": "Пожалуйста, сначала выберите город",
-    "website": "Веб-сайт",
-    "instagram": "Instagram",
-    "snapchat": "Snapchat",
-    "twitter": "Twitter/X",
-    "facebook": "Facebook",
     "whatsappAvailable": "WhatsApp доступен",
     "viberAvailable": "Viber доступен",
     "language": "Язык",
@@ -133,7 +136,13 @@
     "passwordsDoNotMatch": "Пароли не совпадают",
     "pleaseSelectServices": "Пожалуйста, выберите хотя бы одну услугу",
     "pleaseProvideIncallRates": "Пожалуйста, укажите хотя бы один тариф для инколла",
-    "pleaseProvideOutcallRates": "Пожалуйста, укажите хотя бы один тариф для аутколла"
+    "pleaseProvideOutcallRates": "Пожалуйста, укажите хотя бы один тариф для аутколла",
+    "telegram": "Телеграм",
+    "instagram": "Инстаграм",
+    "website": "Веб-сайт",
+    "snapchat": "Снэпчат",
+    "twitter": "Твиттер",
+    "facebook": "Фейсбук"
   },
   "header": {
     "title": "Эскорт Директория Грузия",

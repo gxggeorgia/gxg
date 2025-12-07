@@ -54,7 +54,15 @@
     "profileGoesLive": "Your profile goes live!",
     "cancel": "Cancel",
     "continueRegistration": "Continue to Registration",
-    "sendMessage": "Send Message"
+    "sendMessage": "Send Message",
+    "whatsapp": "WhatsApp",
+    "viber": "Viber",
+    "telegram": "Telegram",
+    "snapchat": "Snapchat",
+    "instagram": "Instagram",
+    "website": "Website",
+    "facebook": "Facebook",
+    "twitter": "Twitter/X"
   },
   "myAccount": "My Account",
   "auth": {
@@ -105,11 +113,6 @@
     "privacyPolicy": "Privacy Policy",
     "ofThisWebsite": "of this website",
     "pleaseSelectCityFirst": "Please select city first",
-    "website": "Website",
-    "instagram": "Instagram",
-    "snapchat": "Snapchat",
-    "twitter": "Twitter/X",
-    "facebook": "Facebook",
     "whatsappAvailable": "WhatsApp Available",
     "viberAvailable": "Viber Available",
     "language": "Language",
@@ -133,7 +136,15 @@
     "passwordsDoNotMatch": "Passwords do not match",
     "pleaseSelectServices": "Please select at least one service",
     "pleaseProvideIncallRates": "Please provide at least one incall rate",
-    "pleaseProvideOutcallRates": "Please provide at least one outcall rate"
+    "pleaseProvideOutcallRates": "Please provide at least one outcall rate",
+    "instagram": "Instagram",
+    "website": "Website",
+    "snapchat": "Snapchat",
+    "twitter": "Twitter/X",
+    "facebook": "Facebook",
+    "telegram": "Telegram",
+    "viber": "Viber",
+    "whatsapp": "WhatsApp"
   },
   "header": {
     "title": "Escort Directory Georgia",

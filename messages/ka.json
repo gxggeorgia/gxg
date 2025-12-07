@@ -59,7 +59,15 @@
     "profileGoesLive": "თქვენი პროფილი გახდება ცოცხალი!",
     "cancel": "გაუქმება",
     "continueRegistration": "გაგრძელება რეგისტრაციაზე",
-    "sendMessage": "შეტყობინების გაგზავნა"
+    "sendMessage": "შეტყობინების გაგზავნა",
+    "whatsapp": "ვოთსაფი",
+    "viber": "ვაიბერი",
+    "telegram": "ტელეგრამი",
+    "instagram": "ინსტაგრამი",
+    "website": "ვებსაიტი",
+    "snapchat": "სნეპჩატი",
+    "twitter": "ტვიტერი",
+    "facebook": "ფეისბუქი"
   },
   "auth": {
     "email": "ელ-ფოსტა",
@@ -109,11 +117,6 @@
     "privacyPolicy": "კონფიდენციალურობის პოლიტიკას",
     "ofThisWebsite": "ამ ვებსაიტის",
     "pleaseSelectCityFirst": "გთხოვთ ჯერ აირჩიოთ ქალაქი",
-    "website": "ვებსაიტი",
-    "instagram": "Instagram",
-    "snapchat": "Snapchat",
-    "twitter": "Twitter/X",
-    "facebook": "Facebook",
     "whatsappAvailable": "WhatsApp ხელმისაწვდომია",
     "viberAvailable": "Viber ხელმისაწვდომია",
     "language": "ენა",

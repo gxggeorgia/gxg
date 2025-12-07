@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useRouter, usePathname } from '@/i18n/routing';
 import { Phone, MapPin, Edit2, Globe, Ruler, Heart, Languages as LanguagesIcon, DollarSign, Star, Crown, MessageCircle, Clock, Zap, ExternalLink, Instagram, Facebook, Twitter, Flag } from 'lucide-react';
 import Image from 'next/image';
@@ -81,6 +81,20 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false }: 
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxIndex, setLightboxIndex] = useState(0);
     const [reportModalOpen, setReportModalOpen] = useState(false);
+    const locale = useLocale();
+
+    const getWhatsAppMessage = () => {
+        // Always use the production URL to avoid hydration mismatches (server vs client)
+        const profileUrl = `https://gogoxgeorgia.ge/${locale}/escort/${profile.id}`;
+
+        const messages = {
+            ka: `გამარჯობა, თქვენი პროფილი აღმოჩნდა აქ და მსურდა დაკავშირება.\n${profileUrl}`,
+            ru: `Здравствуйте, я увидел ваш профиль здесь и решил написать вам.\n${profileUrl}`,
+            en: `Hello, I saw your profile here and wanted to reach out.\n${profileUrl}`
+        };
+
+        return messages[locale as keyof typeof messages] || messages.en;
+    };
 
     const calculateAge = (dob: Date | string) => {
         const birthDate = typeof dob === 'string' ? new Date(dob) : dob;
@@ -118,12 +132,20 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false }: 
                                 <div className="flex flex-row gap-4 items-center mb-5">
                                     {/* Profile Image */}
                                     {profile.images?.[0]?.url && (
-                                        <div className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-xl overflow-hidden border-2 border-gray-100 shadow-md shrink-0">
+                                        <div className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-xl overflow-hidden border-2 border-gray-100 shadow-md shrink-0 relative">
                                             <img
                                                 src={profile.images[0].url}
                                                 alt={profile.name || 'Profile'}
                                                 className="w-full h-full object-cover"
                                             />
+                                            {/* Watermark */}
+                                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-90">
+                                                <img
+                                                    src="/icons/logo-bgless.png"
+                                                    alt="Watermark"
+                                                    className="w-1/2 h-auto object-contain"
+                                                />
+                                            </div>
                                         </div>
                                     )}
 
@@ -222,13 +244,13 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false }: 
                                         )}
                                         {profile.whatsappAvailable && (
                                             <a
-                                                href={`https://wa.me/${profile.phone?.replace(/[^0-9]/g, '')}`}
+                                                href={`https://wa.me/${profile.phone?.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(getWhatsAppMessage())}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="flex items-center gap-2 text-gray-700 p-2.5 bg-green-50 rounded-lg hover:bg-green-100 text-sm"
                                             >
                                                 <MessageCircle size={16} className="text-green-600" />
-                                                <span className="font-medium flex-1">WhatsApp</span>
+                                                <span className="font-medium flex-1">{tCommon('whatsapp')}</span>
                                                 <ExternalLink size={12} className="text-gray-400" />
                                             </a>
                                         )}
@@ -240,7 +262,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false }: 
                                                 className="flex items-center gap-2 text-gray-700 p-2.5 bg-purple-50 rounded-lg hover:bg-purple-100 text-sm"
                                             >
                                                 <Image src="/icons/viber_logo-170x170.png" alt="Viber" width={16} height={16} />
-                                                <span className="font-medium flex-1">Viber</span>
+                                                <span className="font-medium flex-1">{tCommon('viber')}</span>
                                                 <ExternalLink size={12} className="text-gray-400" />
                                             </a>
                                         )}
@@ -299,8 +321,8 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false }: 
                         <div className="flex flex-wrap justify-center gap-3">
                             {/* Videos */}
                             {profile.videos?.map((video, index) => (
-                                <div 
-                                    key={`vid-${index}`} 
+                                <div
+                                    key={`vid-${index}`}
                                     className="relative group overflow-hidden rounded-lg w-full sm:w-[calc(50%-0.5rem)] md:w-[calc(50%-0.5rem)] border-2 border-purple-300"
                                 >
                                     <video
@@ -315,17 +337,17 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false }: 
                                     {/* Video Badge */}
                                     <div className="absolute top-2 right-2 bg-purple-600 text-white px-3 py-1.5 rounded-md text-sm font-bold flex items-center gap-1.5">
                                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M8 5v14l11-7z"/>
+                                            <path d="M8 5v14l11-7z" />
                                         </svg>
                                         {tProfile('video')}
                                     </div>
                                 </div>
                             ))}
-                            
+
                             {/* Images */}
                             {profile.images?.map((image, index) => (
-                                <div 
-                                    key={`img-${index}`} 
+                                <div
+                                    key={`img-${index}`}
                                     className="relative group overflow-hidden rounded-lg w-[calc(50%-0.375rem)] sm:w-[calc(33.333%-0.5rem)] md:w-[calc(25%-0.75rem)]"
                                 >
                                     <img
@@ -333,12 +355,20 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false }: 
                                         alt={`${profile.name || 'Profile'} image ${index + 1}`}
                                         width={image.width || 400}
                                         height={image.height || 400}
-                                        className="w-full h-auto object-cover cursor-pointer transition-transform duration-200 hover:scale-105 rounded-lg"
+                                        className="w-full h-full object-cover cursor-pointer transition-transform duration-200 hover:scale-105 rounded-lg"
                                         onClick={() => {
                                             setLightboxIndex(index);
                                             setLightboxOpen(true);
                                         }}
                                     />
+                                    {/* Watermark */}
+                                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-90">
+                                        <img
+                                            src="/icons/logo-bgless.png"
+                                            alt="Watermark"
+                                            className="w-1/4 h-auto object-contain"
+                                        />
+                                    </div>
                                     <button
                                         onClick={() => {
                                             setLightboxIndex(index);

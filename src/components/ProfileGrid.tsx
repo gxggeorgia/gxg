@@ -54,14 +54,6 @@ export default function ProfileGrid() {
   });
   const [currentPage, setCurrentPage] = useState(1);
 
-  const handleFilterChange = (type: string, value: string | number | boolean) => {
-    // implement filter change logic here
-  };
-
-  const handleSort = (key: string) => {
-    // implement sort logic here
-  };
-
   useEffect(() => {
     const fetchEscorts = async () => {
       try {
@@ -110,7 +102,7 @@ export default function ProfileGrid() {
         <h3 className="text-lg font-bold mb-4 text-gray-900">All Escorts</h3>
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-            <div key={i} className="bg-white rounded-lg shadow overflow-hidden animate-pulse">
+            <div key={i} className="bg-white rounded-lg shadow overflow-hidden">
               <div className="relative w-full bg-gray-200" style={{ aspectRatio: '3/4' }}>
                 <div className="absolute top-2 left-2 h-5 w-16 bg-gray-300 rounded"></div>
                 <div className="absolute top-2 right-2 h-6 w-20 bg-gray-300 rounded"></div>
