@@ -3,8 +3,16 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 
+import { usePathname } from 'next/navigation';
+
 export default function Footer() {
+    const pathname = usePathname();
     const t = useTranslations('footer');
+
+    // Don't show footer on admin pages
+    if (pathname.includes('/admin')) {
+        return null;
+    }
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'xgeorgia.me';
     const domain = siteUrl.replace(/^https?:\/\//, '').replace(/\/$/, '').toUpperCase();
     const year = new Date().getFullYear();

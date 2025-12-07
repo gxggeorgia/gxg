@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter, usePathname } from '@/i18n/routing';
-import { Phone, MapPin, Edit2, Globe, Ruler, Heart, Languages as LanguagesIcon, DollarSign, Star, Crown, MessageCircle, Clock, Zap, ExternalLink, Instagram, Facebook, Twitter, Flag } from 'lucide-react';
+import { Phone, MapPin, Edit2, Globe, Ruler, Heart, Languages as LanguagesIcon, DollarSign, Star, Crown, MessageCircle, Clock, Zap, ExternalLink, Instagram, Facebook, Twitter, Flag, Eye, TrendingUp } from 'lucide-react';
 import Image from 'next/image';
 import ImageLightbox from './ImageLightbox';
 import Link from 'next/link';
@@ -69,9 +69,11 @@ interface EscortProfile {
 interface EscortProfileDisplayProps {
     profile: EscortProfile;
     isOwnProfile?: boolean;
+    totalViews?: number;
+    dailyViews?: number;
 }
 
-export default function EscortProfileDisplay({ profile, isOwnProfile = false }: EscortProfileDisplayProps) {
+export default function EscortProfileDisplay({ profile, isOwnProfile = false, totalViews = 0, dailyViews = 0 }: EscortProfileDisplayProps) {
     const tAuth = useTranslations('auth');
     const tCommon = useTranslations('common');
     const tProfile = useTranslations('profile');
@@ -82,6 +84,27 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false }: 
     const [lightboxIndex, setLightboxIndex] = useState(0);
     const [reportModalOpen, setReportModalOpen] = useState(false);
     const locale = useLocale();
+
+    // Analytics: Track View
+    useEffect(() => {
+        if (!isOwnProfile) {
+            fetch('/api/analytics', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: 'view', profileId: profile.id }),
+            }).catch(err => console.error('Failed to track view:', err));
+        }
+    }, [profile.id, isOwnProfile]);
+
+    const trackInteraction = (interactionType: string) => {
+        if (!isOwnProfile) {
+            fetch('/api/analytics', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: 'interaction', profileId: profile.id, interactionType }),
+            }).catch(err => console.error('Failed to track interaction:', err));
+        }
+    };
 
     const getWhatsAppMessage = () => {
         // Always use the production URL to avoid hydration mismatches (server vs client)
@@ -186,6 +209,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false }: 
                                             <span className="text-gray-400">•</span>
                                             <span className="font-medium capitalize">{profile.gender}</span>
                                         </div>
+
                                     </div>
                                 </div>
 
@@ -235,6 +259,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false }: 
                                         {profile.phone && (
                                             <a
                                                 href={`tel:${profile.phone}`}
+                                                onClick={() => trackInteraction('phone')}
                                                 className="flex items-center gap-2 text-gray-700 p-2.5 bg-white rounded-lg hover:bg-gray-100 text-sm"
                                             >
                                                 <Phone size={16} className="text-blue-600" />
@@ -247,6 +272,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false }: 
                                                 href={`https://wa.me/${profile.phone?.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(getWhatsAppMessage())}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
+                                                onClick={() => trackInteraction('whatsapp')}
                                                 className="flex items-center gap-2 text-gray-700 p-2.5 bg-green-50 rounded-lg hover:bg-green-100 text-sm"
                                             >
                                                 <MessageCircle size={16} className="text-green-600" />
@@ -259,6 +285,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false }: 
                                                 href={`viber://chat?number=${profile.phone?.replace(/[^0-9+]/g, '')}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
+                                                onClick={() => trackInteraction('viber')}
                                                 className="flex items-center gap-2 text-gray-700 p-2.5 bg-purple-50 rounded-lg hover:bg-purple-100 text-sm"
                                             >
                                                 <Image src="/icons/viber_logo-170x170.png" alt="Viber" width={16} height={16} />
@@ -278,12 +305,6 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false }: 
                                         </button>
                                     ) : (
                                         <>
-                                            <Link
-                                                href={`/escort/${profile.id}/chat`}
-                                                className="block w-full mt-3 text-center bg-purple-600 hover:bg-purple-700 text-white transition-colors py-2.5 px-4 rounded-lg font-medium text-sm"
-                                            >
-                                                {tCommon('sendMessage')}
-                                            </Link>
                                             <button
                                                 onClick={() => setReportModalOpen(true)}
                                                 className="w-full mt-2 bg-white text-red-600 hover:bg-red-50 transition-colors py-2.5 px-4 rounded-lg font-medium text-sm border border-red-200 flex items-center justify-center gap-2"
@@ -553,38 +574,58 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false }: 
                                 </h3>
                                 <div className="space-y-2">
                                     {profile.website && (
-                                        <a href={profile.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-600 hover:text-blue-700 p-2 hover:bg-blue-50 rounded transition">
+                                        <a href={profile.website} target="_blank" rel="noopener noreferrer" onClick={() => trackInteraction('website')} className="flex items-center gap-2 text-blue-600 hover:text-blue-700 p-2 hover:bg-blue-50 rounded transition">
                                             <Globe size={16} />
                                             <span className="text-sm font-medium">{tAuth('website')}</span>
                                         </a>
                                     )}
                                     {profile.instagram && (
-                                        <a href={`https://instagram.com/${profile.instagram}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-pink-600 hover:text-pink-700 p-2 hover:bg-pink-50 rounded transition">
+                                        <a href={`https://instagram.com/${profile.instagram}`} target="_blank" rel="noopener noreferrer" onClick={() => trackInteraction('instagram')} className="flex items-center gap-2 text-pink-600 hover:text-pink-700 p-2 hover:bg-pink-50 rounded transition">
                                             <Instagram size={16} />
-                                            <span className="text-sm font-medium">{tAuth('instagram')}</span>
+                                            <span className="text-sm font-medium">{tCommon('instagram')}</span>
                                         </a>
                                     )}
                                     {profile.twitter && (
-                                        <a href={`https://twitter.com/${profile.twitter}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sky-600 hover:text-sky-700 p-2 hover:bg-sky-50 rounded transition">
+                                        <a href={`https://twitter.com/${profile.twitter}`} target="_blank" rel="noopener noreferrer" onClick={() => trackInteraction('twitter')} className="flex items-center gap-2 text-sky-600 hover:text-sky-700 p-2 hover:bg-sky-50 rounded transition">
                                             <Twitter size={16} />
-                                            <span className="text-sm font-medium">{tAuth('twitter')}</span>
+                                            <span className="text-sm font-medium">{tCommon('twitter')}</span>
                                         </a>
                                     )}
                                     {profile.facebook && (
-                                        <a href={profile.facebook} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-700 hover:text-blue-800 p-2 hover:bg-blue-50 rounded transition">
+                                        <a href={profile.facebook} target="_blank" rel="noopener noreferrer" onClick={() => trackInteraction('facebook')} className="flex items-center gap-2 text-blue-700 hover:text-blue-800 p-2 hover:bg-blue-50 rounded transition">
                                             <Facebook size={16} />
-                                            <span className="text-sm font-medium">{tAuth('facebook')}</span>
+                                            <span className="text-sm font-medium">{tCommon('facebook')}</span>
                                         </a>
                                     )}
                                     {profile.snapchat && (
-                                        <a href={`https://snapchat.com/add/${profile.snapchat}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-yellow-500 hover:text-yellow-600 p-2 hover:bg-yellow-50 rounded transition">
+                                        <a href={`https://snapchat.com/add/${profile.snapchat}`} target="_blank" rel="noopener noreferrer" onClick={() => trackInteraction('snapchat')} className="flex items-center gap-2 text-yellow-500 hover:text-yellow-600 p-2 hover:bg-yellow-50 rounded transition">
                                             <MessageCircle size={16} />
-                                            <span className="text-sm font-medium">{tAuth('snapchat')}</span>
+                                            <span className="text-sm font-medium">{tCommon('snapchat')}</span>
                                         </a>
                                     )}
                                 </div>
                             </div>
                         )}
+
+                        {/* Analytics Stats (Bottom) */}
+                        <div className="bg-white rounded-2xl shadow-lg p-3 border border-gray-200">
+                            <div className="flex flex-col gap-3">
+                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100">
+                                    <span className="text-gray-600 font-medium flex items-center gap-2">
+                                        <Eye size={18} />
+                                        {tProfile('totalViews')}
+                                    </span>
+                                    <span className="text-gray-900 font-bold text-lg">{totalViews}</span>
+                                </div>
+                                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-100">
+                                    <span className="text-green-700 font-medium flex items-center gap-2">
+                                        <TrendingUp size={18} />
+                                        {tProfile('dailyViews')}
+                                    </span>
+                                    <span className="text-green-900 font-bold text-lg">{dailyViews}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

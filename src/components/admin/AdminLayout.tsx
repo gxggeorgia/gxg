@@ -31,7 +31,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     <div className="min-h-screen bg-gray-50 flex">
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
@@ -39,10 +39,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
       {/* Sidebar */}
       <aside className={`
-        fixed top-16 bottom-0 left-0 z-50
+        fixed top-0 bottom-0 left-0 z-[60] pt-16
         w-64 bg-white border-r border-gray-200 shadow-lg
         transform transition-transform duration-300 ease-in-out
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0 lg:top-16'}
       `}>
         <div className="h-full flex flex-col overflow-hidden">
           {/* Header */}
@@ -63,7 +63,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             {menuItems.map((item) => {
               const Icon = item.icon;
               const active = isActive(item.path);
-              
+
               return (
                 <button
                   key={item.path}
@@ -73,8 +73,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   }}
                   className={`
                     w-full flex items-start gap-3 px-4 py-3 rounded-lg transition
-                    ${active 
-                      ? 'bg-purple-50 text-purple-700 border-l-4 border-purple-600' 
+                    ${active
+                      ? 'bg-purple-50 text-purple-700 border-l-4 border-purple-600'
                       : 'text-gray-700 hover:bg-gray-50'
                     }
                   `}
@@ -108,7 +108,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 lg:ml-64">
         {/* Mobile Header */}
-        <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between fixed top-16 left-0 right-0 z-30">
+        <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between z-40">
           <button
             onClick={() => setSidebarOpen(true)}
             className="text-gray-700 hover:text-gray-900"
@@ -120,7 +120,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </div>
 
         {/* Content */}
-        <main className="flex-1 overflow-hidden">
+        <main className="flex-1 overflow-hidden pt-16 lg:pt-20">
           {children}
         </main>
       </div>

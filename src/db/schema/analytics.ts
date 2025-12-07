@@ -10,23 +10,15 @@ export const profileViews = pgTable('profile_views', {
   viewedAt: timestamp('viewed_at').defaultNow().notNull(),
 });
 
-// Phone clicks tracking (simple counter)
-export const phoneClicks = pgTable('phone_clicks', {
+// Profile interactions tracking (clicks on contact/social links)
+export const profileInteractions = pgTable('profile_interactions', {
   id: uuid('id').defaultRandom().primaryKey(),
   profileId: uuid('profile_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-  clickerIp: text('clicker_ip'),
-  clickedAt: timestamp('clicked_at').defaultNow().notNull(),
+  type: text('type').notNull(), // 'phone', 'whatsapp', 'viber', 'instagram', etc.
+  interactorIp: text('interactor_ip'),
+  interactedAt: timestamp('interacted_at').defaultNow().notNull(),
 });
 
-// Search queries tracking
-export const searchQueries = pgTable('search_queries', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  query: text('query'),
-  filters: text('filters'), // JSON string of applied filters
-  resultsCount: integer('results_count'),
-  userIp: text('user_ip'),
-  searchedAt: timestamp('searched_at').defaultNow().notNull(),
-});
 
 // Relations
 export const profileViewsRelations = relations(profileViews, ({ one }) => ({
@@ -36,9 +28,9 @@ export const profileViewsRelations = relations(profileViews, ({ one }) => ({
   }),
 }));
 
-export const phoneClicksRelations = relations(phoneClicks, ({ one }) => ({
+export const profileInteractionsRelations = relations(profileInteractions, ({ one }) => ({
   profile: one(users, {
-    fields: [phoneClicks.profileId],
+    fields: [profileInteractions.profileId],
     references: [users.id],
   }),
 }));
@@ -46,7 +38,5 @@ export const phoneClicksRelations = relations(phoneClicks, ({ one }) => ({
 // Types
 export type ProfileView = typeof profileViews.$inferSelect;
 export type NewProfileView = typeof profileViews.$inferInsert;
-export type PhoneClick = typeof phoneClicks.$inferSelect;
-export type NewPhoneClick = typeof phoneClicks.$inferInsert;
-export type SearchQuery = typeof searchQueries.$inferSelect;
-export type NewSearchQuery = typeof searchQueries.$inferInsert;
+export type ProfileInteraction = typeof profileInteractions.$inferSelect;
+export type NewProfileInteraction = typeof profileInteractions.$inferInsert;

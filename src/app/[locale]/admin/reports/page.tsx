@@ -244,10 +244,10 @@ export default function ReportsPage() {
                         <td className="px-4 py-3 whitespace-nowrap">
                           <button
                             onClick={() => setSelectedReport(report)}
-                            className="inline-flex items-center gap-1 text-gray-600 hover:text-gray-900 text-sm"
+                            className="inline-flex items-center gap-1  underline"
                             title="View Full Details"
                           >
-                            <Eye className="w-4 h-4" />
+                            <span className="text-sm">Details</span>
                           </button>
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap">

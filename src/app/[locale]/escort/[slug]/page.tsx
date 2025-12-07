@@ -2,7 +2,8 @@ import { notFound } from 'next/navigation';
 import { generatePageMetadata } from '@/lib/seo';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { eq } from 'drizzle-orm';
+import { profileViews } from '@/db/schema/analytics';
+import { eq, count, gt, sql } from 'drizzle-orm';
 import EscortProfileDisplay from '@/components/EscortProfileDisplay';
 
 interface EscortDetailPageProps {
@@ -39,5 +40,20 @@ export default async function EscortDetailPage({ params }: EscortDetailPageProps
     notFound();
   }
 
-  return <EscortProfileDisplay profile={escort} isOwnProfile={false} />;
+  // Fetch analytics
+  const [totalViewsResult] = await db
+    .select({ count: count() })
+    .from(profileViews)
+    .where(eq(profileViews.profileId, escort.id));
+
+  const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  const [dailyViewsResult] = await db
+    .select({ count: count() })
+    .from(profileViews)
+    .where(sql`${profileViews.profileId} = ${escort.id} AND ${profileViews.viewedAt} > ${oneDayAgo}`);
+
+  const totalViews = totalViewsResult?.count || 0;
+  const dailyViews = dailyViewsResult?.count || 0;
+
+  return <EscortProfileDisplay profile={escort} isOwnProfile={false} totalViews={totalViews} dailyViews={dailyViews} />;
 }

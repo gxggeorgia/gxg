@@ -188,6 +188,8 @@
     "age": "Age",
     "publicGallery": "Public Gallery",
     "video": "VIDEO",
+    "totalViews": "Total Views",
+    "dailyViews": "Views Today",
     "noPhotos": "No photos available",
     "about": "About",
     "tags": "Tags",
