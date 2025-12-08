@@ -63,7 +63,9 @@
     "website": "Website",
     "facebook": "Facebook",
     "twitter": "Twitter/X",
-    "menu": "Menu"
+    "menu": "Menu",
+    "securityCheck": "Security Check",
+    "pleaseVerifyHuman": "Please verify you are human to continue."
   },
   "myAccount": "My Account",
   "auth": {

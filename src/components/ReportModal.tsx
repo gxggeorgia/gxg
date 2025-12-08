@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { X, AlertTriangle } from 'lucide-react';
+import Captcha from './Captcha';
 
 interface ReportModalProps {
   isOpen: boolean;
@@ -17,7 +18,8 @@ export default function ReportModal({ isOpen, onClose, profileId, profileUrl, pr
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
-  
+  const [turnstileToken, setTurnstileToken] = useState<string>('');
+
   const [formData, setFormData] = useState({
     reason: '',
     description: '',
@@ -36,9 +38,14 @@ export default function ReportModal({ isOpen, onClose, profileId, profileUrl, pr
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.reason) {
       setError('Please select a reason');
+      return;
+    }
+
+    if (!turnstileToken) {
+      setError('Please complete the captcha');
       return;
     }
 
@@ -56,6 +63,7 @@ export default function ReportModal({ isOpen, onClose, profileId, profileUrl, pr
           description: formData.description,
           reporterName: formData.reporterName,
           reporterEmail: formData.reporterEmail,
+          turnstileToken,
         }),
       });
 
@@ -68,6 +76,7 @@ export default function ReportModal({ isOpen, onClose, profileId, profileUrl, pr
         onClose();
         setSubmitted(false);
         setFormData({ reason: '', description: '', reporterName: '', reporterEmail: '' });
+        setTurnstileToken('');
       }, 2000);
     } catch (err) {
       setError('Failed to submit report. Please try again.');
@@ -180,6 +189,11 @@ export default function ReportModal({ isOpen, onClose, profileId, profileUrl, pr
                 </p>
               </div>
 
+              {/* Captcha */}
+              <div className="flex justify-center">
+                <Captcha onSuccess={(token) => setTurnstileToken(token)} />
+              </div>
+
               {/* Error Message */}
               {error && (
                 <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
@@ -200,7 +214,7 @@ export default function ReportModal({ isOpen, onClose, profileId, profileUrl, pr
                 <button
                   type="submit"
                   className="flex-1 px-2 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !turnstileToken}
                 >
                   {isSubmitting ? 'Submitting...' : 'Submit Report'}
                 </button>

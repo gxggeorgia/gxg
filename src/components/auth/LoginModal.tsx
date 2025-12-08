@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { X, Eye, EyeOff } from 'lucide-react';
+import Captcha from '../Captcha';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -18,6 +19,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess, onSwitchToRegis
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +32,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess, onSwitchToRegis
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, turnstileToken }),
       });
 
       const data = await response.json();
@@ -128,6 +130,11 @@ export default function LoginModal({ isOpen, onClose, onSuccess, onSwitchToRegis
               </button>
             </div>
           </div>
+
+          <Captcha
+            onSuccess={(token: string) => setTurnstileToken(token)}
+            onExpire={() => setTurnstileToken('')}
+          />
 
           <button
             type="submit"

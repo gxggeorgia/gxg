@@ -1,11 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
 import { reports } from '@/db/schema/general';
+import { verifyTurnstileToken } from '@/lib/turnstile';
 
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { profileId, profileUrl, reason, description, reporterName, reporterEmail } = body;
+        const { profileId, profileUrl, reason, description, reporterName, reporterEmail, turnstileToken } = body;
+
+        // Verify Turnstile Token
+        if (process.env.NODE_ENV === 'production' || turnstileToken) {
+            const verification = await verifyTurnstileToken(turnstileToken);
+            if (!verification.success) {
+                return NextResponse.json(
+                    { error: 'Captcha verification failed' },
+                    { status: 400 }
+                );
+            }
+        }
 
         // Validate required fields
         if (!reason) {

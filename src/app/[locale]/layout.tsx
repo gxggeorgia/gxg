@@ -8,6 +8,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import UserStatusBar from '@/components/UserStatusBar';
 import ScrollToTop from '@/components/ScrollToTop';
+import Providers from '@/components/Providers';
 import "../globals.css";
 
 const geistSans = Geist({
@@ -137,7 +138,7 @@ export default async function LocaleLayout({
   };
 
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -153,7 +154,7 @@ export default async function LocaleLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider messages={messages}>
+        <Providers messages={messages} locale={locale}>
           <div className="flex flex-col min-h-screen">
             <Header />
             <UserStatusBar />
@@ -163,7 +164,7 @@ export default async function LocaleLayout({
             <Footer />
             <ScrollToTop />
           </div>
-        </NextIntlClientProvider>
+        </Providers>
       </body>
     </html>
   );

@@ -3,15 +3,16 @@ import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { hashPassword, generateToken, setAuthCookie } from '@/lib/auth';
 import { generateSlug } from '@/lib/slug';
+import { verifyTurnstileToken } from '@/lib/turnstile';
 import { eq } from 'drizzle-orm';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { 
-      email, 
-      password, 
-      phone, 
+    const {
+      email,
+      password,
+      phone,
       name,
       whatsappAvailable,
       viberAvailable,
@@ -20,13 +21,13 @@ export async function POST(request: NextRequest) {
       snapchat,
       twitter,
       facebook,
-      city, 
+      city,
       district,
-      gender, 
-      dateOfBirth, 
-      ethnicity, 
-      height, 
-      weight, 
+      gender,
+      dateOfBirth,
+      ethnicity,
+      height,
+      weight,
       aboutYou,
       hairColor,
       bustSize,
@@ -38,8 +39,20 @@ export async function POST(request: NextRequest) {
       outcallRates,
       languages,
       services,
-      tags
+      tags,
+      turnstileToken
     } = body;
+
+    // Verify Turnstile Token
+    if (process.env.NODE_ENV === 'production' || turnstileToken) {
+      const verification = await verifyTurnstileToken(turnstileToken);
+      if (!verification.success) {
+        return NextResponse.json(
+          { error: 'Captcha verification failed' },
+          { status: 400 }
+        );
+      }
+    }
 
     // Validate required fields
     if (!email || !password || !phone || !city || !gender || !dateOfBirth || !ethnicity || !height || !weight || !aboutYou) {
@@ -97,24 +110,24 @@ export async function POST(request: NextRequest) {
         role: 'user', // Default role
         status: 'pending', // New users start as pending
         statusMessage: 'Waiting for admin verification. Please send a message on Telegram for verification.',
-        
+
         // Basic Info
         phone,
         name: name || null,
         whatsappAvailable: whatsappAvailable || false,
         viberAvailable: viberAvailable || false,
-        
+
         // Social Media
         website: website || null,
         instagram: instagram || null,
         snapchat: snapchat || null,
         twitter: twitter || null,
         facebook: facebook || null,
-        
+
         // Location
         city,
         district: district || null,
-        
+
         // Personal Info (required)
         gender,
         dateOfBirth: dateOfBirth,
@@ -122,30 +135,30 @@ export async function POST(request: NextRequest) {
         height: parseInt(height),
         weight: weight.toString(),
         aboutYou,
-        
+
         // Optional Personal Info
         hairColor: hairColor || null,
         bustSize: bustSize || null,
         build: build || null,
-        
+
         // Availability
         incallAvailable: incallAvailable || false,
         outcallAvailable: outcallAvailable || false,
-        
+
         // Rates
         currency: currency || 'GEL',
         rates: {
           incall: incallRates || {},
           outcall: outcallRates || {},
         },
-        
+
         // Languages
         languages: (languages || []).filter((l: any) => l.name && l.level),
-        
+
         // Services & Tags
         services: services || [],
         tags: tags || [],
-        
+
         // Images
         images: [],
         videos: [],
@@ -166,7 +179,7 @@ export async function POST(request: NextRequest) {
     const { password: _, ...userWithoutPassword } = newUser;
 
     return NextResponse.json(
-      { 
+      {
         message: 'Registration successful',
         user: userWithoutPassword,
         token: token

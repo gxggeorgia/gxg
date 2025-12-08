@@ -2,12 +2,24 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { verifyPassword, generateToken, setAuthCookie } from '@/lib/auth';
+import { verifyTurnstileToken } from '@/lib/turnstile';
 import { eq } from 'drizzle-orm';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, password } = body;
+    const { email, password, turnstileToken } = body;
+
+    // Verify Turnstile Token
+    if (process.env.NODE_ENV === 'production' || turnstileToken) {
+      const verification = await verifyTurnstileToken(turnstileToken);
+      if (!verification.success) {
+        return NextResponse.json(
+          { error: 'Captcha verification failed' },
+          { status: 400 }
+        );
+      }
+    }
 
     // Validate required fields
     if (!email || !password) {
@@ -55,9 +67,9 @@ export async function POST(request: NextRequest) {
     const { password: _, ...userWithoutPassword } = user;
 
     return NextResponse.json(
-      { 
+      {
         message: 'Login successful',
-        user: userWithoutPassword 
+        user: userWithoutPassword
       },
       { status: 200 }
     );

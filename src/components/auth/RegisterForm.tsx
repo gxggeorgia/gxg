@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { Globe, Instagram, MessageCircle, Twitter, Facebook, Phone, X, Eye, EyeOff } from 'lucide-react';
+import Captcha from '../Captcha';
 import Image from 'next/image';
 import type { RegisterFormData } from '@/types/auth';
 import { locations } from '@/data/locations';
@@ -75,6 +76,7 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState('');
   const errorRef = useRef<HTMLDivElement>(null);
 
   const selectedCityDistricts = useMemo(() => {
@@ -309,6 +311,7 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
           snapchat: formData.snapchat || undefined,
           twitter: formData.twitter || undefined,
           facebook: formData.facebook || undefined,
+          turnstileToken,
         }),
       });
 
@@ -1185,6 +1188,14 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200" style={{ zIndex: 9999 }}>
           <div className="max-w-5xl mx-auto px-6 py-3">
             <form onSubmit={handleSubmit}>
+              {/* Captcha - Only show in register mode */}
+              {!isEditMode && (
+                <Captcha
+                  onSuccess={(token: string) => setTurnstileToken(token)}
+                  onExpire={() => setTurnstileToken('')}
+                />
+              )}
+
               {/* Terms and Conditions - Hide in edit mode */}
               {!isEditMode && (
                 <label className="flex items-start mb-2 cursor-pointer">
