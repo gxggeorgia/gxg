@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
-import { useRouter } from '@/i18n/routing';
+import { useRouter, Link } from '@/i18n/routing';
 import { Globe, Instagram, MessageCircle, Twitter, Facebook, Phone, X, Eye, EyeOff } from 'lucide-react';
 import Captcha from '../Captcha';
 import Image from 'next/image';
@@ -1208,13 +1208,13 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
                   />
                   <span className="ml-2 text-xs text-gray-600">
                     {t('auth.termsAgree')}{' '}
-                    <a href={`/${locale}/terms`} target="_blank" className="text-slate-700 hover:text-slate-900 font-medium underline">
+                    <Link href="/terms" target="_blank" className="text-slate-700 hover:text-slate-900 font-medium underline">
                       {t('auth.termsOfService')}
-                    </a>{' '}
+                    </Link>{' '}
                     {t('auth.and')}{' '}
-                    <a href={`/${locale}/privacy`} target="_blank" className="text-slate-700 hover:text-slate-900 font-medium underline">
+                    <Link href="/privacy" target="_blank" className="text-slate-700 hover:text-slate-900 font-medium underline">
                       {t('auth.privacyPolicy')}
-                    </a>{' '}
+                    </Link>{' '}
                     {t('auth.ofThisWebsite')}
                   </span>
                 </label>

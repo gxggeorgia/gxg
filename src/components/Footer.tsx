@@ -5,6 +5,8 @@ import { useTranslations } from 'next-intl';
 
 import { usePathname } from 'next/navigation';
 
+import { Link } from '@/i18n/routing';
+
 export default function Footer() {
     const pathname = usePathname();
     const t = useTranslations('footer');
@@ -20,10 +22,14 @@ export default function Footer() {
     return (
         <footer className="bg-black py-8 mt-auto border-t border-slate-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <p className="text-sm leading-relaxed">
+                <div className="flex justify-center gap-6 mb-4 text-sm text-gray-400">
+                    <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+                    <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+                </div>
+                <p className="text-sm leading-relaxed text-gray-500">
                     {t('copyright', { year, domain })}
                 </p>
             </div>
-        </footer>
+        </footer >
     );
 }
