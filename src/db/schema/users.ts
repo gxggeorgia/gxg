@@ -99,8 +99,7 @@ export const users = pgTable('users', {
   // Services - array of service names
   services: text('services').array().default([]),
 
-  // Tags - array of tag names
-  tags: text('tags').array().default([]),
+
 
   // Media - images and videos with metadata
   images: jsonb('images').$type<Array<{

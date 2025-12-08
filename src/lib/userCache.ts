@@ -37,7 +37,7 @@ interface CachedUser {
       outcall?: Record<string, string>;
     };
     services?: string[];
-    tags?: string[];
+
     isGold?: boolean;
     isFeatured?: boolean;
     isSilver?: boolean;

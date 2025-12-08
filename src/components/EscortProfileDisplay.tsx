@@ -51,7 +51,7 @@ interface EscortProfile {
         };
     } | null;
     services: string[] | null;
-    tags: string[] | null;
+
     images: Array<{ url: string; width?: number; height?: number; size: number; mimeType: string }> | null;
     videos: Array<{ url: string; thumbnailUrl?: string }> | null;
     website?: string | null;
@@ -479,19 +479,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                             </div>
                         )}
 
-                        {/* Tags */}
-                        {profile.tags && profile.tags.length > 0 && (
-                            <div className="bg-white rounded-2xl shadow-lg p-6 border border-blue-100">
-                                <h2 className="text-2xl font-bold text-gray-900 mb-4">{tProfile('tags')}</h2>
-                                <div className="flex flex-wrap gap-2">
-                                    {profile.tags.map((tag, idx) => (
-                                        <span key={idx} className="bg-blue-100 text-blue-800 px-3 py-1.5 rounded-full text-sm">
-                                            #{tag}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
+
 
                         {/* Rates */}
                         {(profile.incallAvailable || profile.outcallAvailable) && profile.rates && (

@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       outcallRates,
       languages,
       services,
-      tags,
+
       turnstileToken
     } = body;
 
@@ -157,7 +157,7 @@ export async function POST(request: NextRequest) {
 
         // Services & Tags
         services: services || [],
-        tags: tags || [],
+
 
         // Images
         images: [],

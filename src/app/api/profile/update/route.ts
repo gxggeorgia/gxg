@@ -55,7 +55,7 @@ export async function PUT(request: NextRequest) {
     }
     if (body.languages !== undefined) allowedFields.languages = (body.languages || []).filter((l: any) => l.name && l.level);
     if (body.services !== undefined) allowedFields.services = body.services || [];
-    if (body.tags !== undefined) allowedFields.tags = body.tags || [];
+
     if (body.coverImage !== undefined) allowedFields.coverImage = body.coverImage || null;
 
     // Update user with allowed fields

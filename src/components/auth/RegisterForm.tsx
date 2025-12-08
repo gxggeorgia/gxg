@@ -69,7 +69,7 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
     },
     languages: [{ name: '', level: '' }, { name: '', level: '' }, { name: '', level: '' }],
     services: [],
-    tags: [],
+
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');

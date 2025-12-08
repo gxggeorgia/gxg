@@ -163,7 +163,6 @@ async function seed() {
         outcallAvailable: Math.random() > 0.1,
         languages: userLangs,
         services: userServices as any,
-        tags: ['Professional', 'Discreet', 'Verified'] as any,
         currency: 'GEL',
         rates: {
           incall: { oneHour: String(100 + i * 5), twoHours: String(180 + i * 10), threeHours: String(260 + i * 15) },
