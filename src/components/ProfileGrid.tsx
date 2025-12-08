@@ -67,6 +67,7 @@ export default function ProfileGrid() {
         const featured = searchParams.get('featured') || '';
         const gold = searchParams.get('gold') || '';
         const silver = searchParams.get('silver') || '';
+        const verifiedPhotos = searchParams.get('verifiedPhotos') || '';
 
         // Fetch all escorts with filters
         const params = new URLSearchParams();
@@ -77,6 +78,7 @@ export default function ProfileGrid() {
         if (featured) params.append('featured', featured);
         if (gold) params.append('gold', gold);
         if (silver) params.append('silver', silver);
+        if (verifiedPhotos) params.append('verifiedPhotos', verifiedPhotos);
         const pageSize = 10;
         params.append('limit', pageSize.toString());
 

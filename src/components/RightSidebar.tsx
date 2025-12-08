@@ -26,6 +26,21 @@ export default function RightSidebar() {
     online: searchParams.get('online') === 'true',
   });
 
+  // Sync state with URL params
+  useEffect(() => {
+    setFilters({
+      gender: searchParams.get('gender') || '',
+      city: searchParams.get('city') || '',
+      district: searchParams.get('district') || '',
+      gold: searchParams.get('gold') === 'true',
+      silver: searchParams.get('silver') === 'true',
+      featured: searchParams.get('featured') === 'true',
+      verifiedPhotos: searchParams.get('verifiedPhotos') === 'true',
+      new: searchParams.get('new') === 'true',
+      online: searchParams.get('online') === 'true',
+    });
+  }, [searchParams]);
+
   // Get districts for selected city
   const selectedCityData = locations.find(c => c.id === filters.city);
   const districts = selectedCityData?.districts || [];

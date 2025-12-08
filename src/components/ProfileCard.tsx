@@ -99,14 +99,7 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
             )}
           </div>
 
-          <div className="absolute top-0 right-0 md:top-2 md:right-2 flex flex-col gap-1 items-end">
-            {profile.verifiedPhotos && (
-              <span className="bg-blue-500 text-white text-[10px] md:text-xs font-bold px-1.5 md:px-2.5 py-0.5 md:py-1 rounded whitespace-nowrap flex items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" /><circle cx="12" cy="13" r="3" /></svg>
-                {t('profile.verifiedPhotos')}
-              </span>
-            )}
-          </div>
+
 
           {/* Online Status */}
           {/* {profile.isOnline && (
@@ -138,6 +131,15 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
           {showMessage && (
             <div className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full animate-pulse">
               Saving locally in browser
+            </div>
+          )}
+          {/* Verified Badge - Bottom Left */}
+          {profile.verifiedPhotos && (
+            <div className="absolute bottom-2 left-2">
+              <span className="bg-blue-600/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" /><circle cx="12" cy="13" r="3" /></svg>
+                100% VERIFIED PHOTOS
+              </span>
             </div>
           )}
         </div>

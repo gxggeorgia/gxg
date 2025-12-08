@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { eq, and, ilike, or, count, gt } from 'drizzle-orm';
+import { eq, and, ilike, or, count, gt, desc } from 'drizzle-orm';
 import { locations } from '@/data/locations';
 
 export async function GET(request: NextRequest) {
@@ -102,11 +102,22 @@ export async function GET(request: NextRequest) {
 
     const total = countResult[0]?.count || 0;
 
+    // Check if any filters are applied
+    const hasFilters = search || city || district || gender || featured || gold || silver || verifiedPhotos || searchParams.get('new') === 'true' || searchParams.get('online') === 'true';
+
+    const orderByClauses = [];
+    if (!hasFilters) {
+      orderByClauses.push(desc(users.isGold), desc(users.isSilver), desc(users.createdAt));
+    } else {
+      orderByClauses.push(desc(users.createdAt));
+    }
+
     // Get paginated results
     const escorts = await db
       .select()
       .from(users)
       .where(and(...conditions))
+      .orderBy(...orderByClauses)
       .limit(limit)
       .offset(offset);
 
