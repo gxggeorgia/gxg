@@ -11,12 +11,12 @@ type FiltersState = {
   gender: string;
   city: string;
   district: string;
-  vipOnly: boolean;
-  vipEliteOnly: boolean;
+  gold: boolean;
+  silver: boolean;
   featured: boolean;
-  verifiedOnly: boolean;
-  newOnly: boolean;
-  onlineOnly: boolean;
+  verifiedPhotos: boolean;
+  new: boolean;
+  online: boolean;
 };
 
 interface QuickSearchModalProps {
@@ -29,12 +29,12 @@ const defaultFilters: FiltersState = {
   gender: '',
   city: '',
   district: '',
-  vipOnly: false,
-  vipEliteOnly: false,
+  gold: false,
+  silver: false,
   featured: false,
-  verifiedOnly: false,
-  newOnly: false,
-  onlineOnly: false,
+  verifiedPhotos: false,
+  new: false,
+  online: false,
 };
 
 export default function QuickSearchModal({ open, onClose }: QuickSearchModalProps) {
@@ -52,12 +52,12 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
       gender: searchParams.get('gender') || '',
       city: searchParams.get('city') || '',
       district: searchParams.get('district') || '',
-      vipOnly: searchParams.get('vip') === 'true',
-      vipEliteOnly: searchParams.get('vipElite') === 'true',
+      gold: searchParams.get('gold') === 'true',
+      silver: searchParams.get('silver') === 'true',
       featured: searchParams.get('featured') === 'true',
-      verifiedOnly: searchParams.get('verified') === 'true',
-      newOnly: searchParams.get('new') === 'true',
-      onlineOnly: searchParams.get('online') === 'true',
+      verifiedPhotos: searchParams.get('verifiedPhotos') === 'true',
+      new: searchParams.get('new') === 'true',
+      online: searchParams.get('online') === 'true',
     });
   }, [open, searchParams]);
 
@@ -82,12 +82,12 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
     if (filters.gender) params.set('gender', filters.gender);
     if (filters.city) params.set('city', filters.city);
     if (filters.district) params.set('district', filters.district);
-    if (filters.vipOnly) params.set('vip', 'true');
-    if (filters.vipEliteOnly) params.set('vipElite', 'true');
+    if (filters.gold) params.set('gold', 'true');
+    if (filters.silver) params.set('silver', 'true');
     if (filters.featured) params.set('featured', 'true');
-    if (filters.verifiedOnly) params.set('verified', 'true');
-    if (filters.newOnly) params.set('new', 'true');
-    if (filters.onlineOnly) params.set('online', 'true');
+    if (filters.verifiedPhotos) params.set('verifiedPhotos', 'true');
+    if (filters.new) params.set('new', 'true');
+    if (filters.online) params.set('online', 'true');
 
     router.push(`/?${params.toString()}`);
     onClose();
@@ -100,10 +100,10 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
     params.delete('gender');
     params.delete('city');
     params.delete('district');
-    params.delete('vip');
-    params.delete('vipElite');
+    params.delete('gold');
+    params.delete('silver');
     params.delete('featured');
-    params.delete('verified');
+    params.delete('verifiedPhotos');
     params.delete('new');
     params.delete('online');
     router.push(`/?${params.toString()}`);
@@ -202,20 +202,20 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
               <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition">
                 <input
                   type="checkbox"
-                  checked={filters.vipOnly}
-                  onChange={() => handleCheckboxToggle('vipOnly')}
+                  checked={filters.gold}
+                  onChange={() => handleCheckboxToggle('gold')}
                   className="w-4 h-4 text-purple-600 accent-purple-600 rounded"
                 />
-                <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.vipOnly')}</span>
+                <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.gold')}</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition">
                 <input
                   type="checkbox"
-                  checked={filters.vipEliteOnly}
-                  onChange={() => handleCheckboxToggle('vipEliteOnly')}
+                  checked={filters.silver}
+                  onChange={() => handleCheckboxToggle('silver')}
                   className="w-4 h-4 text-purple-600 accent-purple-600 rounded"
                 />
-                <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.vipEliteOnly')}</span>
+                <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.silver')}</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition">
                 <input
@@ -224,34 +224,34 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
                   onChange={() => handleCheckboxToggle('featured')}
                   className="w-4 h-4 text-purple-600 accent-purple-600 rounded"
                 />
-                <span className="text-xs sm:text-sm text-gray-700 font-medium">⭐ Featured</span>
+                <span className="text-xs sm:text-sm text-gray-700 font-medium">⭐ {t('search.featured')}</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition">
                 <input
                   type="checkbox"
-                  checked={filters.verifiedOnly}
-                  onChange={() => handleCheckboxToggle('verifiedOnly')}
+                  checked={filters.verifiedPhotos}
+                  onChange={() => handleCheckboxToggle('verifiedPhotos')}
                   className="w-4 h-4 text-purple-600 accent-purple-600 rounded"
                 />
-                <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.verifiedOnly')}</span>
+                <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.verifiedPhotos')}</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition">
                 <input
                   type="checkbox"
-                  checked={filters.newOnly}
-                  onChange={() => handleCheckboxToggle('newOnly')}
+                  checked={filters.new}
+                  onChange={() => handleCheckboxToggle('new')}
                   className="w-4 h-4 text-purple-600 accent-purple-600 rounded"
                 />
-                <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.newOnly')}</span>
+                <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.new')}</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition">
                 <input
                   type="checkbox"
-                  checked={filters.onlineOnly}
-                  onChange={() => handleCheckboxToggle('onlineOnly')}
+                  checked={filters.online}
+                  onChange={() => handleCheckboxToggle('online')}
                   className="w-4 h-4 text-purple-600 accent-purple-600 rounded"
                 />
-                <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.onlineOnly')}</span>
+                <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.online')}</span>
               </label>
             </div>
           </div>

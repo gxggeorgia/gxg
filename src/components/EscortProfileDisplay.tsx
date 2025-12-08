@@ -59,8 +59,9 @@ interface EscortProfile {
     snapchat?: string | null;
     twitter?: string | null;
     facebook?: string | null;
-    isVip: boolean;
-    isVipElite: boolean;
+    isGold: boolean;
+    isSilver: boolean;
+    verifiedPhotos: boolean;
     isFeatured: boolean;
     status?: string;
     email?: string;
@@ -74,6 +75,7 @@ interface EscortProfileDisplayProps {
 }
 
 export default function EscortProfileDisplay({ profile, isOwnProfile = false, totalViews = 0, dailyViews = 0 }: EscortProfileDisplayProps) {
+    // ... (keeping existing hooks)
     const tAuth = useTranslations('auth');
     const tCommon = useTranslations('common');
     const tProfile = useTranslations('profile');
@@ -85,6 +87,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
     const [reportModalOpen, setReportModalOpen] = useState(false);
     const locale = useLocale();
 
+    // ... (keeping existing analytics and helper functions)
     // Analytics: Track View
     useEffect(() => {
         if (!isOwnProfile) {
@@ -179,19 +182,25 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                                             <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
                                                 {profile.name}
                                             </h1>
-                                            {profile.isVipElite && (
-                                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
-                                                    VIP ELITE
+                                            {profile.isSilver && (
+                                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-gray-100 text-gray-800">
+                                                    {tProfile('silver')}
                                                 </span>
                                             )}
-                                            {profile.isVip && !profile.isVipElite && (
-                                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-800">
-                                                    VIP
+                                            {profile.isGold && (
+                                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-100 text-yellow-800">
+                                                    {tProfile('gold')}
                                                 </span>
                                             )}
                                             {profile.isFeatured && (
                                                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">
                                                     FEATURED
+                                                </span>
+                                            )}
+                                            {profile.verifiedPhotos && (
+                                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 flex items-center gap-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" /><circle cx="12" cy="13" r="3" /></svg>
+                                                    {tProfile('verifiedPhotos')}
                                                 </span>
                                             )}
                                         </div>

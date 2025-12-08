@@ -11,9 +11,9 @@ interface ProfileCardProps {
     slug?: string; // SEO-friendly URL slug
     name: string;
     city: string;
-    isVip: boolean;
-    isVipElite?: boolean;
-    isVerified: boolean;
+    isGold: boolean;
+    isSilver?: boolean;
+    verifiedPhotos?: boolean;
     isNew?: boolean;
     isOnline: boolean;
     coverImage?: string;
@@ -87,26 +87,26 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
 
           {/* Badges */}
           <div className="absolute top-2 left-2 md:top-2 md:left-2 flex flex-col gap-0.5">
-            {profile.isVipElite && (
-              <span className="bg-red-600 text-white text-[9px] md:text-[10px] font-bold px-1 md:px-1.5 py-0.5 rounded whitespace-nowrap">
-                Elite VIP
+            {profile.isSilver && (
+              <span className="bg-gray-400 text-white text-[9px] md:text-[10px] font-bold px-1 md:px-1.5 py-0.5 rounded whitespace-nowrap">
+                {t('profile.silver')}
               </span>
             )}
-            {profile.isVip && !profile.isVipElite && (
-              <span className="bg-yellow-400 text-black text-[9px] md:text-[10px] font-bold px-1 md:px-1.5 py-0.5 rounded whitespace-nowrap">
-                VIP
+            {profile.isGold && (
+              <span className="bg-yellow-500 text-white text-[9px] md:text-[10px] font-bold px-1 md:px-1.5 py-0.5 rounded whitespace-nowrap">
+                {t('profile.gold')}
               </span>
             )}
           </div>
 
-          {/* Verified Badge */}
-          {profile.isVerified && (
-            <div className="absolute top-0 right-0 md:top-2 md:right-2">
-              <span className="bg-green-500 text-white text-[10px] md:text-xs font-bold px-1.5 md:px-2.5 py-0.5 md:py-1 rounded whitespace-nowrap">
-                verified
+          <div className="absolute top-0 right-0 md:top-2 md:right-2 flex flex-col gap-1 items-end">
+            {profile.verifiedPhotos && (
+              <span className="bg-blue-500 text-white text-[10px] md:text-xs font-bold px-1.5 md:px-2.5 py-0.5 md:py-1 rounded whitespace-nowrap flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" /><circle cx="12" cy="13" r="3" /></svg>
+                {t('profile.verifiedPhotos')}
               </span>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Online Status */}
           {/* {profile.isOnline && (

@@ -14,7 +14,7 @@ interface User {
   email: string;
   name: string | null;
   role: 'user' | 'escort' | 'admin';
-  status: 'private' | 'public' | 'suspended' | 'pending';
+  status: 'suspended' | 'pending' | 'verified';
 }
 
 export default function Header() {
@@ -196,21 +196,21 @@ export default function Header() {
             <nav className="flex items-center gap-6">
               <Link
                 href="/"
-                className={`flex items-center gap-2 text-base transition-colors text-blue-400 hover:text-blue-300 ${pathname === '/' ? 'font-semibold' : ''}`}
+                className={`flex items-center gap-2 text-base transition-colors text-white hover:text-gray-300 ${pathname === '/' ? 'font-semibold' : ''}`}
               >
                 <Home size={18} />
                 {t('common.home')}
               </Link>
               <Link
                 href="/favorites"
-                className={`flex items-center gap-2 text-base transition-colors text-red-400 hover:text-red-300 ${pathname === '/favorites' ? 'font-semibold' : ''}`}
+                className={`flex items-center gap-2 text-base transition-colors text-white hover:text-gray-300 ${pathname === '/favorites' ? 'font-semibold' : ''}`}
               >
                 <Heart size={18} />
                 {t('common.favorites')}
               </Link>
               <Link
                 href="/support"
-                className={`flex items-center gap-2 text-base transition-colors text-green-400 hover:text-green-300 ${pathname === '/support' ? 'font-semibold' : ''}`}
+                className={`flex items-center gap-2 text-base transition-colors text-white hover:text-gray-300 ${pathname === '/support' ? 'font-semibold' : ''}`}
               >
                 <Headset size={18} />
                 {t('common.support')}
@@ -336,7 +336,7 @@ export default function Header() {
               <nav className="flex flex-col gap-3">
                 <Link
                   href="/"
-                  className="px-4 py-2 hover:bg-slate-700 rounded transition flex items-center gap-2 text-blue-400 hover:text-blue-300"
+                  className="px-4 py-2 hover:bg-slate-700 rounded transition flex items-center gap-2 text-white hover:text-gray-300"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <Home size={18} />
@@ -344,7 +344,7 @@ export default function Header() {
                 </Link>
                 <Link
                   href="/favorites"
-                  className="px-4 py-2 hover:bg-slate-700 rounded transition flex items-center gap-2 text-red-400 hover:text-red-300"
+                  className="px-4 py-2 hover:bg-slate-700 rounded transition flex items-center gap-2 text-white hover:text-gray-300"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <Heart size={18} />
@@ -352,7 +352,7 @@ export default function Header() {
                 </Link>
                 <Link
                   href="/support"
-                  className="px-4 py-2 hover:bg-slate-700 rounded transition flex items-center gap-2 text-green-400 hover:text-green-300"
+                  className="px-4 py-2 hover:bg-slate-700 rounded transition flex items-center gap-2 text-white hover:text-gray-300"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <Headset size={18} />

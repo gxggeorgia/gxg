@@ -47,7 +47,7 @@ export default function AnalyticsPage() {
     const totalViews = views.length;
     const totalInteractions = interactions.length;
     const totalUsers = data.users.length;
-    const activeProfiles = data.users.filter((u: any) => u.status === 'public').length;
+    const activeProfiles = data.users.filter((u: any) => u.status === 'verified').length;
 
     // Interactions by Type
     const interactionsByType: Record<string, number> = {};

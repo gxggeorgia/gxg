@@ -13,15 +13,17 @@ interface UserProfile extends Omit<RegisterFormData, 'password' | 'confirmPasswo
   id: string;
   email: string;
   emailVerified: boolean;
-  status: 'private' | 'public' | 'suspended' | 'pending';
+  status: 'suspended' | 'pending' | 'verified';
   statusMessage: string | null;
   role: 'user' | 'escort' | 'admin';
-  isVip: boolean;
+  isGold: boolean;
   isFeatured: boolean;
-  isVipElite: boolean;
-  vipExpiresAt: string | null;
+  isSilver: boolean;
+  goldExpiresAt: string | null;
   featuredExpiresAt: string | null;
-  vipEliteExpiresAt: string | null;
+  silverExpiresAt: string | null;
+
+  verifiedPhotos: boolean;
   createdAt: string;
   coverImage?: string | null;
   rates?: {
@@ -139,13 +141,13 @@ export default function ProfilePage() {
     const currentCount = ((profile as any)?.images as any[])?.length || 0;
     const newFiles: File[] = [];
     const newPreviews: string[] = [];
-    
+
     for (const file of Array.from(files)) {
       if (currentCount + selectedImages.length + newFiles.length >= 10) {
         setNotification({ type: 'error', message: 'Maximum 10 images allowed' });
         break;
       }
-      
+
       if (!ALLOWED_TYPES.includes(file.type)) {
         setNotification({ type: 'error', message: `Invalid file type: ${file.name}. Only JPG, PNG, and WebP are allowed.` });
         continue;
@@ -154,7 +156,7 @@ export default function ProfilePage() {
         setNotification({ type: 'error', message: `File too large: ${file.name}. Maximum size is 10MB.` });
         continue;
       }
-      
+
       newFiles.push(file);
       newPreviews.push(URL.createObjectURL(file));
     }
@@ -187,10 +189,10 @@ export default function ProfilePage() {
     try {
       for (let i = 0; i < selectedImages.length; i++) {
         const file = selectedImages[i];
-        
+
         // Set uploading status for this file
         setImageUploadStatus(prev => ({ ...prev, [i]: 'uploading' }));
-        
+
         try {
           const dimensions = await getImageDimensions(file);
 
@@ -218,19 +220,19 @@ export default function ProfilePage() {
           setImageUploadStatus(prev => ({ ...prev, [i]: 'error' }));
         }
       }
-      
+
       // Wait a bit to show success status
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       // Clear selections and previews
       imagePreviews.forEach(url => URL.revokeObjectURL(url));
       setSelectedImages([]);
       setImagePreviews([]);
       setImageUploadStatus({});
-      
+
       // Refresh profile
       await fetchProfile();
-      
+
       if (errors.length > 0) {
         setNotification({ type: 'error', message: `Uploaded ${successCount} image(s). Errors: ${errors.join(', ')}` });
       } else {
@@ -267,7 +269,7 @@ export default function ProfilePage() {
     // Validate file
     const MAX_SIZE = 100 * 1024 * 1024; // 100MB
     const ALLOWED_TYPES = ['video/mp4', 'video/webm', 'video/quicktime'];
-    
+
     if (!ALLOWED_TYPES.includes(file.type)) {
       setNotification({ type: 'error', message: 'Invalid file type. Only MP4, WebM, and MOV are allowed.' });
       e.target.value = ''; // Clear input
@@ -327,7 +329,7 @@ export default function ProfilePage() {
       }
       setSelectedVideo(null);
       setVideoPreviews(null);
-      
+
       // Refresh profile
       await fetchProfile();
       setNotification({ type: 'success', message: 'Video uploaded successfully!' });
@@ -414,11 +416,10 @@ export default function ProfilePage() {
       {/* Notification Toast */}
       {notification && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4 animate-in fade-in slide-in-from-top-2 duration-300">
-          <div className={`rounded-2xl shadow-2xl p-5 flex items-center justify-between backdrop-blur-sm border ${
-            notification.type === 'success' 
-              ? 'bg-gradient-to-r from-green-500 to-emerald-500 border-green-400/50' 
-              : 'bg-gradient-to-r from-red-500 to-rose-500 border-red-400/50'
-          } text-white`}>
+          <div className={`rounded-2xl shadow-2xl p-5 flex items-center justify-between backdrop-blur-sm border ${notification.type === 'success'
+            ? 'bg-gradient-to-r from-green-500 to-emerald-500 border-green-400/50'
+            : 'bg-gradient-to-r from-red-500 to-rose-500 border-red-400/50'
+            } text-white`}>
             <div className="flex items-center gap-3">
               {notification.type === 'success' ? (
                 <div className="flex-shrink-0 animate-bounce">
@@ -439,60 +440,60 @@ export default function ProfilePage() {
                   {notification.message}
                 </p>
               </div>
+              <button
+                onClick={() => setNotification(null)}
+                className="ml-4 flex-shrink-0 hover:bg-white/20 rounded-full p-1 transition duration-200 hover:scale-110"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
-            <button
-              onClick={() => setNotification(null)}
-              className="ml-4 flex-shrink-0 hover:bg-white/20 rounded-full p-1 transition duration-200 hover:scale-110"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
           </div>
         </div>
       )}
 
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4">
 
         {/* Premium Header Card */}
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden mb-6 border border-gray-200">
           <div className="relative bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-4 py-4 md:px-8 md:py-8">
             {/* Subscription Badges - Single Row */}
             <div className="mb-2 md:mb-4 flex gap-2 overflow-x-auto scrollbar-hide justify-center md:justify-end">
-              {/* VIP Elite Badge */}
-              {profile.isVipElite && (
-                <div className="px-2 md:px-3 py-1.5 md:py-2 rounded-md bg-yellow-700 border-2 border-yellow-500 shadow-lg flex-shrink-0">
+              {/* Silver Badge */}
+              {profile.isSilver && (
+                <div className="px-2 md:px-3 py-1.5 md:py-2 rounded-md bg-gray-700 border-2 border-gray-400 shadow-lg flex-shrink-0">
                   <div className="flex items-center gap-1.5">
                     <Crown size={14} className="text-white md:w-4 md:h-4" />
                     <div className="flex flex-col">
-                      <span className="text-white font-bold text-[10px] md:text-xs leading-tight whitespace-nowrap">VIP ELITE</span>
-                      {profile.vipEliteExpiresAt && (
-                        <span className="text-yellow-100 text-[8px] md:text-[10px] leading-tight whitespace-nowrap">
-                          {new Date(profile.vipEliteExpiresAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      <span className="text-white font-bold text-[10px] md:text-xs leading-tight whitespace-nowrap">SILVER</span>
+                      {profile.silverExpiresAt && (
+                        <span className="text-gray-100 text-[8px] md:text-[10px] leading-tight whitespace-nowrap">
+                          {new Date(profile.silverExpiresAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                         </span>
                       )}
                     </div>
                   </div>
                 </div>
               )}
-              
-              {/* VIP Badge */}
-              {profile.isVip && (
-                <div className="px-2 md:px-3 py-1.5 md:py-2 rounded-md bg-purple-700 border-2 border-purple-400 shadow-lg flex-shrink-0">
+
+              {/* Gold Badge */}
+              {profile.isGold && (
+                <div className="px-2 md:px-3 py-1.5 md:py-2 rounded-md bg-yellow-700 border-2 border-yellow-400 shadow-lg flex-shrink-0">
                   <div className="flex items-center gap-1.5">
-                    <Star size={14} className="text-white md:w-4 md:h-4 fill-white" />
+                    <Crown size={14} className="text-white md:w-4 md:h-4" />
                     <div className="flex flex-col">
-                      <span className="text-white font-bold text-[10px] md:text-xs leading-tight whitespace-nowrap">VIP</span>
-                      {profile.vipExpiresAt && (
-                        <span className="text-purple-100 text-[8px] md:text-[10px] leading-tight whitespace-nowrap">
-                          {new Date(profile.vipExpiresAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      <span className="text-white font-bold text-[10px] md:text-xs leading-tight whitespace-nowrap">GOLD</span>
+                      {profile.goldExpiresAt && (
+                        <span className="text-yellow-100 text-[8px] md:text-[10px] leading-tight whitespace-nowrap">
+                          {new Date(profile.goldExpiresAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                         </span>
                       )}
                     </div>
                   </div>
                 </div>
               )}
-              
+
               {/* FEATURED Badge */}
               {profile.isFeatured && (
                 <div className="px-2 md:px-3 py-1.5 md:py-2 rounded-md bg-blue-700 border-2 border-blue-400 shadow-lg flex-shrink-0">
@@ -510,78 +511,86 @@ export default function ProfilePage() {
                 </div>
               )}
             </div>
-
-            <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
-              <div className="w-24 h-24 md:w-32 md:h-32 bg-white rounded-full flex items-center justify-center shadow-2xl ring-4 ring-white/30">
-                <User size={48} className="text-purple-600 md:w-16 md:h-16" />
+            {/* Verified Photos Badge */}
+            {profile.verifiedPhotos && (
+              <div className="px-2 md:px-3 py-1.5 md:py-2 rounded-md bg-green-700 border-2 border-green-400 shadow-lg flex-shrink-0">
+                <div className="flex items-center gap-1.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white md:w-4 md:h-4"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" /><circle cx="12" cy="13" r="3" /></svg>
+                  <div className="flex flex-col">
+                    <span className="text-white font-bold text-[10px] md:text-xs leading-tight whitespace-nowrap">VERIFIED PHOTOS</span>
+                  </div>
+                </div>
               </div>
-              <div className="text-white flex-1 text-center md:text-left">
-                <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3 mb-2">
-                  <h1 className="text-2xl md:text-4xl font-bold">{profile.name || t('common.user')}</h1>
-                  <div className="flex items-center gap-2 flex-wrap justify-center md:justify-start">
-                    <span className="px-3 py-1 bg-amber-500/20 backdrop-blur-sm rounded-full text-xs md:text-sm font-semibold capitalize border border-amber-400/30">
-                      {profile.role}
-                    </span>
-                    {/* Status Badge */}
-                    <div className={`px-2 py-1 md:px-3 md:py-1.5 rounded-full flex items-center gap-1 md:gap-1.5 shadow-lg ${
-                      profile.status === 'public' ? 'bg-green-600' :
-                      profile.status === 'suspended' ? 'bg-red-600' :
+            )}
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 p-4">
+            <div className="w-24 h-24 md:w-32 md:h-32 bg-white rounded-full flex items-center justify-center shadow-2xl ring-4 ring-white/30">
+              <User size={48} className="text-purple-600 md:w-16 md:h-16" />
+            </div>
+            <div className="flex-1 text-center md:text-left text-black">
+              <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3 mb-2">
+                <h1 className="text-2xl md:text-4xl font-bold">{profile.name || t('common.user')}</h1>
+                <div className="flex items-center gap-2 flex-wrap justify-center md:justify-start">
+                  <span className="px-3 py-1 bg-amber-500/20 backdrop-blur-sm rounded-full text-xs md:text-sm font-semibold capitalize border border-amber-400/30">
+                    {profile.role}
+                  </span>
+                  {/* Status Badge */}
+                  <div className={`px-2 py-1 md:px-3 md:py-1.5 rounded-full flex items-center gap-1 md:gap-1.5 shadow-lg ${profile.status === 'verified' ? 'bg-green-600' :
+                    profile.status === 'suspended' ? 'bg-red-600' :
                       profile.status === 'pending' ? 'bg-yellow-600' :
-                      'bg-gray-600'
+                        'bg-gray-600'
                     }`}>
-                      <svg className="w-3 h-3 md:w-4 md:h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span className="text-white font-bold text-[10px] md:text-xs uppercase">
-                        {profile.status === 'public' ? 'ACTIVE' :
-                         profile.status === 'pending' ? 'PENDING' :
-                         profile.status === 'suspended' ? 'SUSPENDED' :
-                         'PRIVATE'}
-                      </span>
-                    </div>
+                    <svg className="w-3 h-3 md:w-4 md:h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-white font-bold text-[10px] md:text-xs uppercase">
+                      {profile.status === 'verified' ? 'VERIFIED' :
+                        profile.status === 'pending' ? 'PENDING' :
+                          profile.status === 'suspended' ? 'SUSPENDED' :
+                            'UNKNOWN'}
+                    </span>
                   </div>
                 </div>
-                <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-gray-300 text-sm md:text-base">
+              </div>
+              <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-gray-300 text-sm md:text-base">
+                <div className="flex items-center gap-2 text-black">
+                  <Mail size={16} className="md:w-5 md:h-5" />
+                  <span className="break-all">{profile.email}</span>
+                </div>
+                {cityName && (
                   <div className="flex items-center gap-2">
-                    <Mail size={16} className="md:w-5 md:h-5" />
-                    <span className="break-all">{profile.email}</span>
-                  </div>
-                  {cityName && (
-                    <div className="flex items-center gap-2">
-                      <MapPin size={16} className="md:w-5 md:h-5" />
-                      <span>{cityName}{districtName && `, ${districtName}`}</span>
-                    </div>
-                  )}
-                </div>
-                
-                {/* Status Message */}
-                {profile.statusMessage && (
-                  <div className={`mt-4 px-4 py-3 rounded-lg border-l-4 ${
-                    profile.status === 'suspended' ? 'bg-red-900/30 border-red-400' :
-                    profile.status === 'pending' ? 'bg-yellow-900/30 border-yellow-400' :
-                    profile.status === 'public' ? 'bg-green-900/30 border-green-400' :
-                    'bg-blue-900/30 border-blue-400'
-                  }`}>
-                    <p className={`text-sm ${
-                      profile.status === 'suspended' ? 'text-red-200' :
-                      profile.status === 'pending' ? 'text-yellow-200' :
-                      profile.status === 'public' ? 'text-green-200' :
-                      'text-blue-200'
-                    }`}>
-                     
-                      {profile.statusMessage}
-                    </p>
+                    <MapPin size={16} className="md:w-5 md:h-5" />
+                    <span>{cityName}{districtName && `, ${districtName}`}</span>
                   </div>
                 )}
               </div>
-              <button
-                onClick={() => router.push('/profile/edit')}
-                className="w-full md:w-auto bg-white text-purple-600 px-4 md:px-6 py-2 md:py-3 rounded-xl font-semibold hover:bg-purple-50 transition flex items-center justify-center gap-2 shadow-lg text-sm md:text-base"
-              >
-                <Edit2 size={18} className="md:w-5 md:h-5" />
-                {t('common.editProfile')}
-              </button>
+
+              {/* Status Message */}
+              {profile.statusMessage && (
+                <div className={`mt-4 px-4 py-3 rounded-lg border-l-4 ${profile.status === 'suspended' ? 'bg-red-900/30 border-red-400' :
+                  profile.status === 'pending' ? 'bg-yellow-900/30 border-yellow-400' :
+                    profile.status === 'verified' ? 'bg-green-900/30 border-green-400' :
+                      'bg-blue-900/30 border-blue-400'
+                  }`}>
+                  <p className={`text-sm ${profile.status === 'suspended' ? 'text-red-200' :
+                    profile.status === 'pending' ? 'text-yellow-200' :
+                      profile.status === 'verified' ? 'text-green-200' :
+                        'text-blue-200'
+                    }`}>
+
+                    {profile.statusMessage}
+                  </p>
+                </div>
+              )}
             </div>
+            <button
+              onClick={() => router.push('/profile/edit')}
+              className="w-full md:w-auto bg-white text-purple-600 px-4 md:px-6 py-2 md:py-3 rounded-xl font-semibold hover:bg-purple-50 transition flex items-center justify-center gap-2 shadow-lg text-sm md:text-base"
+            >
+              <Edit2 size={18} className="md:w-5 md:h-5" />
+              {t('common.editProfile')}
+            </button>
           </div>
         </div>
 
@@ -635,7 +644,7 @@ export default function ProfilePage() {
               <p className="text-xs md:text-sm text-gray-600 mb-3">
                 {(profile as any)?.images?.length || 0} / 10 images uploaded
               </p>
-              
+
               {/* Uploaded Images */}
               {(profile as any)?.images && (profile as any).images.length > 0 && (
                 <div className="grid grid-cols-3 gap-2 mb-3">
@@ -643,13 +652,13 @@ export default function ProfilePage() {
                     const isDeleting = deletingImages.has(image.url);
                     return (
                       <div key={index} className="relative aspect-square group">
-                        <img 
-                          src={image.url} 
-                          alt={`Image ${index + 1}`} 
-                          className="w-full h-full object-cover rounded-lg md:cursor-pointer" 
+                        <img
+                          src={image.url}
+                          alt={`Image ${index + 1}`}
+                          className="w-full h-full object-cover rounded-lg md:cursor-pointer"
                           onClick={() => setLightboxImage(image.url)}
                         />
-                        
+
                         {/* Deleting Overlay */}
                         {isDeleting && (
                           <div className="absolute inset-0 bg-black/40 rounded-lg flex flex-col items-center justify-center">
@@ -657,7 +666,7 @@ export default function ProfilePage() {
                             <span className="text-white text-sm font-bold drop-shadow-lg">Deleting...</span>
                           </div>
                         )}
-                        
+
                         {!isDeleting && (
                           <>
                             {/* Center View Icon - Desktop only */}
@@ -683,11 +692,10 @@ export default function ProfilePage() {
                                 setCoverImage(image.url);
                               }}
                               disabled={settingCoverImage}
-                              className={`absolute bottom-1 left-1 rounded-full p-2 transition shadow-lg md:opacity-0 md:group-hover:opacity-100 ${
-                                profile?.coverImage === image.url
-                                  ? 'bg-blue-600 text-white'
-                                  : 'bg-gray-600 text-white hover:bg-blue-600'
-                              }`}
+                              className={`absolute bottom-1 left-1 rounded-full p-2 transition shadow-lg md:opacity-0 md:group-hover:opacity-100 ${profile?.coverImage === image.url
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-gray-600 text-white hover:bg-blue-600'
+                                }`}
                               title={profile?.coverImage === image.url ? 'Cover image' : 'Set as cover'}
                             >
                               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -722,7 +730,7 @@ export default function ProfilePage() {
                     return (
                       <div key={index} className="relative aspect-square">
                         <img src={preview} alt={`Preview ${index + 1}`} className="w-full h-full object-cover rounded-lg border-2 border-blue-400" />
-                        
+
                         {/* Upload Status Overlay */}
                         {status && (
                           <div className="absolute inset-0 bg-black/40 rounded-lg flex flex-col items-center justify-center">
@@ -736,7 +744,7 @@ export default function ProfilePage() {
                                 <span className="text-white text-sm font-bold drop-shadow-lg">Waiting...</span>
                               </>
                             )}
-                            {status === 'uploading' && (                                                                                                                                                                                                                            
+                            {status === 'uploading' && (
                               <>
                                 <div className="animate-spin rounded-full h-10 w-10 border-4 border-white border-t-transparent mb-2"></div>
                                 <span className="text-white text-sm font-bold drop-shadow-lg">Uploading...</span>
@@ -760,7 +768,7 @@ export default function ProfilePage() {
                             )}
                           </div>
                         )}
-                        
+
                         {!status && (
                           <button
                             onClick={() => removeSelectedImage(index)}
@@ -779,7 +787,7 @@ export default function ProfilePage() {
               )}
 
               {imagePreviews.length === 0 && (profile as any)?.images?.length === 0 && (
-                <div 
+                <div
                   onClick={() => document.getElementById('image-upload')?.click()}
                   className="w-full h-32 md:h-40 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center hover:border-purple-400 transition cursor-pointer mb-3"
                 >
@@ -799,7 +807,7 @@ export default function ProfilePage() {
                 onChange={handleImageSelect}
                 disabled={uploadingImages}
               />
-              
+
               <div className="flex gap-2">
                 <button
                   onClick={() => document.getElementById('image-upload')?.click()}
@@ -831,17 +839,17 @@ export default function ProfilePage() {
               <p className="text-xs md:text-sm text-gray-600 mb-3">
                 {(profile as any)?.videos?.length > 0 ? '1 video uploaded' : 'No video uploaded'}
               </p>
-              
+
               {/* Uploaded Video */}
               {(profile as any)?.videos && (profile as any).videos.length > 0 && (
                 <div className="relative mb-3 group">
-                  <video 
+                  <video
                     id="uploaded-video"
-                    src={(profile as any).videos[0].url} 
-                    className="w-full h-auto rounded-lg bg-black" 
-                    controls 
+                    src={(profile as any).videos[0].url}
+                    className="w-full h-auto rounded-lg bg-black"
+                    controls
                   />
-                  
+
                   {/* Deleting Overlay */}
                   {deletingVideo && (
                     <div className="absolute inset-0 bg-black/40 rounded-lg flex flex-col items-center justify-center pointer-events-none">
@@ -849,7 +857,7 @@ export default function ProfilePage() {
                       <span className="text-white text-sm font-bold drop-shadow-lg">Deleting...</span>
                     </div>
                   )}
-                  
+
                   {!deletingVideo && (
                     <button
                       onClick={(e) => {
@@ -883,7 +891,7 @@ export default function ProfilePage() {
               )}
 
               {!videoPreviews && !((profile as any)?.videos?.length > 0) && (
-                <div 
+                <div
                   onClick={() => document.getElementById('video-upload')?.click()}
                   className="w-full h-32 md:h-40 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center hover:border-blue-400 transition cursor-pointer mb-3"
                 >
@@ -902,7 +910,7 @@ export default function ProfilePage() {
                 onChange={handleVideoSelect}
                 disabled={uploadingVideo}
               />
-              
+
               <div className="flex gap-2">
                 <button
                   onClick={() => document.getElementById('video-upload')?.click()}
@@ -1168,72 +1176,75 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Lightbox Modal - Images Only */}
-      {lightboxImage && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
-          onClick={() => setLightboxImage(null)}
-        >
-          <div className="relative max-w-6xl max-h-[90vh] w-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
-            <img 
-              src={lightboxImage} 
-              alt="Full view" 
-              className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
-            />
-            
-            {/* Close Button */}
-            <button
+
+        {/* Lightbox Modal - Images Only */}
+        {
+          lightboxImage && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
               onClick={() => setLightboxImage(null)}
-              className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full p-2.5 hover:bg-red-600 transition shadow-xl"
-              title="Close"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            
-            {/* Previous Button */}
-            {(profile as any)?.images && (profile as any).images.length > 1 && (
-              <>
+              <div className="relative max-w-6xl max-h-[90vh] w-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+                <img
+                  src={lightboxImage}
+                  alt="Full view"
+                  className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+                />
+
+                {/* Close Button */}
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    const images = (profile as any).images;
-                    const currentIndex = images.findIndex((img: any) => img.url === lightboxImage);
-                    const prevIndex = currentIndex > 0 ? currentIndex - 1 : images.length - 1;
-                    setLightboxImage(images[prevIndex].url);
-                  }}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 text-gray-900 rounded-full p-3 hover:bg-white transition shadow-xl"
-                  title="Previous"
+                  onClick={() => setLightboxImage(null)}
+                  className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full p-2.5 hover:bg-red-600 transition shadow-xl"
+                  title="Close"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
-                
-                {/* Next Button */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    const images = (profile as any).images;
-                    const currentIndex = images.findIndex((img: any) => img.url === lightboxImage);
-                    const nextIndex = currentIndex < images.length - 1 ? currentIndex + 1 : 0;
-                    setLightboxImage(images[nextIndex].url);
-                  }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 text-gray-900 rounded-full p-3 hover:bg-white transition shadow-xl"
-                  title="Next"
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+
+                {/* Previous Button */}
+                {(profile as any)?.images && (profile as any).images.length > 1 && (
+                  <>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const images = (profile as any).images;
+                        const currentIndex = images.findIndex((img: any) => img.url === lightboxImage);
+                        const prevIndex = currentIndex > 0 ? currentIndex - 1 : images.length - 1;
+                        setLightboxImage(images[prevIndex].url);
+                      }}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 text-gray-900 rounded-full p-3 hover:bg-white transition shadow-xl"
+                      title="Previous"
+                    >
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
+
+                    {/* Next Button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const images = (profile as any).images;
+                        const currentIndex = images.findIndex((img: any) => img.url === lightboxImage);
+                        const nextIndex = currentIndex < images.length - 1 ? currentIndex + 1 : 0;
+                        setLightboxImage(images[nextIndex].url);
+                      }}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 text-gray-900 rounded-full p-3 hover:bg-white transition shadow-xl"
+                      title="Next"
+                    >
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          )
+        }
+      </div >
     </div>
   );
 }

@@ -138,7 +138,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess, onSwitchToRegis
 
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || !turnstileToken}
             className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
           >
             {isLoading ? (

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import StatusBar from './StatusBar';
 
 interface User {
-  status: 'pending' | 'public' | 'suspended' | 'private';
+  status: 'pending' | 'verified' | 'suspended';
   statusMessage?: string | null;
 }
 
@@ -16,7 +16,7 @@ export default function UserStatusBar() {
     const fetchUser = async () => {
       try {
         const response = await fetch('/api/profile');
-        
+
         if (response.ok) {
           const data = await response.json();
           setUser(data.user);
@@ -34,14 +34,14 @@ export default function UserStatusBar() {
     };
 
     fetchUser();
-    
+
     // Poll for status updates every 30 seconds
     const interval = setInterval(fetchUser, 30000);
     return () => clearInterval(interval);
   }, []);
 
   if (isLoading) return null;
-  
+
   if (!user) return null;
 
   return <StatusBar status={user.status} statusMessage={user.statusMessage} />;

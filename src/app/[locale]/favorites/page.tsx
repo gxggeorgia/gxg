@@ -8,7 +8,8 @@ interface Escort {
   id: string;
   name: string;
   city: string;
-  isVip: boolean;
+  isGold: boolean;
+  isSilver: boolean;
   images: Array<{ url: string; isPrimary?: boolean }>;
   coverImage?: string;
 }
@@ -36,14 +37,14 @@ export default function FavoritesPage() {
           const data = await res.json();
           console.log('All escorts fetched:', data.escorts.length);
           console.log('Filtering for IDs:', favoriteIds);
-          
+
           const favoriteEscorts = data.escorts.filter((escort: Escort) => {
             const escortIdStr = String(escort.id);
             const match = favoriteIds.includes(escortIdStr);
             console.log(`Checking ${escort.name} (${escortIdStr}): ${match}`);
             return match;
           });
-          
+
           console.log('Matched favorites:', favoriteEscorts.length);
           setFavorites(favoriteEscorts);
         }
@@ -106,8 +107,9 @@ export default function FavoritesPage() {
                     id: escort.id,
                     name: escort.name,
                     city: escort.city,
-                    isVip: escort.isVip,
-                    isVerified: true,
+                    isGold: escort.isGold,
+                    isSilver: escort.isSilver,
+
                     isNew: false,
                     isOnline: true,
                     coverImage: escort.coverImage || escort.images?.[0]?.url,

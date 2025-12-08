@@ -43,18 +43,18 @@ export default function RegistrationInfoModal({ isOpen, onClose }: RegistrationI
                   <p className="text-sm text-gray-600">{t('getFeaturedFirstMonth') || 'Get featured for your first month'}</p>
                 </div>
               </div> */}
-              <div className="flex gap-3 p-3 bg-red-50 rounded-lg border border-red-200">
-                <Star size={20} className="text-red-600 flex-shrink-0 mt-0.5" />
+              <div className="flex gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <Star size={20} className="text-gray-600 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-semibold text-gray-900">{t('vipPass') || 'VIP Pass'}</p>
-                  <p className="text-sm text-gray-600">{t('vipPassDesc') || 'Premium visibility and features'}</p>
+                  <p className="font-semibold text-gray-900">{t('silverSubscription') || 'Silver Subscription'}</p>
+                  <p className="text-sm text-gray-600">{t('silverSubscriptionDesc') || 'Enhanced visibility and features'}</p>
                 </div>
               </div>
               <div className="flex gap-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
                 <Star size={20} className="text-yellow-600 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-semibold text-gray-900">{t('eliteVipPass') || 'Elite VIP Pass'}</p>
-                  <p className="text-sm text-gray-600">{t('eliteVipPassDesc') || 'Maximum visibility and exclusive features'}</p>
+                  <p className="font-semibold text-gray-900">{t('goldSubscription') || 'Gold Subscription'}</p>
+                  <p className="text-sm text-gray-600">{t('goldSubscriptionDesc') || 'Maximum visibility and exclusive features'}</p>
                 </div>
               </div>
             </div>

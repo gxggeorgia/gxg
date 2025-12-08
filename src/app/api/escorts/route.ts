@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { eq, and, ilike, or, count } from 'drizzle-orm';
+import { eq, and, ilike, or, count, gt } from 'drizzle-orm';
 import { locations } from '@/data/locations';
 
 export async function GET(request: NextRequest) {
@@ -12,15 +12,16 @@ export async function GET(request: NextRequest) {
     const district = searchParams.get('district') || '';
     const gender = searchParams.get('gender') || '';
     const featured = searchParams.get('featured') === 'true';
-    const vipOnly = searchParams.get('vip') === 'true';
-    const vipEliteOnly = searchParams.get('vipElite') === 'true';
+    const gold = searchParams.get('gold') === 'true';
+    const silver = searchParams.get('silver') === 'true';
+    const verifiedPhotos = searchParams.get('verifiedPhotos') === 'true';
     const limit = parseInt(searchParams.get('limit') || '20');
     const offset = parseInt(searchParams.get('offset') || '0');
 
     // Build WHERE conditions
     const conditions: any[] = [
       eq(users.role, 'escort'),
-      eq(users.status, 'public'),
+      eq(users.status, 'verified'),
     ];
 
     // Convert city ID to city name
@@ -30,18 +31,24 @@ export async function GET(request: NextRequest) {
       cityName = cityObj?.name.en || city;
     }
 
-    console.log('API Filters:', { search, city, cityName, district, gender, featured, vipOnly, vipEliteOnly });
+    console.log('API Filters:', { search, city, cityName, district, gender, featured, gold, silver, verifiedPhotos });
+
+    const now = new Date();
 
     if (featured) {
-      conditions.push(eq(users.isFeatured, true));
+      conditions.push(and(eq(users.isFeatured, true), gt(users.featuredExpiresAt, now)));
     }
 
-    if (vipOnly) {
-      conditions.push(eq(users.isVip, true));
+    if (gold) {
+      conditions.push(and(eq(users.isGold, true), gt(users.goldExpiresAt, now)));
     }
 
-    if (vipEliteOnly) {
-      conditions.push(eq(users.isVipElite, true));
+    if (silver) {
+      conditions.push(and(eq(users.isSilver, true), gt(users.silverExpiresAt, now)));
+    }
+
+    if (verifiedPhotos) {
+      conditions.push(eq(users.verifiedPhotos, true));
     }
 
     if (cityName) {
@@ -56,13 +63,35 @@ export async function GET(request: NextRequest) {
       conditions.push(eq(users.gender, gender as any));
     }
 
+    if (searchParams.get('new') === 'true') {
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      conditions.push(gt(users.createdAt, thirtyDaysAgo));
+    }
+
+    if (searchParams.get('online') === 'true') {
+      const fifteenMinutesAgo = new Date();
+      fifteenMinutesAgo.setMinutes(fifteenMinutesAgo.getMinutes() - 15);
+      conditions.push(gt(users.lastActive, fifteenMinutesAgo));
+    }
+
     if (search) {
-      conditions.push(
-        or(
-          ilike(users.name, `%${search}%`),
-          ilike(users.city, `%${search}%`)
-        )
+      const searchLower = search.toLowerCase();
+      const matchingCity = locations.find(c =>
+        c.name.ka.toLowerCase().includes(searchLower) ||
+        c.name.ru.toLowerCase().includes(searchLower)
       );
+
+      const searchConditions = [
+        ilike(users.name, `%${search}%`),
+        ilike(users.city, `%${search}%`)
+      ];
+
+      if (matchingCity) {
+        searchConditions.push(ilike(users.city, `%${matchingCity.name.en}%`));
+      }
+
+      conditions.push(or(...searchConditions));
     }
 
     // Get total count of matching records
@@ -70,7 +99,7 @@ export async function GET(request: NextRequest) {
       .select({ count: count() })
       .from(users)
       .where(and(...conditions));
-    
+
     const total = countResult[0]?.count || 0;
 
     // Get paginated results
@@ -103,8 +132,9 @@ export async function GET(request: NextRequest) {
           district: district || null,
           gender: gender || null,
           featured,
-          vipOnly,
-          vipEliteOnly
+          gold,
+          silver,
+          verifiedPhotos
         }
       }
     });

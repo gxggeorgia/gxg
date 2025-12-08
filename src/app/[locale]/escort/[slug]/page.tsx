@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: EscortDetailPageProps) {
   }
 
   const title = `${escort.name} - Verified Escort in ${escort.city}`;
-  const description = escort.aboutYou || `Professional escort ${escort.name} in ${escort.city}. VIP verified profile.`;
+  const description = escort.aboutYou || `Professional escort ${escort.name} in ${escort.city}. Verified profile.`;
 
   return generatePageMetadata(
     title,
@@ -36,7 +36,7 @@ export default async function EscortDetailPage({ params }: EscortDetailPageProps
   const { slug } = await params;
   const escort = await db.select().from(users).where(eq(users.slug, slug)).limit(1).then(res => res[0]);
 
-  if (!escort || escort.status !== 'public') {
+  if (!escort || escort.status !== 'verified') {
     notFound();
   }
 

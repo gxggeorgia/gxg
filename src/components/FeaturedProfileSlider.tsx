@@ -9,8 +9,9 @@ interface Escort {
   slug: string;
   name: string;
   city: string;
-  isVip: boolean;
-  isVipElite: boolean;
+  isGold: boolean;
+  isSilver: boolean;
+  verifiedPhotos: boolean;
   languages?: Array<{ name: string; level: string }>;
   coverImage?: string;
   images: Array<{ url: string; width?: number; height?: number; isPrimary?: boolean }>;
@@ -21,9 +22,9 @@ interface Profile {
   slug: string;
   name: string;
   city: string;
-  isVip: boolean;
-  isVipElite: boolean;
-  isVerified: boolean;
+  isGold: boolean;
+  isSilver: boolean;
+  verifiedPhotos: boolean;
   isOnline: boolean;
   languages?: Array<{ name: string; level: string }>;
   coverImage?: string;
@@ -215,9 +216,9 @@ export default function FeaturedProfileSlider() {
                       slug: profile.slug,
                       name: profile.name,
                       city: profile.city,
-                      isVip: profile.isVip,
-                      isVipElite: profile.isVipElite,
-                      isVerified: true,
+                      isGold: profile.isGold,
+                      isSilver: profile.isSilver,
+                      verifiedPhotos: profile.verifiedPhotos,
                       isOnline: true,
                       languages: profile.languages,
                       coverImage: profile.coverImage || (profile.images as any)?.[0]?.url,

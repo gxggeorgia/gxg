@@ -12,14 +12,15 @@ interface User {
   name: string | null;
   phone: string;
   role: 'user' | 'escort' | 'admin';
-  status: 'private' | 'public' | 'suspended' | 'pending';
+  status: 'suspended' | 'pending' | 'verified';
   statusMessage: string | null;
-  isVip: boolean;
+  isGold: boolean;
   isFeatured: boolean;
-  isVipElite: boolean;
-  vipExpiresAt: string | null;
+  isSilver: boolean;
+  goldExpiresAt: string | null;
   featuredExpiresAt: string | null;
-  vipEliteExpiresAt: string | null;
+  silverExpiresAt: string | null;
+  verifiedPhotos: boolean;
 }
 
 export default function AdminPage() {
@@ -148,8 +149,7 @@ export default function AdminPage() {
               <div className="grid grid-cols-2 gap-2 md:col-span-2 md:gap-4">
                 <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg">
                   <option value="all">All Statuses</option>
-                  <option value="private">Private</option>
-                  <option value="public">Public</option>
+                  <option value="verified">Verified</option>
                   <option value="pending">Pending</option>
                   <option value="suspended">Suspended</option>
                 </select>
@@ -170,12 +170,12 @@ export default function AdminPage() {
               <div className="text-lg md:text-2xl font-bold text-gray-900">{users.length}</div>
             </div>
             <div className="bg-white rounded-lg shadow p-2 md:p-4">
-              <div className="text-[10px] md:text-sm text-gray-600">Public</div>
-              <div className="text-lg md:text-2xl font-bold text-green-600">{users.filter(u => u.status === 'public').length}</div>
+              <div className="text-[10px] md:text-sm text-gray-600">Verified</div>
+              <div className="text-lg md:text-2xl font-bold text-green-600">{users.filter(u => u.status === 'verified').length}</div>
             </div>
             <div className="bg-white rounded-lg shadow p-2 md:p-4">
-              <div className="text-[10px] md:text-sm text-gray-600">VIP</div>
-              <div className="text-lg md:text-2xl font-bold text-purple-600">{users.filter(u => u.isVip || u.isFeatured || u.isVipElite).length}</div>
+              <div className="text-[10px] md:text-sm text-gray-600">Premium</div>
+              <div className="text-lg md:text-2xl font-bold text-purple-600">{users.filter(u => u.isGold || u.isFeatured || u.isSilver).length}</div>
             </div>
             <div className="bg-white rounded-lg shadow p-2 md:p-4">
               <div className="text-[10px] md:text-sm text-gray-600">Banned</div>
@@ -206,23 +206,23 @@ export default function AdminPage() {
                       </td>
                       <td className="px-6 py-4">
                         <span className={`px-2 py-1 text-xs font-semibold rounded-full ${user.role === 'admin' ? 'bg-red-100 text-red-800' :
-                            user.role === 'escort' ? 'bg-purple-100 text-purple-800' :
-                              'bg-gray-100 text-gray-800'
+                          user.role === 'escort' ? 'bg-purple-100 text-purple-800' :
+                            'bg-gray-100 text-gray-800'
                           }`}>{user.role}</span>
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${user.status === 'public' ? 'bg-green-100 text-green-800' :
-                            user.status === 'suspended' ? 'bg-red-100 text-red-800' :
-                              user.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-gray-100 text-gray-800'
+                        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${user.status === 'verified' ? 'bg-green-100 text-green-800' :
+                          user.status === 'suspended' ? 'bg-red-100 text-red-800' :
+                            user.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-gray-100 text-gray-800'
                           }`}>{user.status}</span>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex gap-2 items-center">
-                          {user.isVip && (
+                          {user.isGold && (
                             <div className="flex items-center gap-1">
-                              <Crown className="w-4 h-4 text-purple-600" />
-                              <span className="text-xs font-medium text-purple-600">VIP</span>
+                              <Crown className="w-4 h-4 text-yellow-600" />
+                              <span className="text-xs font-medium text-yellow-600">GOLD</span>
                             </div>
                           )}
                           {user.isFeatured && (
@@ -231,14 +231,19 @@ export default function AdminPage() {
                               <span className="text-xs font-medium text-blue-600">FEATURED</span>
                             </div>
                           )}
-                          {user.isVipElite && (
+                          {user.isSilver && (
                             <div className="flex items-center gap-1">
-                              <Crown className="w-4 h-4 text-yellow-600" />
-                              <span className="text-xs font-medium text-yellow-600">ELITE</span>
+                              <Crown className="w-4 h-4 text-gray-600" />
+                              <span className="text-xs font-medium text-gray-600">SILVER</span>
                             </div>
                           )}
-                          {!user.isVip && !user.isFeatured && !user.isVipElite && (
+                          {!user.isGold && !user.isFeatured && !user.isSilver && !user.verifiedPhotos && (
                             <span className="text-xs text-gray-500">None</span>
+                          )}
+                          {user.verifiedPhotos && (
+                            <div className="flex items-center gap-1">
+                              <span className="text-xs font-bold text-green-600 bg-green-100 px-1.5 py-0.5 rounded-full">VERIFIED PHOTOS</span>
+                            </div>
                           )}
                         </div>
                       </td>

@@ -10,9 +10,9 @@ async function createAdmin() {
   try {
     const email = 'admin@gmail.com';
     const password = 'admin123'; // Change this to a secure password
-    
+
     console.log('🔍 Checking if admin user already exists...');
-    
+
     // Check if user already exists
     const existingUser = await db
       .select()
@@ -22,19 +22,19 @@ async function createAdmin() {
 
     if (existingUser.length > 0) {
       console.log('⚠️  User already exists. Updating to admin role...');
-      
+
       // Update existing user to admin
       const [updatedUser] = await db
         .update(users)
         .set({
           role: 'admin',
-          status: 'private',
+          status: 'verified',
           statusMessage: "Admin Profile",
           emailVerified: true,
         })
         .where(eq(users.email, email))
         .returning();
-      
+
       console.log('User updated to admin successfully!');
       console.log('Email:', email);
       console.log('User ID:', updatedUser.id);
@@ -42,13 +42,13 @@ async function createAdmin() {
       console.log('Status:', updatedUser.status);
     } else {
       console.log('📝 Creating new admin user...');
-      
+
       // Hash password
       const hashedPassword = await hashPassword(password);
-      
+
       // Generate slug for admin user
       const slug = generateSlug('Admin', 'Tbilisi');
-      
+
       // Create admin user
       interface User {
         id: string;
@@ -77,7 +77,7 @@ async function createAdmin() {
         slug,
         phone: '+990000000000',
         role: 'admin',
-        status: 'private',
+        status: 'verified',
         statusMessage: null,
         emailVerified: true,
         city: 'Tbilisi',
@@ -88,7 +88,7 @@ async function createAdmin() {
         weight: '75',
         aboutYou: 'System Administrator',
       }).returning();
-      
+
       console.log('✅ Admin user created successfully!');
       console.log('Email:', email);
       console.log('Password:', password);
@@ -96,12 +96,12 @@ async function createAdmin() {
       console.log('Role:', admin.role);
       console.log('Status:', admin.status);
     }
-    
+
     console.log('\n⚠️  Default password: admin123');
     console.log('⚠️  Please change the password after first login!');
     console.log('\n🔗 Login at: http://localhost:3000');
     console.log('🔗 Admin panel: http://localhost:3000/admin');
-    
+
     process.exit(0);
   } catch (error: any) {
     console.error('❌ Error:', error.message || error);

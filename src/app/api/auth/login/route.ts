@@ -11,14 +11,19 @@ export async function POST(request: NextRequest) {
     const { email, password, turnstileToken } = body;
 
     // Verify Turnstile Token
-    if (process.env.NODE_ENV === 'production' || turnstileToken) {
-      const verification = await verifyTurnstileToken(turnstileToken);
-      if (!verification.success) {
-        return NextResponse.json(
-          { error: 'Captcha verification failed' },
-          { status: 400 }
-        );
-      }
+    if (!turnstileToken) {
+      return NextResponse.json(
+        { error: 'Please complete the captcha' },
+        { status: 400 }
+      );
+    }
+
+    const verification = await verifyTurnstileToken(turnstileToken);
+    if (!verification.success) {
+      return NextResponse.json(
+        { error: 'Captcha verification failed' },
+        { status: 400 }
+      );
     }
 
     // Validate required fields

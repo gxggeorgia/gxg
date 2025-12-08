@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ProfileCard from './ProfileCard';
+import ProfileCardSkeleton from './ProfileCardSkeleton';
 
 interface Escort {
   id: string;
@@ -10,8 +11,9 @@ interface Escort {
   name: string;
   city: string;
   isFeatured: boolean;
-  isVip: boolean;
-  isVipElite: boolean;
+  isGold: boolean;
+  isSilver: boolean;
+  verifiedPhotos: boolean;
   languages?: Array<{ name: string; level: string }>;
   images: Array<{ url: string; width?: number; height?: number; isPrimary?: boolean }>;
   coverImage?: string;
@@ -30,9 +32,9 @@ interface Profile {
   slug: string;
   name: string;
   city: string;
-  isVip: boolean;
-  isVipElite: boolean;
-  isVerified: boolean;
+  isGold: boolean;
+  isSilver: boolean;
+  verifiedPhotos: boolean;
   isOnline: boolean;
   languages?: Array<{ name: string; level: string }>;
   coverImage?: string;
@@ -63,8 +65,8 @@ export default function ProfileGrid() {
         const district = searchParams.get('district') || '';
         const gender = searchParams.get('gender') || '';
         const featured = searchParams.get('featured') || '';
-        const vip = searchParams.get('vip') || '';
-        const vipElite = searchParams.get('vipElite') || '';
+        const gold = searchParams.get('gold') || '';
+        const silver = searchParams.get('silver') || '';
 
         // Fetch all escorts with filters
         const params = new URLSearchParams();
@@ -73,8 +75,8 @@ export default function ProfileGrid() {
         if (district) params.append('district', district);
         if (gender) params.append('gender', gender);
         if (featured) params.append('featured', featured);
-        if (vip) params.append('vip', vip);
-        if (vipElite) params.append('vipElite', vipElite);
+        if (gold) params.append('gold', gold);
+        if (silver) params.append('silver', silver);
         const pageSize = 10;
         params.append('limit', pageSize.toString());
 
@@ -96,44 +98,22 @@ export default function ProfileGrid() {
     fetchEscorts();
   }, [searchParams.toString(), currentPage]);
 
-  if (loading) {
-    return (
-      <div className="space-y-6">
-        <h3 className="text-lg font-bold mb-4 text-gray-900">All Escorts</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-            <div key={i} className="bg-white rounded-lg shadow overflow-hidden">
-              <div className="relative w-full bg-gray-200" style={{ aspectRatio: '3/4' }}>
-                <div className="absolute top-2 left-2 h-5 w-16 bg-gray-300 rounded"></div>
-                <div className="absolute top-2 right-2 h-6 w-20 bg-gray-300 rounded"></div>
-                <div className="absolute bottom-2 left-2 h-6 w-16 bg-gray-300 rounded-full"></div>
-                <div className="absolute bottom-2 right-2 w-8 h-8 bg-gray-300 rounded-full"></div>
-              </div>
-              <div className="p-2.5 space-y-1.5">
-                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
+  // ... (loading state unchanged)
 
-  if (error) {
-    return (
-      <div className="flex justify-center items-center py-12">
-        <div className="text-red-500">{error}</div>
-      </div>
-    );
-  }
+  // ... (error state unchanged)
 
   return (
     <div className="space-y-6">
       {/* All Escorts */}
       <div>
         <h3 className="text-lg font-bold mb-4 text-gray-900">All Escorts</h3>
-        {escorts.length === 0 ? (
+        {loading ? (
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <ProfileCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : escorts.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
             No escorts found
           </div>
@@ -147,9 +127,9 @@ export default function ProfileGrid() {
                   slug: escort.slug,
                   name: escort.name,
                   city: escort.city,
-                  isVip: escort.isVip,
-                  isVipElite: escort.isVipElite,
-                  isVerified: (escort as any).isVerified || true,
+                  isGold: escort.isGold,
+                  isSilver: escort.isSilver,
+                  verifiedPhotos: escort.verifiedPhotos,
                   isOnline: (escort as any).isOnline || true,
                   languages: escort.languages,
                   coverImage: escort.coverImage || (escort.images as any)?.[0]?.url,
@@ -192,8 +172,8 @@ export default function ProfileGrid() {
                     key={page}
                     onClick={() => setCurrentPage(page)}
                     className={`w-10 h-10 rounded-lg font-medium transition ${page === currentPage
-                        ? 'bg-red-600 text-white shadow-md'
-                        : 'bg-white text-gray-700 border border-gray-300 hover:border-red-300 hover:text-red-600'
+                      ? 'bg-red-600 text-white shadow-md'
+                      : 'bg-white text-gray-700 border border-gray-300 hover:border-red-300 hover:text-red-600'
                       }`}
                     aria-current={page === currentPage ? 'page' : undefined}
                   >

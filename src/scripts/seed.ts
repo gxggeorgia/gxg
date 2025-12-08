@@ -1,6 +1,7 @@
 // seed.ts
 // npx tsx src/scripts/seed.ts 
 
+import 'dotenv/config';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -9,9 +10,6 @@ import { Pool } from 'pg';
 import { users } from '@/db/schema/users';
 import { hashPassword } from '@/lib/auth';
 import { generateSlug } from '@/lib/slug';
-
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 // Use environment variable
 const DATABASE_URL = process.env.DATABASE_URL!;
@@ -174,10 +172,15 @@ async function seed() {
         images: profileImages,
         videos: [],
         coverImage: profileImages[0]?.url,
-        status: 'public' as 'public' | 'private' | 'suspended' | 'pending',
+        status: 'verified' as 'suspended' | 'pending' | 'verified',
         role: 'escort' as 'user' | 'escort' | 'admin',
         isFeatured: Math.random() > 0.7,
-        isVip: Math.random() > 0.8
+        featuredExpiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+        isGold: Math.random() > 0.8,
+        goldExpiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        isSilver: Math.random() > 0.85,
+        silverExpiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        verifiedPhotos: Math.random() > 0.5
       });
       console.log(`✅ Created profile: ${name} with ${profileImages.length} images uploaded to R2`);
     } catch (error) {

@@ -21,13 +21,13 @@ export async function POST(request: NextRequest) {
 
     // Validate and prepare updates
     const allowedFields = [
-      'status', 'statusMessage', 'role', 'isVip', 'isFeatured', 'isVipElite',
-      'vipExpiresAt', 'featuredExpiresAt', 'vipEliteExpiresAt',
+      'status', 'statusMessage', 'role', 'isGold', 'isFeatured', 'isSilver', 'verifiedPhotos',
+      'goldExpiresAt', 'featuredExpiresAt', 'silverExpiresAt',
       'name', 'phone', 'city', 'district', 'emailVerified'
     ];
 
     const updateData: any = {};
-    
+
     for (const [key, value] of Object.entries(updates)) {
       if (allowedFields.includes(key)) {
         // Handle date fields - convert string to Date if needed
@@ -41,12 +41,12 @@ export async function POST(request: NextRequest) {
           }
         }
         // Handle subscription toggles
-        else if ((key === 'isVip' || key === 'isFeatured' || key === 'isVipElite') && value === false) {
+        else if ((key === 'isGold' || key === 'isFeatured' || key === 'isSilver') && value === false) {
           updateData[key] = value;
           // Clear expiration date when disabling subscription
-          const expiresAtKey = key.replace('is', '').toLowerCase() + 'ExpiresAt';
-          const correctKey = expiresAtKey === 'vipeliteExpiresAt' ? 'vipEliteExpiresAt' : expiresAtKey;
-          updateData[correctKey] = null;
+          if (key === 'isGold') updateData['goldExpiresAt'] = null;
+          if (key === 'isFeatured') updateData['featuredExpiresAt'] = null;
+          if (key === 'isSilver') updateData['silverExpiresAt'] = null;
         } else {
           updateData[key] = value;
         }

@@ -18,12 +18,12 @@ export default function RightSidebar() {
     gender: searchParams.get('gender') || '',
     city: searchParams.get('city') || '',
     district: searchParams.get('district') || '',
-    vipOnly: searchParams.get('vip') === 'true',
-    vipEliteOnly: searchParams.get('vipElite') === 'true',
-    topOnly: searchParams.get('top') === 'true',
-    verifiedOnly: searchParams.get('verified') === 'true',
-    newOnly: searchParams.get('new') === 'true',
-    onlineOnly: searchParams.get('online') === 'true',
+    gold: searchParams.get('gold') === 'true',
+    silver: searchParams.get('silver') === 'true',
+    featured: searchParams.get('featured') === 'true',
+    verifiedPhotos: searchParams.get('verifiedPhotos') === 'true',
+    new: searchParams.get('new') === 'true',
+    online: searchParams.get('online') === 'true',
   });
 
   // Get districts for selected city
@@ -39,12 +39,12 @@ export default function RightSidebar() {
     if (filters.gender) params.set('gender', filters.gender);
     if (filters.city) params.set('city', filters.city);
     if (filters.district) params.set('district', filters.district);
-    if (filters.vipOnly) params.set('vip', 'true');
-    if (filters.vipEliteOnly) params.set('vipElite', 'true');
-    if (filters.topOnly) params.set('top', 'true');
-    if (filters.verifiedOnly) params.set('verified', 'true');
-    if (filters.newOnly) params.set('new', 'true');
-    if (filters.onlineOnly) params.set('online', 'true');
+    if (filters.gold) params.set('gold', 'true');
+    if (filters.silver) params.set('silver', 'true');
+    if (filters.featured) params.set('featured', 'true');
+    if (filters.verifiedPhotos) params.set('verifiedPhotos', 'true');
+    if (filters.new) params.set('new', 'true');
+    if (filters.online) params.set('online', 'true');
 
     router.push(`/?${params.toString()}`);
   };
@@ -124,56 +124,56 @@ export default function RightSidebar() {
           <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-red-300 transition">
             <input
               type="checkbox"
-              checked={filters.vipOnly}
-              onChange={() => handleCheckboxChange('vipOnly')}
+              checked={filters.gold}
+              onChange={() => handleCheckboxChange('gold')}
               className="w-4 h-4 text-red-600 accent-red-600 rounded"
             />
-            <span className="text-xs sm:text-sm text-gray-700 font-medium">VIP</span>
+            <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.gold')}</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-red-300 transition">
             <input
               type="checkbox"
-              checked={filters.vipEliteOnly}
-              onChange={() => handleCheckboxChange('vipEliteOnly')}
+              checked={filters.silver}
+              onChange={() => handleCheckboxChange('silver')}
               className="w-4 h-4 text-red-600 accent-red-600 rounded"
             />
-            <span className="text-xs sm:text-sm text-gray-700 font-medium">VIP Elite</span>
+            <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.silver')}</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-red-300 transition">
             <input
               type="checkbox"
-              checked={filters.topOnly}
-              onChange={() => handleCheckboxChange('topOnly')}
+              checked={filters.featured}
+              onChange={() => handleCheckboxChange('featured')}
               className="w-4 h-4 text-red-600 accent-red-600 rounded"
             />
-            <span className="text-xs sm:text-sm text-gray-700 font-medium">TOP</span>
+            <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.featured')}</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-red-300 transition">
             <input
               type="checkbox"
-              checked={filters.verifiedOnly}
-              onChange={() => handleCheckboxChange('verifiedOnly')}
+              checked={filters.verifiedPhotos}
+              onChange={() => handleCheckboxChange('verifiedPhotos')}
               className="w-4 h-4 text-red-600 accent-red-600 rounded"
             />
-            <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.verifiedOnly')}</span>
+            <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.verifiedPhotos')}</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-red-300 transition">
             <input
               type="checkbox"
-              checked={filters.newOnly}
-              onChange={() => handleCheckboxChange('newOnly')}
+              checked={filters.new}
+              onChange={() => handleCheckboxChange('new')}
               className="w-4 h-4 text-red-600 accent-red-600 rounded"
             />
-            <span className="text-xs sm:text-sm text-gray-700 font-medium">New</span>
+            <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.new')}</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-red-300 transition">
             <input
               type="checkbox"
-              checked={filters.onlineOnly}
-              onChange={() => handleCheckboxChange('onlineOnly')}
+              checked={filters.online}
+              onChange={() => handleCheckboxChange('online')}
               className="w-4 h-4 text-red-600 accent-red-600 rounded"
             />
-            <span className="text-xs sm:text-sm text-gray-700 font-medium">Online</span>
+            <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.online')}</span>
           </label>
         </div>
 

@@ -8,7 +8,7 @@ interface CachedUser {
     email: string;
     name: string | null;
     role: 'user' | 'escort' | 'admin';
-    status: 'private' | 'public' | 'suspended' | 'pending';
+    status: 'suspended' | 'pending' | 'verified';
     phone: string;
     whatsappAvailable?: boolean;
     viberAvailable?: boolean;
@@ -38,9 +38,10 @@ interface CachedUser {
     };
     services?: string[];
     tags?: string[];
-    isVip?: boolean;
+    isGold?: boolean;
     isFeatured?: boolean;
-    isVipElite?: boolean;
+    isSilver?: boolean;
+    verifiedPhotos: boolean;
     createdAt: string;
     updatedAt: string;
   };
