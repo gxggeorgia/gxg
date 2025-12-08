@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import Captcha from "./Captcha";
 import { useTranslations } from "next-intl";
 
+import Image from "next/image";
+
 export default function SecurityCheck({ children }: { children: React.ReactNode }) {
     const [verified, setVerified] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -67,11 +69,13 @@ export default function SecurityCheck({ children }: { children: React.ReactNode 
 
                 {/* Logo */}
                 <div className="flex justify-center">
-                    <div className="relative w-24 h-24 rounded-full overflow-hidden shadow-sm border border-gray-100 p-1">
-                        <img
-                            src="/icons/logo.jpeg"
+                    <div className="relative w-24 h-24 rounded-full overflow-hidden p-1">
+                        <Image
+                            src="/icons/logo.png"
                             alt="GogoXGeorgia"
-                            className="w-full h-full object-cover rounded-full"
+                            fill
+                            className="object-contain"
+                            priority
                         />
                     </div>
                 </div>

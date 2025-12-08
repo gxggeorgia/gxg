@@ -43,11 +43,11 @@ export const defaultMetadata: Metadata = {
     description,
     images: [
       {
-        url: `${baseUrl}/icons/logo.jpeg`,
+        url: `${baseUrl}/icons/logo.png`,
         width: 1200,
         height: 630,
         alt: `${siteName} Logo`,
-        type: 'image/jpeg',
+        type: 'image/png',
       },
     ],
   },
@@ -55,7 +55,7 @@ export const defaultMetadata: Metadata = {
     card: 'summary_large_image',
     title: `${siteName} | Verified Escorts & Companions`,
     description,
-    images: [`${baseUrl}/icons/logo.jpeg`],
+    images: [`${baseUrl}/icons/logo.png`],
     creator: '@escortdirectoryga',
   },
   icons: {

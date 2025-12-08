@@ -85,7 +85,7 @@ export default function Header() {
                 <img
                   src="/icons/logo-bgless.png"
                   alt={process.env.NEXT_PUBLIC_SITE_NAME || 'EG'}
-                  className="h-20 w-auto object-contain"
+                  className="h-36 w-auto object-contain"
                 />
               </Link>
             </div>
