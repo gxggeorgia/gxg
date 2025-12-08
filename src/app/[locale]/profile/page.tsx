@@ -567,16 +567,15 @@ export default function ProfilePage() {
               </div>
 
               {/* Status Message */}
-              {profile.statusMessage && (
-                <div className={`mt-4 px-4 py-3 rounded-lg border-l-4 ${profile.status === 'suspended' ? 'bg-red-900/30 border-red-400' :
-                  profile.status === 'pending' ? 'bg-yellow-900/30 border-yellow-400' :
-                    profile.status === 'verified' ? 'bg-green-900/30 border-green-400' :
-                      'bg-blue-900/30 border-blue-400'
+              {/* Status Message */}
+              {profile.statusMessage && profile.status !== 'verified' && (
+                <div className={`mt-4 px-4 py-3 rounded-lg border-l-4 ${profile.status === 'suspended' ? 'bg-red-50 border-red-500' :
+                  profile.status === 'pending' ? 'bg-yellow-50 border-yellow-500' :
+                    'bg-blue-50 border-blue-500'
                   }`}>
-                  <p className={`text-sm ${profile.status === 'suspended' ? 'text-red-200' :
-                    profile.status === 'pending' ? 'text-yellow-200' :
-                      profile.status === 'verified' ? 'text-green-200' :
-                        'text-blue-200'
+                  <p className={`text-sm font-medium ${profile.status === 'suspended' ? 'text-red-800' :
+                    profile.status === 'pending' ? 'text-yellow-800' :
+                      'text-blue-800'
                     }`}>
 
                     {profile.statusMessage}

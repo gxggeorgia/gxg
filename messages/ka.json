@@ -94,6 +94,7 @@
     "build": "აგებულება",
     "aboutYou": "თქვენს შესახებ",
     "loggingIn": "შესვლა...",
+    "completeCaptcha": "გთხოვთ დაასრულოთ captcha შესასვლელად",
     "creatingAccount": "ანგარიშის შექმნა...",
     "dontHaveAccount": "არ გაქვთ ანგარიში?",
     "alreadyHaveAccount": "უკვე გაქვთ ანგარიში?",

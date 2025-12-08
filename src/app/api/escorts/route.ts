@@ -3,6 +3,7 @@ import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { eq, and, ilike, or, count, gt, desc } from 'drizzle-orm';
 import { locations } from '@/data/locations';
+import { checkSubscriptionStatus } from '@/lib/subscription';
 
 export async function GET(request: NextRequest) {
   try {
@@ -124,8 +125,10 @@ export async function GET(request: NextRequest) {
     const totalPages = Math.ceil(total / limit);
     const currentPage = Math.floor(offset / limit) + 1;
 
+    const escortsWithStatus = escorts.map(escort => checkSubscriptionStatus(escort));
+
     return NextResponse.json({
-      escorts,
+      escorts: escortsWithStatus,
       pagination: {
         total,
         limit,

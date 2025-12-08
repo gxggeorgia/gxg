@@ -90,6 +90,7 @@
     "build": "Build",
     "aboutYou": "About You",
     "loggingIn": "Logging in...",
+    "completeCaptcha": "Please complete the captcha to login",
     "creatingAccount": "Creating account...",
     "dontHaveAccount": "Don't have an account?",
     "alreadyHaveAccount": "Already have an account?",

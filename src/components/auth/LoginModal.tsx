@@ -153,6 +153,11 @@ export default function LoginModal({ isOpen, onClose, onSuccess, onSwitchToRegis
               t('common.login')
             )}
           </button>
+          {!turnstileToken && !isLoading && (
+            <p className="text-sm text-center text-amber-600 font-medium animate-pulse">
+              {t('auth.completeCaptcha')}
+            </p>
+          )}
         </form>
 
         {/* Footer */}

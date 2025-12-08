@@ -90,6 +90,7 @@
     "build": "Телосложение",
     "aboutYou": "О себе",
     "loggingIn": "Вход...",
+    "completeCaptcha": "Пожалуйста, пройдите капчу для входа",
     "creatingAccount": "Создание аккаунта...",
     "dontHaveAccount": "Нет аккаунта?",
     "alreadyHaveAccount": "Уже есть аккаунт?",

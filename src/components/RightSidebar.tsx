@@ -201,6 +201,27 @@ export default function RightSidebar() {
           {t('search.searchButton')}
         </button>
 
+        {/* Clear Filters Button */}
+        <button
+          onClick={() => {
+            setFilters({
+              gender: '',
+              city: '',
+              district: '',
+              gold: false,
+              silver: false,
+              featured: false,
+              verifiedPhotos: false,
+              new: false,
+              online: false,
+            });
+            router.push('/');
+          }}
+          className="w-full text-gray-500 hover:text-gray-700 underline text-sm transition-colors mt-2"
+        >
+          {t('search.clearFilters')}
+        </button>
+
 
       </div>
     </div>

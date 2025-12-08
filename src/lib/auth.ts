@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { eq } from 'drizzle-orm';
+import { checkSubscriptionStatus } from './subscription';
 
 const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'your-secret-key-change-in-production';
 const TOKEN_EXPIRY = '30d';
@@ -86,7 +87,9 @@ export async function getCurrentUser() {
 
     // Don't return password
     const { password, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+
+    // Check subscription status
+    return checkSubscriptionStatus(userWithoutPassword);
   } catch (error) {
     console.error('Error in getCurrentUser:', error);
     return null;
