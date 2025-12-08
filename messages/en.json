@@ -169,7 +169,7 @@
     "featured": "Featured",
     "new": "New",
     "online": "Online",
-    "verifiedPhotos": "Verified Photos",
+    "verifiedPhotos": "100% Photos",
     "quickSearch": "Quick Search",
     "quickFilters": "Quick Filters",
     "clearFilters": "Clear Filters",
@@ -188,7 +188,7 @@
   "profile": {
     "lastActive": "Last active",
     "verified": "Verified",
-    "verifiedPhotos": "Verified Photos",
+    "verifiedPhotos": "100% Photos",
     "vip": "VIP",
     "gold": "GOLD",
     "silver": "SILVER",
@@ -259,6 +259,8 @@
     "vpnWarning": "Attention! If GogoXGeorgia is blocked, please use a VPN to access the site.",
     "vpnInstructions": "If the site is blocked, go to your phone's app store (App Store for iPhone or Google Play for Android), search for \"VPN\", download any VPN application, turn it on, and then access the site.",
     "telegramInfo": "Our TELEGRAM chat is only this one: {telegramUsername}. We don’t have another number.",
-    "siteInfo": "Our 18+ site is only {domain}. We don’t have other sites. In case of site blocking, the working and current link will always be in our group. Click and join:"
+    "siteInfo": "Our 18+ site is only {domain}. We don’t have other sites. In case of site blocking, the working and current link will always be in our group. Click and join:",
+    "hide": "Hide",
+    "more": "More"
   }
 }

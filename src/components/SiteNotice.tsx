@@ -41,7 +41,8 @@ export default function SiteNotice() {
                     <AlertTriangle size={20} className="text-red-600" />
                     <span>{t('vpnWarning')}</span>
                 </div>
-                <button className="text-red-700 hover:text-red-900 transition-colors">
+                <button className="text-red-700 hover:text-red-900 transition-colors flex items-center gap-1 text-sm font-medium">
+                    <span>{isExpanded ? t('hide') : t('more')}</span>
                     {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                 </button>
             </div>

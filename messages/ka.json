@@ -165,7 +165,7 @@
     "featured": "რჩეული",
     "new": "ახალი",
     "online": "ონლაინ",
-    "verifiedPhotos": "დადასტურებული ფოტოები",
+    "verifiedPhotos": "100% ფოტოები",
     "quickSearch": "სწრაფი ძებნა",
     "quickFilters": "სწრაფი ფილტრები",
     "clearFilters": "ფილტრების გასუფთავება",
@@ -184,7 +184,7 @@
   "profile": {
     "lastActive": "ბოლო აქტივობა",
     "verified": "გადამოწმებული",
-    "verifiedPhotos": "დადასტურებული ფოტოები",
+    "verifiedPhotos": "100% ფოტოები",
     "vip": "VIP",
     "gold": "ოქრო",
     "silver": "ვერცხლი",
@@ -255,6 +255,8 @@
     "vpnWarning": "ყურადღება! თუ GogoXGeorgia დაბლოკილია, გთხოვთ გამოიყენოთ VPN საიტზე შესასვლელად.",
     "vpnInstructions": "თუ საიტი არ იტვირთება, გადმოწერეთ ნებისმიერი VPN აპლიკაცია App Store-იდან ან Google Play-დან, ჩართეთ და განაახლეთ გვერდი.",
     "telegramInfo": "ოფიციალური GogoXGeorgia Telegram: {telegramUsername}. ჩვენ არ ვიყენებთ სხვა ანგარიშებს.",
-    "siteInfo": "ჩვენი ოფიციალური 18+ საიტი არის {domain}. სიახლეებისა და მუშა ლინკებისთვის შემოგვიერთდით Telegram არხზე:"
+    "siteInfo": "ჩვენი ოფიციალური 18+ საიტი არის {domain}. სიახლეებისა და მუშა ლინკებისთვის შემოგვიერთდით Telegram არხზე:",
+    "hide": "დამალვა",
+    "more": "მეტი"
   }
 }
