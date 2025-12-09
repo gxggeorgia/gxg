@@ -11,6 +11,7 @@ import ReportModal from './ReportModal';
 
 interface EscortProfile {
     id: string;
+    slug?: string;
     name: string | null;
     phone: string;
     whatsappAvailable: boolean | null;
@@ -146,12 +147,12 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
 
     const getWhatsAppMessage = () => {
         // Always use the production URL to avoid hydration mismatches (server vs client)
-        const profileUrl = `https://gogoxgeorgia.ge/${locale}/escort/${profile.id}`;
+        const profileUrl = `https://gogoxgeorgia.ge/${locale}/escort/${profile.slug || profile.id}`;
 
         const messages = {
-            ka: `გამარჯობა, თქვენი პროფილი აღმოჩნდა აქ და მსურდა დაკავშირება.\n${profileUrl}`,
-            ru: `Здравствуйте, я увидел ваш профиль здесь и решил написать вам.\n${profileUrl}`,
-            en: `Hello, I saw your profile here and wanted to reach out.\n${profileUrl}`
+            ka: `გამარჯობა ${profile.name}, თქვენი პროფილი აღმოჩნდა აქ და მსურდა დაკავშირება.\n${profileUrl}`,
+            ru: `Здравствуйте ${profile.name}, я увидел ваш профиль здесь и решил написать вам.\n${profileUrl}`,
+            en: `Hello ${profile.name}, I saw your profile here and wanted to reach out.\n${profileUrl}`
         };
 
         return messages[locale as keyof typeof messages] || messages.en;
