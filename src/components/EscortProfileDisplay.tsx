@@ -65,6 +65,7 @@ interface EscortProfile {
     isFeatured: boolean;
     status?: string;
     email?: string;
+    lastActive?: string | Date | null;
 }
 
 interface EscortProfileDisplayProps {
@@ -86,6 +87,40 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
     const [lightboxIndex, setLightboxIndex] = useState(0);
     const [reportModalOpen, setReportModalOpen] = useState(false);
     const locale = useLocale();
+    const [onlineStatus, setOnlineStatus] = useState<{ isOnline: boolean; text: string } | null>(null);
+
+    useEffect(() => {
+        if (!profile.lastActive) {
+            setOnlineStatus(null);
+            return;
+        }
+
+        const calculateStatus = () => {
+            const lastActiveDate = new Date(profile.lastActive!);
+            const now = new Date();
+            const diffInSeconds = Math.floor((now.getTime() - lastActiveDate.getTime()) / 1000);
+
+            if (diffInSeconds <= 30) {
+                setOnlineStatus({ isOnline: true, text: tProfile('online') });
+            } else {
+                let timeText = '';
+                if (diffInSeconds < 60) {
+                    timeText = `${diffInSeconds}s`;
+                } else if (diffInSeconds < 3600) {
+                    timeText = `${Math.floor(diffInSeconds / 60)}m`;
+                } else if (diffInSeconds < 86400) {
+                    timeText = `${Math.floor(diffInSeconds / 3600)}h`;
+                } else {
+                    timeText = `${Math.floor(diffInSeconds / 86400)}d`;
+                }
+                setOnlineStatus({ isOnline: false, text: `${tProfile('lastSeen')} ${timeText}` });
+            }
+        };
+
+        calculateStatus();
+        const interval = setInterval(calculateStatus, 60000);
+        return () => clearInterval(interval);
+    }, [profile.lastActive]);
 
     // ... (keeping existing analytics and helper functions)
     // Analytics: Track View
@@ -182,6 +217,14 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                                             <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
                                                 {profile.name}
                                             </h1>
+                                            {onlineStatus && (
+                                                <span className={`${onlineStatus.isOnline ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'} px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1`}>
+                                                    {onlineStatus.isOnline && (
+                                                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                                                    )}
+                                                    {onlineStatus.text}
+                                                </span>
+                                            )}
                                             {profile.isSilver && (
                                                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-gray-100 text-gray-800">
                                                     {tProfile('silver')}
@@ -218,22 +261,29 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                                             <span className="text-gray-400">•</span>
                                             <span className="font-medium capitalize">{profile.gender}</span>
                                         </div>
+                                    </div>
+                                </div>
 
-                                        {/* Analytics Stats (Inline) */}
-                                        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
-                                            <div className="flex items-center gap-1.5">
-                                                <Eye className="w-4 h-4 text-gray-500" />
-                                                <span className="font-medium">{tProfile('totalViews')}:</span>
-                                                <span className="font-bold text-gray-900">{totalViews}</span>
-                                            </div>
-                                            <div className="w-px h-4 bg-gray-300"></div>
-                                            <div className="flex items-center gap-1.5">
-                                                <TrendingUp className="w-4 h-4 text-green-600" />
-                                                <span className="font-medium">{tProfile('dailyViews')}:</span>
-                                                <span className="font-bold text-green-700">{dailyViews}</span>
-                                            </div>
+                                {/* Analytics Stats  */}
+                                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-5 bg-gray-50 p-3 rounded-lg border border-gray-100 w-fit">
+                                    <div className="flex items-center gap-2">
+                                        <div className="p-1.5 bg-white rounded-full shadow-sm text-gray-500">
+                                            <Eye className="w-4 h-4" />
                                         </div>
-
+                                        <div className="flex items-center gap-1.5">
+                                            <span className="text-[10px] uppercase font-bold text-gray-900">{tProfile('totalViews')}:</span>
+                                            <span className="font-bold text-gray-900">{totalViews}</span>
+                                        </div>
+                                    </div>
+                                    <div className="w-px h-6 bg-gray-200 mx-2"></div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="p-1.5 bg-white rounded-full shadow-sm text-green-600">
+                                            <TrendingUp className="w-4 h-4" />
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <span className="text-[10px] uppercase font-bold text-gray-900">{tProfile('dailyViews')}:</span>
+                                            <span className="font-bold text-green-700">{dailyViews}</span>
+                                        </div>
                                     </div>
                                 </div>
 

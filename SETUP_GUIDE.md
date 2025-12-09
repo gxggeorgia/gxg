@@ -26,27 +26,27 @@ Create a `.env` file in the root directory with the following configuration:
 
 ```env
 # Site Configuration
-NEXT_PUBLIC_SITE_NAME="GogoXGeorgia"
-NEXT_PUBLIC_SITE_URL="http://localhost:3000"
-NEXT_PUBLIC_MAIL_ADDRESS="contact@gogoxgeorgia.ge"
-NEXT_PUBLIC_TELEGRAM_LINK="https://t.me/gogoxgeorgia"
-NEXT_PUBLIC_TELEGRAM_USERNAME="@gogoxgeorgia"
+NEXT_PUBLIC_SITE_NAME=
+NEXT_PUBLIC_SITE_URL=
+NEXT_PUBLIC_MAIL_ADDRESS=
+NEXT_PUBLIC_TELEGRAM_LINK=
+NEXT_PUBLIC_TELEGRAM_USERNAME=
 
-NODE_ENV="development"
+NODE_ENV=
 
 # Security (Cloudflare Turnstile)
-NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY="your-site-key"
-CLOUDFLARE_TURNSTILE_SECRET_KEY="your-secret-key"
+NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY=
+CLOUDFLARE_TURNSTILE_SECRET_KEY=
 
 # Database
-DATABASE_URL="postgresql://user:password@host:port/dbname"
+DATABASE_URL=
 
 # Cloudflare R2 Configuration
-R2_ACCOUNT_ID="your-account-id"
-R2_ACCESS_KEY_ID="your-access-key-id"
-R2_SECRET_ACCESS_KEY="your-secret-access-key"
-R2_BUCKET_NAME="your-bucket-name"
-R2_ENDPOINT="https://your-account-id.r2.cloudflarestorage.com"
+R2_ACCOUNT_ID=
+R2_ACCESS_KEY_ID=
+R2_SECRET_ACCESS_KEY=
+R2_BUCKET_NAME=
+R2_ENDPOINT=
 ```
 
 ## Available Scripts

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { eq, and, ilike, or, count, gt, desc } from 'drizzle-orm';
+import { eq, and, ilike, or, count, gt, desc, sql } from 'drizzle-orm';
 import { locations } from '@/data/locations';
 import { checkSubscriptionStatus } from '@/lib/subscription';
 
@@ -31,8 +31,6 @@ export async function GET(request: NextRequest) {
       const cityObj = locations.find(c => c.id === city);
       cityName = cityObj?.name.en || city;
     }
-
-    console.log('API Filters:', { search, city, cityName, district, gender, featured, gold, silver, verifiedPhotos });
 
     const now = new Date();
 
@@ -71,9 +69,9 @@ export async function GET(request: NextRequest) {
     }
 
     if (searchParams.get('online') === 'true') {
-      const fifteenMinutesAgo = new Date();
-      fifteenMinutesAgo.setMinutes(fifteenMinutesAgo.getMinutes() - 15);
-      conditions.push(gt(users.lastActive, fifteenMinutesAgo));
+      const thirtySecondsAgo = new Date();
+      thirtySecondsAgo.setSeconds(thirtySecondsAgo.getSeconds() - 30);
+      conditions.push(gt(users.lastActive, thirtySecondsAgo));
     }
 
     if (search) {
@@ -108,7 +106,12 @@ export async function GET(request: NextRequest) {
 
     const orderByClauses = [];
     if (!hasFilters) {
-      orderByClauses.push(desc(users.isGold), desc(users.isSilver), desc(users.createdAt));
+      // Sort by valid gold/silver status (isGold/isSilver AND not expired)
+      orderByClauses.push(
+        desc(sql`CASE WHEN ${users.isGold} AND ${users.goldExpiresAt} > ${now} THEN 1 ELSE 0 END`),
+        desc(sql`CASE WHEN ${users.isSilver} AND ${users.silverExpiresAt} > ${now} THEN 1 ELSE 0 END`),
+        desc(users.createdAt)
+      );
     } else {
       orderByClauses.push(desc(users.createdAt));
     }

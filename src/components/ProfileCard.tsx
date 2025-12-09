@@ -15,7 +15,8 @@ interface ProfileCardProps {
     isSilver?: boolean;
     verifiedPhotos?: boolean;
     isNew?: boolean;
-    isOnline: boolean;
+    isOnline?: boolean;
+    lastActive?: string | Date | null;
     coverImage?: string;
     imageWidth?: number;
     imageHeight?: number;
@@ -29,11 +30,46 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
   const locale = useLocale();
   const [isFavorite, setIsFavorite] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
+  const [onlineStatus, setOnlineStatus] = useState<{ isOnline: boolean; text: string } | null>(null);
 
   useEffect(() => {
     const favorites = JSON.parse(localStorage.getItem('favoriteEscorts') || '[]');
     setIsFavorite(favorites.includes(profile.id));
   }, [profile.id]);
+
+  useEffect(() => {
+    if (!profile.lastActive) {
+      setOnlineStatus(null);
+      return;
+    }
+
+    const calculateStatus = () => {
+      const lastActiveDate = new Date(profile.lastActive!);
+      const now = new Date();
+      const diffInSeconds = Math.floor((now.getTime() - lastActiveDate.getTime()) / 1000);
+
+      if (diffInSeconds <= 30) {
+        setOnlineStatus({ isOnline: true, text: t('profile.online') });
+      } else {
+        let timeText = '';
+        if (diffInSeconds < 60) {
+          timeText = `${diffInSeconds}s`;
+        } else if (diffInSeconds < 3600) {
+          timeText = `${Math.floor(diffInSeconds / 60)}m`;
+        } else if (diffInSeconds < 86400) {
+          timeText = `${Math.floor(diffInSeconds / 3600)}h`;
+        } else {
+          timeText = `${Math.floor(diffInSeconds / 86400)}d`;
+        }
+        setOnlineStatus({ isOnline: false, text: `${t('profile.lastSeen')} ${timeText}` });
+      }
+    };
+
+    calculateStatus();
+    // Update status every minute to keep "last seen" relatively fresh
+    const interval = setInterval(calculateStatus, 60000);
+    return () => clearInterval(interval);
+  }, [profile.lastActive]);
 
   const handleLike = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -101,15 +137,15 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
 
 
 
-          {/* Online Status */}
-          {/* {profile.isOnline && (
-            <div className="absolute bottom-2 left-2 md:left-2">
-              <span className="bg-green-500 text-white text-[10px] md:text-xs font-bold px-1.5 md:px-2 py-0.5 md:py-1 rounded-full flex items-center gap-0.5 md:gap-1 whitespace-nowrap">
+          {/* Online Status (Online only) */}
+          {onlineStatus && onlineStatus.isOnline && (
+            <div className="absolute top-2 right-2 z-10">
+              <span className="bg-green-500 text-white text-[10px] md:text-xs px-1.5 md:px-2 py-0.5 md:py-1 rounded-full flex items-center gap-0.5 md:gap-1 whitespace-nowrap backdrop-blur-sm shadow-sm">
                 <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-white rounded-full animate-pulse"></span>
-                {t('profile.online')}
+                {onlineStatus.text}
               </span>
             </div>
-          )} */}
+          )}
 
           {/* Like Button */}
           <button
@@ -143,7 +179,6 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
             </div>
           )}
         </div>
-
         {/* Profile Info */}
         <div className="p-2.5 bg-white border-t border-gray-100 space-y-1.5">
           <div className="flex items-center gap-1.5 text-xs">
@@ -159,6 +194,14 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
               <span className="truncate text-[11px]">
                 {profile.languages.map(lang => lang.name).join(', ')}
               </span>
+            </div>
+          )}
+
+          {/* Last Seen Status (Offline) */}
+          {onlineStatus && !onlineStatus.isOnline && (
+            <div className="text-[10px] text-gray-800 flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
+              {onlineStatus.text}
             </div>
           )}
         </div>

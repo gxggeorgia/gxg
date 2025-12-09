@@ -13,6 +13,8 @@ export default function UserStatusBar() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let intervalId: NodeJS.Timeout | null = null;
+
     const fetchUser = async () => {
       try {
         const response = await fetch('/api/profile');
@@ -20,14 +22,25 @@ export default function UserStatusBar() {
         if (response.ok) {
           const data = await response.json();
           setUser(data.user);
+
+          // Start polling if not already started (20 seconds)
+          if (!intervalId) {
+            intervalId = setInterval(fetchUser, 20000);
+          }
         } else if (response.status === 401) {
-          setIsLoading(false);
-          return;
-        } else {
-          setIsLoading(false);
+          setUser(null);
+          // Stop polling if not authenticated
+          if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+          }
         }
       } catch (error) {
-        setIsLoading(false);
+        // Stop polling on error
+        if (intervalId) {
+          clearInterval(intervalId);
+          intervalId = null;
+        }
       } finally {
         setIsLoading(false);
       }
@@ -35,9 +48,9 @@ export default function UserStatusBar() {
 
     fetchUser();
 
-    // Poll for status updates every 30 seconds
-    const interval = setInterval(fetchUser, 30000);
-    return () => clearInterval(interval);
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
   }, []);
 
   if (isLoading) return null;

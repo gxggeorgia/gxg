@@ -3,7 +3,7 @@ import { generatePageMetadata } from '@/lib/seo';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { profileViews } from '@/db/schema/analytics';
-import { eq, count, gt, sql } from 'drizzle-orm';
+import { eq, count, gt, sql, and } from 'drizzle-orm';
 import EscortProfileDisplay from '@/components/EscortProfileDisplay';
 
 interface EscortDetailPageProps {
@@ -46,11 +46,16 @@ export default async function EscortDetailPage({ params }: EscortDetailPageProps
     .from(profileViews)
     .where(eq(profileViews.profileId, escort.id));
 
-  const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  const now = new Date();
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
   const [dailyViewsResult] = await db
     .select({ count: count() })
     .from(profileViews)
-    .where(sql`${profileViews.profileId} = ${escort.id} AND ${profileViews.viewedAt} > ${oneDayAgo}`);
+    .where(and(
+      eq(profileViews.profileId, escort.id),
+      gt(profileViews.viewedAt, startOfDay)
+    ));
 
   const totalViews = totalViewsResult?.count || 0;
   const dailyViews = dailyViewsResult?.count || 0;

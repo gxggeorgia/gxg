@@ -68,6 +68,7 @@ export default function ProfileGrid() {
         const gold = searchParams.get('gold') || '';
         const silver = searchParams.get('silver') || '';
         const verifiedPhotos = searchParams.get('verifiedPhotos') || '';
+        const online = searchParams.get('online') || '';
 
         // Fetch all escorts with filters
         const params = new URLSearchParams();
@@ -79,6 +80,7 @@ export default function ProfileGrid() {
         if (gold) params.append('gold', gold);
         if (silver) params.append('silver', silver);
         if (verifiedPhotos) params.append('verifiedPhotos', verifiedPhotos);
+        if (online) params.append('online', online);
         const pageSize = 10;
         params.append('limit', pageSize.toString());
 
@@ -132,7 +134,8 @@ export default function ProfileGrid() {
                   isGold: escort.isGold,
                   isSilver: escort.isSilver,
                   verifiedPhotos: escort.verifiedPhotos,
-                  isOnline: (escort as any).isOnline || true,
+                  isOnline: (escort as any).isOnline,
+                  lastActive: (escort as any).lastActive,
                   languages: escort.languages,
                   coverImage: escort.coverImage || (escort.images as any)?.[0]?.url,
                   imageWidth: (escort.images as any)?.[0]?.width,
