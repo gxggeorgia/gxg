@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
@@ -165,6 +166,7 @@ export default async function LocaleLayout({
             <ScrollToTop />
           </div>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
