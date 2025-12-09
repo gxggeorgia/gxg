@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import ProfileCard from './ProfileCard';
@@ -33,6 +34,7 @@ interface Profile {
 }
 
 export default function FeaturedProfileSlider() {
+  const t = useTranslations();
   const [profiles, setProfiles] = useState<Escort[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -181,10 +183,10 @@ export default function FeaturedProfileSlider() {
         <div className="mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 mb-3">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-linear-to-r from-slate-900 via-red-800 to-slate-900 bg-clip-text text-transparent">
-              ✨ Featured Profiles
+              ✨ {t('header.featuredProfiles')}
             </h2>
           </div>
-          <p className="text-slate-600 text-sm sm:text-base font-medium">Discover our most popular and verified escorts</p>
+          <p className="text-slate-600 text-sm sm:text-base font-medium">{t('header.featuredProfilesDesc')}</p>
         </div>
 
         {/* Slider Container */}

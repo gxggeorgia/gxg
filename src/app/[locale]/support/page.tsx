@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Mail, MessageCircle } from 'lucide-react';
 
 const SUPPORT_EMAIL = process.env.NEXT_PUBLIC_MAIL_ADDRESS || 'contact@escortgeorgia.com';
@@ -7,16 +8,18 @@ const TELEGRAM_LINK = process.env.NEXT_PUBLIC_TELEGRAM_LINK || 'https://t.me/esc
 const TELEGRAM_USERNAME = process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || '@escortgeorgia';
 
 export default function SupportPage() {
+  const t = useTranslations('support');
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-10 sm:mb-16">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
-            How Can We Help You?
+            {t('title')}
           </h1>
           <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-            We're here to assist you. Choose your preferred way to get in touch with our support team.
+            {t('subtitle')}
           </p>
         </div>
 
@@ -28,9 +31,9 @@ export default function SupportPage() {
                 <Mail className="w-6 h-6 text-purple-600" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-1">Email Support</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">{t('emailSupport')}</h3>
                 <p className="text-gray-600 text-sm mb-3">
-                  Get a response within 24 hours
+                  {t('emailDesc')}
                 </p>
                 <a
                   href={`mailto:${SUPPORT_EMAIL}`}
@@ -49,9 +52,9 @@ export default function SupportPage() {
                 <MessageCircle className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-1">Telegram</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">{t('telegram')}</h3>
                 <p className="text-gray-600 text-sm mb-3">
-                  Chat with us instantly
+                  {t('telegramDesc')}
                 </p>
                 <a
                   href={TELEGRAM_LINK}
@@ -68,20 +71,20 @@ export default function SupportPage() {
 
         {/* FAQ Section */}
         <div className="bg-white rounded-xl shadow-md p-6 sm:p-8 border border-gray-100">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">{t('faqTitle')}</h2>
           <div className="space-y-6">
             {[
               {
-                question: "How long does it take to get a response?",
-                answer: "We typically respond within 24 hours during business days."
+                question: t('faq1Q'),
+                answer: t('faq1A')
               },
               {
-                question: "What information should I include?",
-                answer: "Please provide as much detail as possible about your issue to help us assist you better."
+                question: t('faq2Q'),
+                answer: t('faq2A')
               },
               {
-                question: "Do you offer phone support?",
-                answer: "Currently, we offer support via email and Telegram only."
+                question: t('faq3Q'),
+                answer: t('faq3A')
               }
             ].map((faq, index) => (
               <div key={index} className="border-b border-gray-100 pb-4 last:border-0 last:pb-0">

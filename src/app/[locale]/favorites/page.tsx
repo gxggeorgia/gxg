@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { Heart } from 'lucide-react';
 import ProfileCard from '@/components/ProfileCard';
@@ -15,6 +16,7 @@ interface Escort {
 }
 
 export default function FavoritesPage() {
+  const t = useTranslations('favorites');
   const [favorites, setFavorites] = useState<Escort[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -61,7 +63,7 @@ export default function FavoritesPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Loading favorites...</div>
+        <div className="text-gray-500">{t('loading')}</div>
       </div>
     );
   }
@@ -74,12 +76,12 @@ export default function FavoritesPage() {
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-2">
               <Heart size={32} className="text-red-500 fill-red-500" />
-              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">My Favorites</h1>
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">{t('title')}</h1>
             </div>
             <p className="text-gray-600">
               {favorites.length === 0
-                ? 'No favorites yet. Start adding escorts to your favorites!'
-                : `You have ${favorites.length} favorite escort${favorites.length !== 1 ? 's' : ''}`}
+                ? t('noFavorites')
+                : t('count', { count: favorites.length })}
             </p>
           </div>
 
@@ -87,15 +89,15 @@ export default function FavoritesPage() {
           {favorites.length === 0 ? (
             <div className="text-center py-16">
               <Heart size={64} className="mx-auto text-gray-300 mb-4" />
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">No Favorites Yet</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('emptyTitle')}</h2>
               <p className="text-gray-600 mb-6">
-                Click the heart icon on any escort profile to add them to your favorites.
+                {t('emptyDesc')}
               </p>
               <a
                 href="/"
                 className="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
               >
-                Browse Escorts
+                {t('browseEscorts')}
               </a>
             </div>
           ) : (

@@ -156,7 +156,9 @@
   },
   "header": {
     "title": "Escort Directory Georgia",
-    "subtitle": "Find verified escorts in Georgia"
+    "subtitle": "Find verified escorts in Georgia",
+    "featuredProfiles": "Featured Profiles",
+    "featuredProfilesDesc": "Discover our most popular and verified escorts"
   },
   "search": {
     "city": "City",
@@ -263,5 +265,29 @@
     "siteInfo": "Our 18+ site is only {domain}. We don’t have other sites. In case of site blocking, the working and current link will always be in our group. Click and join:",
     "hide": "Hide",
     "more": "More"
+  },
+  "favorites": {
+    "title": "My Favorites",
+    "noFavorites": "No favorites yet. Start adding escorts to your favorites!",
+    "count": "You have {count} favorite escort{s}",
+    "emptyTitle": "No Favorites Yet",
+    "emptyDesc": "Click the heart icon on any escort profile to add them to your favorites.",
+    "browseEscorts": "Browse Escorts",
+    "loading": "Loading favorites..."
+  },
+  "support": {
+    "title": "How Can We Help You?",
+    "subtitle": "We're here to assist you. Choose your preferred way to get in touch with our support team.",
+    "emailSupport": "Email Support",
+    "emailDesc": "Get a response within 24 hours",
+    "telegram": "Telegram",
+    "telegramDesc": "Chat with us instantly",
+    "faqTitle": "Frequently Asked Questions",
+    "faq1Q": "How long does it take to get a response?",
+    "faq1A": "We typically respond within 24 hours during business days.",
+    "faq2Q": "What information should I include?",
+    "faq2A": "Please provide as much detail as possible about your issue to help us assist you better.",
+    "faq3Q": "Do you offer phone support?",
+    "faq3A": "Currently, we offer support via email and Telegram only."
   }
 }
