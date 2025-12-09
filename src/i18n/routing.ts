@@ -6,8 +6,8 @@ export const routing = defineRouting({
   locales: ['en', 'ka', 'ru'],
 
   // Used when no locale matches
-  defaultLocale: 'ka',
-  
+  defaultLocale: (process.env.NEXT_PUBLIC_DEFAULT_LOCALE as 'en' | 'ka' | 'ru') || 'ka',
+
   // Locale prefix strategy
   localePrefix: 'always'
 });
