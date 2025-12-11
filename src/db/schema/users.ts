@@ -2,8 +2,7 @@ import { pgTable, text, timestamp, boolean, integer, uuid, jsonb, date, pgEnum, 
 import { relations } from 'drizzle-orm';
 
 // Enums
-export const userRoleEnum = pgEnum('user_role', ['user', 'escort', 'admin']);
-export const profileStatusEnum = pgEnum('profile_status', ['suspended', 'pending', 'verified']);
+export const userRoleEnum = pgEnum('user_role', ['escort', 'admin']);
 export const genderEnum = pgEnum('gender', ['female', 'male', 'transsexual']);
 export const languageLevelEnum = pgEnum('language_level', ['minimal', 'conversational', 'fluent']);
 export const ethnicityEnum = pgEnum('ethnicity', ['georgian', 'russian', 'black', 'turk', 'armenian', 'azerbaijan', 'kazakh', 'greek', 'ukraine', 'other']);
@@ -20,18 +19,17 @@ export const users = pgTable('users', {
   email: text('email').notNull().unique(),
   emailVerified: boolean('email_verified').notNull().default(false),
   slug: text('slug').notNull().unique(), // Unique slug for SEO-friendly URLs (e.g., "natalia-tbilisi-123")
-  status: profileStatusEnum('status').notNull().default('pending'),
-  statusMessage: text('status_message').default('Waiting for admin verification. Please send a message on Telegram for verification.'),
+  publicExpiry: timestamp('public_expiry'),
   role: userRoleEnum('role').notNull().default('escort'),
 
   // Subscription features (can have multiple at same time)
-  isGold: boolean('is_gold').notNull().default(false),
+
   goldExpiresAt: timestamp('gold_expires_at'),
-  isFeatured: boolean('is_featured').notNull().default(false),
+
   featuredExpiresAt: timestamp('featured_expires_at'),
-  isSilver: boolean('is_silver').notNull().default(false),
+
   silverExpiresAt: timestamp('silver_expires_at'),
-  verifiedPhotos: boolean('verified_photos').notNull().default(false),
+  verifiedPhotosExpiry: timestamp('verified_photos_expiry'),
 
   // Basic Info
   name: text('name'),

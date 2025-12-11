@@ -13,6 +13,8 @@ interface EscortDetailPageProps {
   }>;
 }
 
+import { checkSubscriptionStatus } from '@/lib/subscription';
+
 export async function generateMetadata({ params }: EscortDetailPageProps) {
   const { slug } = await params;
   const escort = await db.select().from(users).where(eq(users.slug, slug)).limit(1).then(res => res[0]);
@@ -34,11 +36,13 @@ export async function generateMetadata({ params }: EscortDetailPageProps) {
 
 export default async function EscortDetailPage({ params }: EscortDetailPageProps) {
   const { slug } = await params;
-  const escort = await db.select().from(users).where(eq(users.slug, slug)).limit(1).then(res => res[0]);
+  const rawEscort = await db.select().from(users).where(eq(users.slug, slug)).limit(1).then(res => res[0]);
 
-  if (!escort || escort.status !== 'verified') {
+  if (!rawEscort || !rawEscort.publicExpiry || new Date(rawEscort.publicExpiry) <= new Date()) {
     notFound();
   }
+
+  const escort = checkSubscriptionStatus(rawEscort);
 
   // Fetch analytics
   const [totalViewsResult] = await db

@@ -4,26 +4,18 @@ export function checkSubscriptionStatus(user: any) {
     const now = new Date();
     const updatedUser = { ...user };
 
-    if (updatedUser.isGold && updatedUser.goldExpiresAt) {
-        const expiryDate = new Date(updatedUser.goldExpiresAt);
-        if (expiryDate < now) {
-            updatedUser.isGold = false;
-        }
-    }
+    // Compute subscription statuses based on expiry dates
+    updatedUser.isGold = updatedUser.goldExpiresAt ? new Date(updatedUser.goldExpiresAt) > now : false;
+    updatedUser.isSilver = updatedUser.silverExpiresAt ? new Date(updatedUser.silverExpiresAt) > now : false;
+    updatedUser.isFeatured = updatedUser.featuredExpiresAt ? new Date(updatedUser.featuredExpiresAt) > now : false;
 
-    if (updatedUser.isSilver && updatedUser.silverExpiresAt) {
-        const expiryDate = new Date(updatedUser.silverExpiresAt);
-        if (expiryDate < now) {
-            updatedUser.isSilver = false;
-        }
-    }
+    // Compute verification status
+    updatedUser.verifiedPhotos = updatedUser.verifiedPhotosExpiry ? new Date(updatedUser.verifiedPhotosExpiry) > now : false;
 
-    if (updatedUser.isFeatured && updatedUser.featuredExpiresAt) {
-        const expiryDate = new Date(updatedUser.featuredExpiresAt);
-        if (expiryDate < now) {
-            updatedUser.isFeatured = false;
-        }
-    }
+    // Compute public/private status
+    // If publicExpiry is in the future, it's public. Otherwise private.
+    const isPublic = updatedUser.publicExpiry ? new Date(updatedUser.publicExpiry) > now : false;
+    updatedUser.status = isPublic ? 'public' : 'private';
 
     return updatedUser;
 }

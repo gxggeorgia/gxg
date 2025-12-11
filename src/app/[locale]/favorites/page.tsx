@@ -9,8 +9,8 @@ interface Escort {
   id: string;
   name: string;
   city: string;
-  isGold: boolean;
-  isSilver: boolean;
+  isGold?: boolean;
+  isSilver?: boolean;
   images: Array<{ url: string; isPrimary?: boolean }>;
   coverImage?: string;
 }

@@ -171,15 +171,14 @@ async function seed() {
         images: profileImages,
         videos: [],
         coverImage: profileImages[0]?.url,
-        status: 'verified' as 'suspended' | 'pending' | 'verified',
-        role: 'escort' as 'user' | 'escort' | 'admin',
-        isFeatured: Math.random() > 0.7,
-        featuredExpiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
-        isGold: Math.random() > 0.8,
-        goldExpiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-        isSilver: Math.random() > 0.85,
-        silverExpiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-        verifiedPhotos: Math.random() > 0.5
+        role: 'escort' as 'escort' | 'admin',
+
+        // New Schema Fields
+        publicExpiry: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now (Public)
+        featuredExpiresAt: Math.random() > 0.7 ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : null,
+        goldExpiresAt: Math.random() > 0.8 ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : null,
+        silverExpiresAt: Math.random() > 0.85 ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : null,
+        verifiedPhotosExpiry: Math.random() > 0.5 ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : null,
       });
       console.log(`✅ Created profile: ${name} with ${profileImages.length} images uploaded to R2`);
     } catch (error) {

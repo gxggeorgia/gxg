@@ -60,10 +60,10 @@ interface EscortProfile {
     snapchat?: string | null;
     twitter?: string | null;
     facebook?: string | null;
-    isGold: boolean;
-    isSilver: boolean;
-    verifiedPhotos: boolean;
-    isFeatured: boolean;
+    isGold?: boolean;
+    isSilver?: boolean;
+    verifiedPhotos?: boolean;
+    isFeatured?: boolean;
     status?: string;
     email?: string;
     lastActive?: string | Date | null;

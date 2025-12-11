@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     // Build WHERE conditions
     const conditions: any[] = [
       eq(users.role, 'escort'),
-      eq(users.status, 'verified'),
+      gt(users.publicExpiry, new Date()),
     ];
 
     // Convert city ID to city name
@@ -35,19 +35,19 @@ export async function GET(request: NextRequest) {
     const now = new Date();
 
     if (featured) {
-      conditions.push(and(eq(users.isFeatured, true), gt(users.featuredExpiresAt, now)));
+      conditions.push(gt(users.featuredExpiresAt, now));
     }
 
     if (gold) {
-      conditions.push(and(eq(users.isGold, true), gt(users.goldExpiresAt, now)));
+      conditions.push(gt(users.goldExpiresAt, now));
     }
 
     if (silver) {
-      conditions.push(and(eq(users.isSilver, true), gt(users.silverExpiresAt, now)));
+      conditions.push(gt(users.silverExpiresAt, now));
     }
 
     if (verifiedPhotos) {
-      conditions.push(eq(users.verifiedPhotos, true));
+      conditions.push(gt(users.verifiedPhotosExpiry, now));
     }
 
     if (cityName) {
@@ -108,8 +108,8 @@ export async function GET(request: NextRequest) {
     if (!hasFilters) {
       // Sort by valid gold/silver status (isGold/isSilver AND not expired)
       orderByClauses.push(
-        desc(sql`CASE WHEN ${users.isGold} AND ${users.goldExpiresAt} > ${now} THEN 1 ELSE 0 END`),
-        desc(sql`CASE WHEN ${users.isSilver} AND ${users.silverExpiresAt} > ${now} THEN 1 ELSE 0 END`),
+        desc(sql`CASE WHEN ${users.goldExpiresAt} > ${now} THEN 1 ELSE 0 END`),
+        desc(sql`CASE WHEN ${users.silverExpiresAt} > ${now} THEN 1 ELSE 0 END`),
         desc(users.createdAt)
       );
     } else {

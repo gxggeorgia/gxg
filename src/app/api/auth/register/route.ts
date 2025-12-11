@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
-import { users } from '@/db/schema/users';
+import { users, NewUser } from '@/db/schema/users';
 import { hashPassword, generateToken, setAuthCookie } from '@/lib/auth';
 import { generateSlug } from '@/lib/slug';
 import { verifyTurnstileToken } from '@/lib/turnstile';
@@ -100,69 +100,77 @@ export async function POST(request: NextRequest) {
     const slug = generateSlug(name || email.split('@')[0], city);
 
     // Create user with all fields from schema
+    const newUserData: NewUser = {
+      // Auth fields
+      email,
+      password: hashedPassword,
+      slug,
+      role: 'escort', // Default role
+      emailVerified: false, // Default
+
+      // Basic Info
+      phone,
+      name: name || null,
+      whatsappAvailable: whatsappAvailable || false,
+      viberAvailable: viberAvailable || false,
+
+      // Social Media
+      website: website || null,
+      instagram: instagram || null,
+      snapchat: snapchat || null,
+      twitter: twitter || null,
+      facebook: facebook || null,
+
+      // Location
+      city,
+      district: district || null,
+
+      // Personal Info (required)
+      gender,
+      dateOfBirth: dateOfBirth,
+      ethnicity,
+      height: parseInt(height),
+      weight: weight.toString(),
+      aboutYou,
+
+      // Optional Personal Info
+      hairColor: hairColor || null,
+      bustSize: bustSize || null,
+      build: build || null,
+
+      // Availability
+      incallAvailable: incallAvailable || false,
+      outcallAvailable: outcallAvailable || false,
+
+      // Rates
+      currency: currency || 'GEL',
+      rates: {
+        incall: incallRates || {},
+        outcall: outcallRates || {},
+      },
+
+      // Languages
+      languages: (languages || []).filter((l: any) => l.name && l.level),
+
+      // Services & Tags
+      services: services || [],
+
+      // Images
+      images: [],
+      videos: [],
+
+      // Timestamps
+      publicExpiry: null,
+      goldExpiresAt: null,
+      featuredExpiresAt: null,
+      silverExpiresAt: null,
+      verifiedPhotosExpiry: null,
+      coverImage: null,
+    };
+
     const [newUser] = await db
       .insert(users)
-      .values({
-        // Auth fields
-        email,
-        password: hashedPassword,
-        slug,
-        role: 'user', // Default role
-        status: 'pending', // New users start as pending
-        statusMessage: 'Waiting for admin verification. Please send a message on Telegram for verification.',
-
-        // Basic Info
-        phone,
-        name: name || null,
-        whatsappAvailable: whatsappAvailable || false,
-        viberAvailable: viberAvailable || false,
-
-        // Social Media
-        website: website || null,
-        instagram: instagram || null,
-        snapchat: snapchat || null,
-        twitter: twitter || null,
-        facebook: facebook || null,
-
-        // Location
-        city,
-        district: district || null,
-
-        // Personal Info (required)
-        gender,
-        dateOfBirth: dateOfBirth,
-        ethnicity,
-        height: parseInt(height),
-        weight: weight.toString(),
-        aboutYou,
-
-        // Optional Personal Info
-        hairColor: hairColor || null,
-        bustSize: bustSize || null,
-        build: build || null,
-
-        // Availability
-        incallAvailable: incallAvailable || false,
-        outcallAvailable: outcallAvailable || false,
-
-        // Rates
-        currency: currency || 'GEL',
-        rates: {
-          incall: incallRates || {},
-          outcall: outcallRates || {},
-        },
-
-        // Languages
-        languages: (languages || []).filter((l: any) => l.name && l.level),
-
-        // Services & Tags
-        services: services || [],
-
-
-        // Images
-        images: [],
-        videos: [],
-      })
+      .values(newUserData)
       .returning();
 
     // Generate JWT token

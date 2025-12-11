@@ -1,23 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { Crown, Star } from 'lucide-react';
+import { Crown, Star, X } from 'lucide-react';
 
 interface User {
   id: string;
   email: string;
   name: string | null;
   phone: string;
-  role: 'user' | 'escort' | 'admin';
-  status: 'suspended' | 'pending' | 'verified';
-  statusMessage: string | null;
-  isGold: boolean;
-  isFeatured: boolean;
-  isSilver: boolean;
+  role: 'escort' | 'admin';
+  publicExpiry: string | null;
   goldExpiresAt: string | null;
   featuredExpiresAt: string | null;
   silverExpiresAt: string | null;
-  verifiedPhotos: boolean;
+  verifiedPhotosExpiry: string | null;
 }
 
 interface EditUserModalProps {
@@ -30,15 +26,11 @@ export default function EditUserModal({ user, onClose, onSave }: EditUserModalPr
   const [saving, setSaving] = useState(false);
   const [data, setData] = useState({
     role: user.role,
-    status: user.status,
-    statusMessage: user.statusMessage || '',
-    isGold: user.isGold,
-    isFeatured: user.isFeatured,
-    isSilver: user.isSilver,
-    verifiedPhotos: user.verifiedPhotos,
+    publicExpiry: user.publicExpiry ? new Date(user.publicExpiry).toISOString().split('T')[0] : '',
     goldExpiresAt: user.goldExpiresAt ? new Date(user.goldExpiresAt).toISOString().split('T')[0] : '',
     featuredExpiresAt: user.featuredExpiresAt ? new Date(user.featuredExpiresAt).toISOString().split('T')[0] : '',
     silverExpiresAt: user.silverExpiresAt ? new Date(user.silverExpiresAt).toISOString().split('T')[0] : '',
+    verifiedPhotosExpiry: user.verifiedPhotosExpiry ? new Date(user.verifiedPhotosExpiry).toISOString().split('T')[0] : '',
   });
 
   const handleSave = async () => {
@@ -46,17 +38,22 @@ export default function EditUserModal({ user, onClose, onSave }: EditUserModalPr
     try {
       const updates: Partial<User> = {
         role: data.role,
-        status: data.status,
-        statusMessage: data.statusMessage,
-        isGold: data.isGold,
-        isFeatured: data.isFeatured,
-        isSilver: data.isSilver,
-        verifiedPhotos: data.verifiedPhotos,
       };
 
+      if (data.publicExpiry) updates.publicExpiry = new Date(data.publicExpiry + 'T23:59:59').toISOString();
+      else updates.publicExpiry = null;
+
       if (data.goldExpiresAt) updates.goldExpiresAt = new Date(data.goldExpiresAt + 'T23:59:59').toISOString();
+      else updates.goldExpiresAt = null;
+
       if (data.featuredExpiresAt) updates.featuredExpiresAt = new Date(data.featuredExpiresAt + 'T23:59:59').toISOString();
+      else updates.featuredExpiresAt = null;
+
       if (data.silverExpiresAt) updates.silverExpiresAt = new Date(data.silverExpiresAt + 'T23:59:59').toISOString();
+      else updates.silverExpiresAt = null;
+
+      if (data.verifiedPhotosExpiry) updates.verifiedPhotosExpiry = new Date(data.verifiedPhotosExpiry + 'T23:59:59').toISOString();
+      else updates.verifiedPhotosExpiry = null;
 
       await onSave(updates);
     } finally {
@@ -66,6 +63,14 @@ export default function EditUserModal({ user, onClose, onSave }: EditUserModalPr
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setData({ ...data, [e.target.name]: e.target.value });
+  };
+
+  const isPastDate = (dateStr: string) => {
+    if (!dateStr) return false;
+    const date = new Date(dateStr);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
   };
 
   return (
@@ -92,35 +97,31 @@ export default function EditUserModal({ user, onClose, onSave }: EditUserModalPr
                 name="role"
                 className="w-full px-3 py-2 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
               >
-                <option value="user" className="text-gray-900">User</option>
                 <option value="escort" className="text-gray-900">Escort</option>
                 <option value="admin" className="text-gray-900">Admin</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-              <select
-                value={data.status}
-                onChange={(e) => setData({ ...data, status: e.target.value as any })}
-                className="w-full px-3 py-2 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-              >
-                <option value="pending" className="text-gray-900">Pending</option>
-                <option value="verified" className="text-gray-900">Verified</option>
-                <option value="suspended" className="text-gray-900">Suspended</option>
-              </select>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Public Profile Expiry</label>
+              <div className="flex gap-2">
+                <input
+                  type="date"
+                  value={data.publicExpiry}
+                  onChange={(e) => setData({ ...data, publicExpiry: e.target.value })}
+                  className={`w-full px-3 py-2 text-gray-900 bg-white border rounded-lg focus:ring-2 focus:ring-purple-500 [color-scheme:light] ${isPastDate(data.publicExpiry) ? 'border-amber-500' : 'border-gray-300'}`}
+                />
+                <button
+                  onClick={() => setData({ ...data, publicExpiry: '' })}
+                  className="p-2 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition"
+                  title="Clear date"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              {isPastDate(data.publicExpiry) && (
+                <p className="text-xs text-amber-600 mt-1">⚠️ Date is in the past</p>
+              )}
             </div>
-          </div>
-
-          {/* Status Message */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Status Message</label>
-            <input
-              type="text"
-              value={data.statusMessage}
-              onChange={(e) => setData({ ...data, statusMessage: e.target.value })}
-              className="w-full px-3 py-2 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-              placeholder="Optional status message..."
-            />
           </div>
 
           {/* Subscriptions */}
@@ -131,67 +132,95 @@ export default function EditUserModal({ user, onClose, onSave }: EditUserModalPr
             </h3>
             <div className="space-y-3">
               {/* Gold */}
-              <div className="flex items-center gap-4 p-3 bg-yellow-50 rounded-lg">
-                <input
-                  type="checkbox"
-                  checked={data.isGold}
-                  onChange={(e) => setData({ ...data, isGold: e.target.checked })}
-                  className="w-4 h-4 text-yellow-600"
-                />
-                <label className="flex-1 font-medium text-yellow-900">Gold</label>
-                <input
-                  type="date"
-                  value={data.goldExpiresAt}
-                  onChange={(e) => setData({ ...data, goldExpiresAt: e.target.value })}
-                  className="px-3 py-1 text-gray-900 bg-white border border-yellow-300 rounded text-sm"
-                  placeholder="Expiry date"
-                />
+              <div className="flex flex-col gap-1 p-3 bg-yellow-50 rounded-lg">
+                <div className="flex items-center gap-4">
+                  <label className="flex-1 font-medium text-yellow-900">Gold Expiry</label>
+                  <input
+                    type="date"
+                    value={data.goldExpiresAt}
+                    onChange={(e) => setData({ ...data, goldExpiresAt: e.target.value })}
+                    className={`px-3 py-1 text-gray-900 bg-white border rounded text-sm [color-scheme:light] ${isPastDate(data.goldExpiresAt) ? 'border-amber-500' : 'border-yellow-300'}`}
+                  />
+                  <button
+                    onClick={() => setData({ ...data, goldExpiresAt: '' })}
+                    className="p-1 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded transition"
+                    title="Clear date"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+                {isPastDate(data.goldExpiresAt) && (
+                  <p className="text-xs text-amber-600 ml-auto mr-8">⚠️ Date is in the past</p>
+                )}
               </div>
 
               {/* FEATURED */}
-              <div className="flex items-center gap-4 p-3 bg-blue-50 rounded-lg">
-                <input
-                  type="checkbox"
-                  checked={data.isFeatured}
-                  onChange={(e) => setData({ ...data, isFeatured: e.target.checked })}
-                  className="w-4 h-4 text-blue-600"
-                />
-                <label className="flex-1 font-medium text-blue-900">FEATURED</label>
-                <input
-                  type="date"
-                  value={data.featuredExpiresAt}
-                  onChange={(e) => setData({ ...data, featuredExpiresAt: e.target.value })}
-                  className="px-3 py-1 text-gray-900 bg-white border border-blue-300 rounded text-sm"
-                  placeholder="Expiry date"
-                />
+              <div className="flex flex-col gap-1 p-3 bg-blue-50 rounded-lg">
+                <div className="flex items-center gap-4">
+                  <label className="flex-1 font-medium text-blue-900">Featured Expiry</label>
+                  <input
+                    type="date"
+                    value={data.featuredExpiresAt}
+                    onChange={(e) => setData({ ...data, featuredExpiresAt: e.target.value })}
+                    className={`px-3 py-1 text-gray-900 bg-white border rounded text-sm [color-scheme:light] ${isPastDate(data.featuredExpiresAt) ? 'border-amber-500' : 'border-blue-300'}`}
+                  />
+                  <button
+                    onClick={() => setData({ ...data, featuredExpiresAt: '' })}
+                    className="p-1 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded transition"
+                    title="Clear date"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+                {isPastDate(data.featuredExpiresAt) && (
+                  <p className="text-xs text-amber-600 ml-auto mr-8">⚠️ Date is in the past</p>
+                )}
               </div>
 
               {/* Silver */}
-              <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
-                <input
-                  type="checkbox"
-                  checked={data.isSilver}
-                  onChange={(e) => setData({ ...data, isSilver: e.target.checked })}
-                  className="w-4 h-4 text-gray-600"
-                />
-                <label className="flex-1 font-medium text-gray-900">Silver</label>
-                <input
-                  type="date"
-                  value={data.silverExpiresAt}
-                  onChange={(e) => setData({ ...data, silverExpiresAt: e.target.value })}
-                  className="px-3 py-1 text-gray-900 bg-white border border-gray-300 rounded text-sm"
-                  placeholder="Expiry date"
-                />
+              <div className="flex flex-col gap-1 p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-4">
+                  <label className="flex-1 font-medium text-gray-900">Silver Expiry</label>
+                  <input
+                    type="date"
+                    value={data.silverExpiresAt}
+                    onChange={(e) => setData({ ...data, silverExpiresAt: e.target.value })}
+                    className={`px-3 py-1 text-gray-900 bg-white border rounded text-sm [color-scheme:light] ${isPastDate(data.silverExpiresAt) ? 'border-amber-500' : 'border-gray-300'}`}
+                  />
+                  <button
+                    onClick={() => setData({ ...data, silverExpiresAt: '' })}
+                    className="p-1 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded transition"
+                    title="Clear date"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+                {isPastDate(data.silverExpiresAt) && (
+                  <p className="text-xs text-amber-600 ml-auto mr-8">⚠️ Date is in the past</p>
+                )}
               </div>
+
               {/* Verified Photos */}
-              <div className="flex items-center gap-4 p-3 bg-green-50 rounded-lg">
-                <input
-                  type="checkbox"
-                  checked={data.verifiedPhotos}
-                  onChange={(e) => setData({ ...data, verifiedPhotos: e.target.checked })}
-                  className="w-4 h-4 text-green-600"
-                />
-                <label className="flex-1 font-medium text-green-900">Verified Photos</label>
+              <div className="flex flex-col gap-1 p-3 bg-green-50 rounded-lg">
+                <div className="flex items-center gap-4">
+                  <label className="flex-1 font-medium text-green-900">Verified Photos Expiry</label>
+                  <input
+                    type="date"
+                    value={data.verifiedPhotosExpiry}
+                    onChange={(e) => setData({ ...data, verifiedPhotosExpiry: e.target.value })}
+                    className={`px-3 py-1 text-gray-900 bg-white border rounded text-sm [color-scheme:light] ${isPastDate(data.verifiedPhotosExpiry) ? 'border-amber-500' : 'border-green-300'}`}
+                  />
+                  <button
+                    onClick={() => setData({ ...data, verifiedPhotosExpiry: '' })}
+                    className="p-1 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded transition"
+                    title="Clear date"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+                {isPastDate(data.verifiedPhotosExpiry) && (
+                  <p className="text-xs text-amber-600 ml-auto mr-8">⚠️ Date is in the past</p>
+                )}
               </div>
             </div>
           </div>

@@ -590,7 +590,7 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
                     onChange={handleChange}
                     required
                     disabled={isLoading}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent disabled:bg-gray-100 text-gray-900 text-sm"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent disabled:bg-gray-100 text-gray-900 text-sm [color-scheme:light]"
                   />
                 </div>
 

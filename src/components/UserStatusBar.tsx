@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import StatusBar from './StatusBar';
 
 interface User {
-  status: 'pending' | 'verified' | 'suspended';
-  statusMessage?: string | null;
+  status: 'public' | 'private';
+  role: 'escort' | 'admin';
 }
 
 export default function UserStatusBar() {
@@ -55,7 +55,7 @@ export default function UserStatusBar() {
 
   if (isLoading) return null;
 
-  if (!user) return null;
+  if (!user || user.role === 'admin') return null;
 
-  return <StatusBar status={user.status} statusMessage={user.statusMessage} />;
+  return <StatusBar status={user.status} />;
 }

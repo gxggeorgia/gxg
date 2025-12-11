@@ -11,7 +11,7 @@ interface ProfileCardProps {
     slug?: string; // SEO-friendly URL slug
     name: string;
     city: string;
-    isGold: boolean;
+    isGold?: boolean;
     isSilver?: boolean;
     verifiedPhotos?: boolean;
     isNew?: boolean;

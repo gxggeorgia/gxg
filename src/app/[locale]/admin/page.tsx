@@ -11,16 +11,12 @@ interface User {
   email: string;
   name: string | null;
   phone: string;
-  role: 'user' | 'escort' | 'admin';
-  status: 'suspended' | 'pending' | 'verified';
-  statusMessage: string | null;
-  isGold: boolean;
-  isFeatured: boolean;
-  isSilver: boolean;
+  role: 'escort' | 'admin';
+  publicExpiry: string | null;
   goldExpiresAt: string | null;
   featuredExpiresAt: string | null;
   silverExpiresAt: string | null;
-  verifiedPhotos: boolean;
+  verifiedPhotosExpiry: string | null;
 }
 
 export default function AdminPage() {
@@ -100,7 +96,12 @@ export default function AdminPage() {
     const matchesSearch = user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.phone.includes(searchTerm);
-    const matchesStatus = statusFilter === 'all' || user.status === statusFilter;
+
+    const isPublic = user.publicExpiry && new Date(user.publicExpiry) > new Date();
+    const matchesStatus = statusFilter === 'all' ||
+      (statusFilter === 'public' && isPublic) ||
+      (statusFilter === 'private' && !isPublic);
+
     const matchesRole = roleFilter === 'all' || user.role === roleFilter;
     return matchesSearch && matchesStatus && matchesRole;
   });
@@ -149,13 +150,11 @@ export default function AdminPage() {
               <div className="grid grid-cols-2 gap-2 md:col-span-2 md:gap-4">
                 <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg">
                   <option value="all">All Statuses</option>
-                  <option value="verified">Verified</option>
-                  <option value="pending">Pending</option>
-                  <option value="suspended">Suspended</option>
+                  <option value="public">Public</option>
+                  <option value="private">Private</option>
                 </select>
                 <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)} className="px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg">
                   <option value="all">All Roles</option>
-                  <option value="user">User</option>
                   <option value="escort">Escort</option>
                   <option value="admin">Admin</option>
                 </select>
@@ -170,16 +169,20 @@ export default function AdminPage() {
               <div className="text-lg md:text-2xl font-bold text-gray-900">{users.length}</div>
             </div>
             <div className="bg-white rounded-lg shadow p-2 md:p-4">
-              <div className="text-[10px] md:text-sm text-gray-600">Verified</div>
-              <div className="text-lg md:text-2xl font-bold text-green-600">{users.filter(u => u.status === 'verified').length}</div>
+              <div className="text-[10px] md:text-sm text-gray-600">Public</div>
+              <div className="text-lg md:text-2xl font-bold text-green-600">{users.filter(u => u.publicExpiry && new Date(u.publicExpiry) > new Date()).length}</div>
             </div>
             <div className="bg-white rounded-lg shadow p-2 md:p-4">
               <div className="text-[10px] md:text-sm text-gray-600">Premium</div>
-              <div className="text-lg md:text-2xl font-bold text-purple-600">{users.filter(u => u.isGold || u.isFeatured || u.isSilver).length}</div>
+              <div className="text-lg md:text-2xl font-bold text-purple-600">{users.filter(u =>
+                (u.goldExpiresAt && new Date(u.goldExpiresAt) > new Date()) ||
+                (u.featuredExpiresAt && new Date(u.featuredExpiresAt) > new Date()) ||
+                (u.silverExpiresAt && new Date(u.silverExpiresAt) > new Date())
+              ).length}</div>
             </div>
             <div className="bg-white rounded-lg shadow p-2 md:p-4">
-              <div className="text-[10px] md:text-sm text-gray-600">Banned</div>
-              <div className="text-lg md:text-2xl font-bold text-red-600">{users.filter(u => u.status === 'suspended').length}</div>
+              <div className="text-[10px] md:text-sm text-gray-600">Private</div>
+              <div className="text-lg md:text-2xl font-bold text-gray-600">{users.filter(u => !u.publicExpiry || new Date(u.publicExpiry) <= new Date()).length}</div>
             </div>
           </div>
 
@@ -211,36 +214,34 @@ export default function AdminPage() {
                           }`}>{user.role}</span>
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${user.status === 'verified' ? 'bg-green-100 text-green-800' :
-                          user.status === 'suspended' ? 'bg-red-100 text-red-800' :
-                            user.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-gray-100 text-gray-800'
-                          }`}>{user.status}</span>
+                        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${user.publicExpiry && new Date(user.publicExpiry) > new Date()
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-gray-100 text-gray-800'
+                          }`}>
+                          {user.publicExpiry && new Date(user.publicExpiry) > new Date() ? 'Public' : 'Private'}
+                        </span>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="flex gap-2 items-center">
-                          {user.isGold && (
+                        <div className="flex gap-2 items-center flex-wrap">
+                          {user.goldExpiresAt && new Date(user.goldExpiresAt) > new Date() && (
                             <div className="flex items-center gap-1">
                               <Crown className="w-4 h-4 text-yellow-600" />
                               <span className="text-xs font-medium text-yellow-600">GOLD</span>
                             </div>
                           )}
-                          {user.isFeatured && (
+                          {user.featuredExpiresAt && new Date(user.featuredExpiresAt) > new Date() && (
                             <div className="flex items-center gap-1">
                               <Star className="w-4 h-4 text-blue-600 fill-blue-600" />
                               <span className="text-xs font-medium text-blue-600">FEATURED</span>
                             </div>
                           )}
-                          {user.isSilver && (
+                          {user.silverExpiresAt && new Date(user.silverExpiresAt) > new Date() && (
                             <div className="flex items-center gap-1">
                               <Crown className="w-4 h-4 text-gray-600" />
                               <span className="text-xs font-medium text-gray-600">SILVER</span>
                             </div>
                           )}
-                          {!user.isGold && !user.isFeatured && !user.isSilver && !user.verifiedPhotos && (
-                            <span className="text-xs text-gray-500">None</span>
-                          )}
-                          {user.verifiedPhotos && (
+                          {user.verifiedPhotosExpiry && new Date(user.verifiedPhotosExpiry) > new Date() && (
                             <div className="flex items-center gap-1">
                               <span className="text-xs font-bold text-green-600 bg-green-100 px-1.5 py-0.5 rounded-full">VERIFIED PHOTOS</span>
                             </div>

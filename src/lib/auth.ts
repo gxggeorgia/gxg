@@ -13,7 +13,7 @@ const COOKIE_NAME = 'auth_token';
 export interface JWTPayload {
   userId: string;
   email: string;
-  role: 'user' | 'escort' | 'admin';
+  role: 'escort' | 'admin';
 }
 
 // Password hashing

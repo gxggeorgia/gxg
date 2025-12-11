@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
                 id: users.id,
                 name: users.name,
                 slug: users.slug,
-                status: users.status,
+                publicExpiry: users.publicExpiry,
                 role: users.role,
             })
             .from(users);

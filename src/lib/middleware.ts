@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from './auth';
 
-export type UserRole = 'user' | 'escort' | 'admin';
+export type UserRole = 'escort' | 'admin';
 
 /**
  * Authentication Middleware Functions
@@ -21,55 +21,55 @@ export type UserRole = 'user' | 'escort' | 'admin';
 // Middleware to require any authenticated user
 export async function requireAuth(request: NextRequest) {
   const user = await getCurrentUser();
-  
+
   if (!user) {
     return NextResponse.json(
       { error: 'Unauthorized. Please login.' },
       { status: 401 }
     );
   }
-  
+
   return { user };
 }
 
 // Middleware to require admin role
 export async function requireAdmin(request: NextRequest) {
   const user = await getCurrentUser();
-  
+
   if (!user) {
     return NextResponse.json(
       { error: 'Unauthorized. Please login.' },
       { status: 401 }
     );
   }
-  
+
   if (user.role !== 'admin') {
     return NextResponse.json(
       { error: 'Forbidden. Admin access required.' },
       { status: 403 }
     );
   }
-  
+
   return { user };
 }
 
 // Middleware to require escort role (or admin)
 export async function requireEscort(request: NextRequest) {
   const user = await getCurrentUser();
-  
+
   if (!user) {
     return NextResponse.json(
       { error: 'Unauthorized. Please login.' },
       { status: 401 }
     );
   }
-  
-  if (user.role !== 'escort' ) {
+
+  if (user.role !== 'escort') {
     return NextResponse.json(
       { error: 'Forbidden. Escort or Admin access required.' },
       { status: 403 }
     );
   }
-  
+
   return { user };
 }

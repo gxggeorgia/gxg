@@ -28,8 +28,7 @@ async function createAdmin() {
         .update(users)
         .set({
           role: 'admin',
-          status: 'verified',
-          statusMessage: "Admin Profile",
+          publicExpiry: new Date('2099-01-01'),
           emailVerified: true,
         })
         .where(eq(users.email, email))
@@ -39,7 +38,7 @@ async function createAdmin() {
       console.log('Email:', email);
       console.log('User ID:', updatedUser.id);
       console.log('Role:', updatedUser.role);
-      console.log('Status:', updatedUser.status);
+      console.log('Role:', updatedUser.role);
     } else {
       console.log('📝 Creating new admin user...');
 
@@ -58,8 +57,7 @@ async function createAdmin() {
         password: string;
         slug: string;
         phone: string;
-        status: string;
-        statusMessage: string | null;
+        publicExpiry: Date | null;
         emailVerified: boolean;
         city: string;
         gender: string;
@@ -77,8 +75,7 @@ async function createAdmin() {
         slug,
         phone: '+990000000000',
         role: 'admin',
-        status: 'verified',
-        statusMessage: null,
+        publicExpiry: new Date('2099-01-01'),
         emailVerified: true,
         city: 'Tbilisi',
         gender: 'male',
@@ -94,7 +91,7 @@ async function createAdmin() {
       console.log('Password:', password);
       console.log('User ID:', admin.id);
       console.log('Role:', admin.role);
-      console.log('Status:', admin.status);
+      console.log('Role:', admin.role);
     }
 
     console.log('\n⚠️  Default password: admin123');

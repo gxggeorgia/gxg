@@ -13,12 +13,11 @@ interface UserProfile extends Omit<RegisterFormData, 'password' | 'confirmPasswo
   id: string;
   email: string;
   emailVerified: boolean;
-  status: 'suspended' | 'pending' | 'verified';
-  statusMessage: string | null;
-  role: 'user' | 'escort' | 'admin';
-  isGold: boolean;
-  isFeatured: boolean;
-  isSilver: boolean;
+  status: 'public' | 'private';
+  role: 'escort' | 'admin';
+  isGold?: boolean;
+  isFeatured?: boolean;
+  isSilver?: boolean;
   goldExpiresAt: string | null;
   featuredExpiresAt: string | null;
   silverExpiresAt: string | null;
@@ -536,19 +535,12 @@ export default function ProfilePage() {
                     {profile.role}
                   </span>
                   {/* Status Badge */}
-                  <div className={`px-2 py-1 md:px-3 md:py-1.5 rounded-full flex items-center gap-1 md:gap-1.5 shadow-lg ${profile.status === 'verified' ? 'bg-green-600' :
-                    profile.status === 'suspended' ? 'bg-red-600' :
-                      profile.status === 'pending' ? 'bg-yellow-600' :
-                        'bg-gray-600'
-                    }`}>
+                  <div className={`px-2 py-1 md:px-3 md:py-1.5 rounded-full flex items-center gap-1 md:gap-1.5 shadow-lg ${profile.status === 'public' ? 'bg-green-600' : 'bg-yellow-600'}`}>
                     <svg className="w-3 h-3 md:w-4 md:h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <span className="text-white font-bold text-[10px] md:text-xs uppercase">
-                      {profile.status === 'verified' ? 'VERIFIED' :
-                        profile.status === 'pending' ? 'PENDING' :
-                          profile.status === 'suspended' ? 'SUSPENDED' :
-                            'UNKNOWN'}
+                      {profile.status === 'public' ? 'VERIFIED' : 'PENDING'}
                     </span>
                   </div>
                 </div>
@@ -568,20 +560,7 @@ export default function ProfilePage() {
 
               {/* Status Message */}
               {/* Status Message */}
-              {profile.statusMessage && profile.status !== 'verified' && (
-                <div className={`mt-4 px-4 py-3 rounded-lg border-l-4 ${profile.status === 'suspended' ? 'bg-red-50 border-red-500' :
-                  profile.status === 'pending' ? 'bg-yellow-50 border-yellow-500' :
-                    'bg-blue-50 border-blue-500'
-                  }`}>
-                  <p className={`text-sm font-medium ${profile.status === 'suspended' ? 'text-red-800' :
-                    profile.status === 'pending' ? 'text-yellow-800' :
-                      'text-blue-800'
-                    }`}>
 
-                    {profile.statusMessage}
-                  </p>
-                </div>
-              )}
             </div>
             <button
               onClick={() => router.push('/profile/edit')}
@@ -600,7 +579,7 @@ export default function ProfilePage() {
         )}
 
         {/* Verification Alert */}
-        {profile.status === 'pending' && (
+        {profile.status === 'private' && (
           <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-2xl p-6 mb-6 shadow-lg">
             <div className="flex items-start gap-4">
               <div className="flex-shrink-0">

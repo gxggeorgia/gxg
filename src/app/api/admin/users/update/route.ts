@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 
     // Validate and prepare updates
     const allowedFields = [
-      'status', 'statusMessage', 'role', 'isGold', 'isFeatured', 'isSilver', 'verifiedPhotos',
+      'role', 'publicExpiry', 'verifiedPhotosExpiry',
       'goldExpiresAt', 'featuredExpiresAt', 'silverExpiresAt',
       'name', 'phone', 'city', 'district', 'emailVerified'
     ];
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     for (const [key, value] of Object.entries(updates)) {
       if (allowedFields.includes(key)) {
         // Handle date fields - convert string to Date if needed
-        if (key.endsWith('ExpiresAt')) {
+        if (key.endsWith('Expiry') || key.endsWith('ExpiresAt')) {
           if (value === null) {
             updateData[key] = null;
           } else if (typeof value === 'string') {
@@ -39,14 +39,6 @@ export async function POST(request: NextRequest) {
           } else if (value instanceof Date) {
             updateData[key] = value;
           }
-        }
-        // Handle subscription toggles
-        else if ((key === 'isGold' || key === 'isFeatured' || key === 'isSilver') && value === false) {
-          updateData[key] = value;
-          // Clear expiration date when disabling subscription
-          if (key === 'isGold') updateData['goldExpiresAt'] = null;
-          if (key === 'isFeatured') updateData['featuredExpiresAt'] = null;
-          if (key === 'isSilver') updateData['silverExpiresAt'] = null;
         } else {
           updateData[key] = value;
         }
