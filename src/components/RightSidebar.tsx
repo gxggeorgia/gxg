@@ -76,7 +76,7 @@ export default function RightSidebar() {
         onClick={() => setIsOpen(!isOpen)}
         className="w-full p-4 sm:p-6 flex items-center justify-between lg:cursor-default"
       >
-        <h3 className="text-lg sm:text-xl font-bold text-red-700">Search</h3>
+        <h3 className="text-lg sm:text-xl font-bold text-red-700">{t('search.search')}</h3>
         <ChevronDown
           className={`lg:hidden transition-transform text-red-700 ${isOpen ? 'rotate-180' : ''}`}
           size={20}
@@ -89,13 +89,13 @@ export default function RightSidebar() {
         <div className="grid grid-cols-2 gap-2">
           {/* City Dropdown */}
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">City</label>
+            <label className="block text-xs font-medium text-gray-700 mb-1">{t('search.city')}</label>
             <select
               value={filters.city}
               onChange={(e) => handleCityChange(e.target.value)}
               className="w-full px-2 py-2 bg-white border-2 border-gray-200 rounded-lg text-xs font-medium text-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition"
             >
-              <option value="">All Cities</option>
+              <option value="">{t('search.allCities')}</option>
               {locations.map(city => (
                 <option key={city.id} value={city.id}>{city.name[locale]}</option>
               ))}
@@ -104,14 +104,14 @@ export default function RightSidebar() {
 
           {/* District Dropdown */}
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">District</label>
+            <label className="block text-xs font-medium text-gray-700 mb-1">{t('search.district')}</label>
             <select
               value={filters.district}
               onChange={(e) => setFilters(prev => ({ ...prev, district: e.target.value }))}
               disabled={!filters.city || districts.length === 0}
               className="w-full px-2 py-2 bg-white border-2 border-gray-200 rounded-lg text-xs font-medium text-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <option value="">All Districts</option>
+              <option value="">{t('search.allDistricts')}</option>
               {districts.map(district => (
                 <option key={district.id} value={district.id}>{district.name[locale]}</option>
               ))}
@@ -121,16 +121,16 @@ export default function RightSidebar() {
 
         {/* Gender Dropdown */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">Gender</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('search.gender')}</label>
           <select
             value={filters.gender}
             onChange={(e) => setFilters(prev => ({ ...prev, gender: e.target.value }))}
             className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition"
           >
-            <option value="">All Genders</option>
+            <option value="">{t('search.allGenders')}</option>
             <option value="female">{t('gender.female')}</option>
             <option value="male">{t('gender.male')}</option>
-            <option value="trans">Trans</option>
+            <option value="trans">{t('gender.trans')}</option>
           </select>
         </div>
 

@@ -23,8 +23,8 @@ export default function Footer() {
         <footer className="bg-black py-8 mt-auto border-t border-slate-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <div className="flex justify-center gap-6 mb-4 text-sm text-gray-400">
-                    <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
-                    <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+                    <Link href="/terms" className="hover:text-white transition-colors">{t('termsOfService')}</Link>
+                    <Link href="/privacy" className="hover:text-white transition-colors">{t('privacyPolicy')}</Link>
                 </div>
                 <p className="text-sm leading-relaxed text-gray-500">
                     {t('copyright', { year, domain })}

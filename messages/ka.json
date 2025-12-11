@@ -74,7 +74,10 @@
     "facebook": "ფეისბუქი",
     "menu": "მენიუ",
     "securityCheck": "უსაფრთხოების შემოწმება",
-    "pleaseVerifyHuman": "გთხოვთ, დაადასტუროთ, რომ ადამიანი ხართ, რათა გააგრძელოთ."
+    "pleaseVerifyHuman": "გთხოვთ, დაადასტუროთ, რომ ადამიანი ხართ, რათა გააგრძელოთ.",
+    "escortsCityList": "ესკორტები ქალაქების მიხედვით:",
+    "contactUsOn": "დაგვიკავშირდით",
+    "scrollToTop": "ზევით"
   },
   "auth": {
     "email": "ელ-ფოსტა",
@@ -168,7 +171,7 @@
     "new": "ახალი",
     "online": "ონლაინ",
     "verifiedPhotos": "100% ფოტოები",
-    "quickSearch": "სწრაფი ძებნა",
+    "search": "ძებნა",
     "quickFilters": "სწრაფი ფილტრები",
     "clearFilters": "ფილტრების გასუფთავება",
     "allCities": "ყველა ქალაქი",
@@ -252,11 +255,12 @@
     "domination": "დომინირება"
   },
   "footer": {
-    "copyright": "© {year} {domain} | GogoXGeorgia - პრემიუმ ესკორტ დირექტორია საქართველოში. გადამოწმებული ესკორტები თბილისში, ბათუმში, ქუთაისში. Eskort gogoebi, bozebis saiti, intim gacnoba, escort girls georgia. 18+"
+    "copyright": "© {year} {domain} | GogoXGeorgia - პრემიუმ ესკორტ დირექტორია საქართველოში. გადამოწმებული ესკორტები თბილისში, ბათუმში, ქუთაისში. Eskort gogoebi, bozebis saiti, intim gacnoba, escort girls georgia. 18+",
+    "termsOfService": "მომსახურების პირობები",
+    "privacyPolicy": "კონფიდენციალურობის პოლიტიკა"
   },
   "siteNotice": {
-    "vpnWarning": "ყურადღება! თუ GogoXGeorgia დაბლოკილია, გთხოვთ გამოიყენოთ VPN საიტზე შესასვლელად.",
-    "vpnInstructions": "თუ საიტი არ იტვირთება, გადმოწერეთ ნებისმიერი VPN აპლიკაცია App Store-იდან ან Google Play-დან, ჩართეთ და განაახლეთ გვერდი.",
+    "officialSiteAndTelegram": "ოფიციალური საიტი და Telegram",
     "telegramInfo": "ოფიციალური GogoXGeorgia Telegram: {telegramUsername}. ჩვენ არ ვიყენებთ სხვა ანგარიშებს.",
     "siteInfo": "ჩვენი ოფიციალური 18+ საიტი არის {domain}. სიახლეებისა და მუშა ლინკებისთვის შემოგვიერთდით Telegram არხზე:",
     "hide": "დამალვა",

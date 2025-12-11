@@ -120,9 +120,7 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
         <div className="flex items-center justify-between px-5 py-4 sm:px-6 sm:py-5 border-b border-red-100 bg-red-50">
           <div className="flex items-center gap-2">
             <Search className="text-red-700" size={20} />
-            <h2 className="text-lg sm:text-xl font-semibold text-red-800">
-              {t('search.quickSearch')}
-            </h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-red-800">{t('search.search')}</h2>
           </div>
           <button
             onClick={onClose}

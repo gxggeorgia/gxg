@@ -39,7 +39,7 @@ export default function SiteNotice() {
             >
                 <div className="flex items-center gap-2 text-red-800 font-bold">
                     <AlertTriangle size={20} className="text-red-600" />
-                    <span>{t('vpnWarning')}</span>
+                    <span>{t('officialSiteAndTelegram')}</span>
                 </div>
                 <button className="text-red-700 hover:text-red-900 transition-colors flex items-center gap-1 text-sm font-medium">
                     <span>{isExpanded ? t('hide') : t('more')}</span>
@@ -50,12 +50,7 @@ export default function SiteNotice() {
             {/* Content */}
             {isExpanded && (
                 <div className="max-w-7xl mx-auto px-3 pb-6 space-y-4 animate-in slide-in-from-top-2 duration-200">
-                    {/* VPN Warning Details */}
-                    <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                        <p className="text-yellow-600 text-sm">
-                            {t('vpnInstructions')}
-                        </p>
-                    </div>
+                    {/* Telegram Info */}
 
                     {/* Telegram Info */}
                     <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-center gap-3">

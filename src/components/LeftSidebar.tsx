@@ -1,5 +1,5 @@
 "use client"
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { locations } from '@/data/locations';
@@ -8,6 +8,7 @@ import { useSearchParams } from 'next/navigation';
 
 export default function LeftSidebar() {
   const locale = useLocale() as 'en' | 'ka' | 'ru';
+  const t = useTranslations();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -60,7 +61,7 @@ export default function LeftSidebar() {
         className="w-full p-4 border-b border-gray-200 flex items-center justify-between lg:cursor-default"
       >
         <h3 className="font-bold text-base text-red-600">
-          Escorts City list:
+          {t('common.escortsCityList')}
         </h3>
         <ChevronDown
           className={`lg:hidden transition-transform text-red-600 ${isOpen ? 'rotate-180' : ''}`}
@@ -137,7 +138,7 @@ export default function LeftSidebar() {
             </svg>
           </div>
           <div>
-            <p className="text-xs text-gray-600">Contact us on</p>
+            <p className="text-xs text-gray-600">{t('common.contactUsOn')}</p>
             <a
               href={process.env.NEXT_PUBLIC_TELEGRAM_LINK || 'https://t.me/gogoxgeorgia'}
               target="_blank"

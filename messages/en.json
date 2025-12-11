@@ -69,7 +69,10 @@
     "twitter": "Twitter/X",
     "menu": "Menu",
     "securityCheck": "Security Check",
-    "pleaseVerifyHuman": "Please verify you are human to continue."
+    "pleaseVerifyHuman": "Please verify you are human to continue.",
+    "escortsCityList": "Escorts City List:",
+    "contactUsOn": "Contact us on",
+    "scrollToTop": "Top"
   },
   "myAccount": "My Account",
   "auth": {
@@ -172,7 +175,7 @@
     "new": "New",
     "online": "Online",
     "verifiedPhotos": "100% Photos",
-    "quickSearch": "Quick Search",
+    "search": "Search",
     "quickFilters": "Quick Filters",
     "clearFilters": "Clear Filters",
     "allCities": "All Cities",
@@ -256,11 +259,12 @@
     "domination": "Domination"
   },
   "footer": {
-    "copyright": "© {year} {domain} | {domain} Escort Girls, eskort gogoebi, gogoxgeorgia, batumi escort, eskort batumi, escort girls, escort tbilisi, whores tbilisi, eskortebi, escorts, gogoxgeorgia tbilisi, escortebi, escort batumi, escort kutaisi, bozebis saiti, eskortebi Telavi, georgian escort, gogoxgeorgia vip, escort, intim gacnoba, gogoebi tbilisi batumi kutaisi, georgian intim dating site, bozebis nomrebi, bozebi batumi gamodzaxebit, escort Georgia 18+"
+    "copyright": "© {year} {domain} | {domain} Escort Girls, eskort gogoebi, gogoxgeorgia, batumi escort, eskort batumi, escort girls, escort tbilisi, whores tbilisi, eskortebi, escorts, gogoxgeorgia tbilisi, escortebi, escort batumi, escort kutaisi, bozebis saiti, eskortebi Telavi, georgian escort, gogoxgeorgia vip, escort, intim gacnoba, gogoebi tbilisi batumi kutaisi, georgian intim dating site, bozebis nomrebi, bozebi batumi gamodzaxebit, escort Georgia 18+",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy"
   },
   "siteNotice": {
-    "vpnWarning": "Attention! If GogoXGeorgia is blocked, please use a VPN to access the site.",
-    "vpnInstructions": "If the site is blocked, go to your phone's app store (App Store for iPhone or Google Play for Android), search for \"VPN\", download any VPN application, turn it on, and then access the site.",
+    "officialSiteAndTelegram": "Official Site & Telegram",
     "telegramInfo": "Our TELEGRAM chat is only this one: {telegramUsername}. We don’t have another number.",
     "siteInfo": "Our 18+ site is only {domain}. We don’t have other sites. In case of site blocking, the working and current link will always be in our group. Click and join:",
     "hide": "Hide",

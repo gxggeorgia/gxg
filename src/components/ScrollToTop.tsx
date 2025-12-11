@@ -1,9 +1,11 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { ArrowUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function ScrollToTop() {
+    const t = useTranslations('common');
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
@@ -40,7 +42,7 @@ export default function ScrollToTop() {
             aria-label="Scroll to top"
         >
             <ArrowUp size={20} className="sm:w-6 sm:h-6" />
-            <span className="text-sm font-medium">Top</span>
+            <span className="text-sm font-medium">{t('scrollToTop')}</span>
         </button>
     );
 }
