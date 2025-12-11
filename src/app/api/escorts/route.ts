@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     const gold = searchParams.get('gold') === 'true';
     const silver = searchParams.get('silver') === 'true';
     const verifiedPhotos = searchParams.get('verifiedPhotos') === 'true';
-    const limit = parseInt(searchParams.get('limit') || '20');
+    const limit = parseInt(searchParams.get('limit') || process.env.NEXT_PUBLIC_ESCORTS_LIMIT || '20');
     const offset = parseInt(searchParams.get('offset') || '0');
 
     // Build WHERE conditions

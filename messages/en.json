@@ -274,7 +274,7 @@
   "favorites": {
     "title": "My Favorites",
     "noFavorites": "No favorites yet. Start adding escorts to your favorites!",
-    "count": "You have {count} favorite escort{s}",
+    "count": "You have {count} favorite {count, plural, one {escort} other {escorts}}",
     "emptyTitle": "No Favorites Yet",
     "emptyDesc": "Click the heart icon on any escort profile to add them to your favorites.",
     "browseEscorts": "Browse Escorts",

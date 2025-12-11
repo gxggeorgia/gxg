@@ -81,7 +81,7 @@ export default function ProfileGrid() {
         if (silver) params.append('silver', silver);
         if (verifiedPhotos) params.append('verifiedPhotos', verifiedPhotos);
         if (online) params.append('online', online);
-        const pageSize = 10;
+        const pageSize = parseInt(process.env.NEXT_PUBLIC_ESCORTS_LIMIT || '20');
         params.append('limit', pageSize.toString());
 
         const allRes = await fetch(`/api/escorts?${params.toString()}&offset=${(currentPage - 1) * pageSize}`);
@@ -193,8 +193,8 @@ export default function ProfileGrid() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             {/* Info */}
             <div className="text-sm text-gray-600">
-              Showing <span className="font-semibold text-gray-900">{(currentPage - 1) * 10 + 1}</span> to{' '}
-              <span className="font-semibold text-gray-900">{Math.min(currentPage * 10, pagination.total)}</span> of{' '}
+              Showing <span className="font-semibold text-gray-900">{Math.min((currentPage - 1) * parseInt(process.env.NEXT_PUBLIC_ESCORTS_LIMIT || '20') + 1, pagination.total)}</span> to{' '}
+              <span className="font-semibold text-gray-900">{Math.min(currentPage * parseInt(process.env.NEXT_PUBLIC_ESCORTS_LIMIT || '20'), pagination.total)}</span> of{' '}
               <span className="font-semibold text-gray-900">{pagination.total}</span> escorts
             </div>
 
