@@ -1,6 +1,6 @@
-# Escort Directory Platform
+# Service Listing Platform
 
-A modern, scalable escort directory platform built with Next.js, Drizzle ORM, and PostgreSQL with multi-language support.
+A modern, scalable directory platform built with Next.js, Drizzle ORM, and PostgreSQL with multi-language support.
 
 ## 🚀 Tech Stack
 
@@ -16,14 +16,14 @@ A modern, scalable escort directory platform built with Next.js, Drizzle ORM, an
 
 - Multi-language support (Georgian, English, Russian)
 - Type-safe database schema with Drizzle ORM
-- User roles (User, Escort, Admin)
+- User roles (User, Provider, Admin)
 - Profile management system
 - Location-based organization (Cities & Districts)
 - Image & video upload system (Cloudflare R2)
 - Media management (upload, view, delete)
 - Lightbox gallery with navigation
-- Search & filtering 
-- Gold/Silver profiles 
+- Search & filtering
+- Premium membership tiers (Gold/Silver)
 
 ## Getting Started
 
@@ -34,11 +34,11 @@ For detailed installation and setup instructions, please refer to the [Setup Gui
 
 ### Users Table
 - User authentication and role management
-- Support for User, Escort, and Admin roles
+- Support for User, Provider, and Admin roles
 - Premium membership tracking
 
 ### Profiles Table
-- Escort profile information
+- Provider profile information
 - Multi-language descriptions
 - Photo and video storage
 - Location (city/district)
