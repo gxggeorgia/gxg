@@ -7,6 +7,7 @@ import ProfileCard from '@/components/ProfileCard';
 
 interface Escort {
   id: string;
+  slug: string;
   name: string;
   city: string;
   isGold?: boolean;
@@ -107,6 +108,7 @@ export default function FavoritesPage() {
                   key={escort.id}
                   profile={{
                     id: escort.id,
+                    slug: escort.slug,
                     name: escort.name,
                     city: escort.city,
                     isGold: escort.isGold,
