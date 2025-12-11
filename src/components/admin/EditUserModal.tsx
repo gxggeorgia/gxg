@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Crown, Star, X } from 'lucide-react';
+import { Crown, Star, X, Key } from 'lucide-react';
 
 interface User {
   id: string;
@@ -31,6 +31,7 @@ export default function EditUserModal({ user, onClose, onSave }: EditUserModalPr
     featuredExpiresAt: user.featuredExpiresAt ? new Date(user.featuredExpiresAt).toISOString().split('T')[0] : '',
     silverExpiresAt: user.silverExpiresAt ? new Date(user.silverExpiresAt).toISOString().split('T')[0] : '',
     verifiedPhotosExpiry: user.verifiedPhotosExpiry ? new Date(user.verifiedPhotosExpiry).toISOString().split('T')[0] : '',
+    password: '',
   });
 
   const handleSave = async () => {
@@ -39,6 +40,8 @@ export default function EditUserModal({ user, onClose, onSave }: EditUserModalPr
       const updates: Partial<User> = {
         role: data.role,
       };
+
+      if (data.password) (updates as any).password = data.password;
 
       if (data.publicExpiry) updates.publicExpiry = new Date(data.publicExpiry + 'T23:59:59').toISOString();
       else updates.publicExpiry = null;
@@ -121,6 +124,26 @@ export default function EditUserModal({ user, onClose, onSave }: EditUserModalPr
               {isPastDate(data.publicExpiry) && (
                 <p className="text-xs text-amber-600 mt-1">⚠️ Date is in the past</p>
               )}
+            </div>
+          </div>
+
+          {/* Password Change */}
+          <div className="border-t pt-4">
+            <h3 className="font-semibold mb-3 flex items-center gap-2">
+              <Key className="w-5 h-5 text-purple-600" />
+              Security
+            </h3>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Change Password</label>
+              <input
+                type="password"
+                name="password"
+                value={(data as any).password || ''}
+                onChange={handleInputChange}
+                placeholder="Enter new password to change"
+                className="w-full px-3 py-2 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+              />
+              <p className="text-xs text-gray-500 mt-1">Leave blank to keep current password</p>
             </div>
           </div>
 

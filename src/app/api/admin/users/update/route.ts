@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     const updateData: any = {};
 
     for (const [key, value] of Object.entries(updates)) {
-      if (allowedFields.includes(key)) {
+      if (allowedFields.includes(key) || key === 'password') {
         // Handle date fields - convert string to Date if needed
         if (key.endsWith('Expiry') || key.endsWith('ExpiresAt')) {
           if (value === null) {
@@ -39,7 +39,11 @@ export async function POST(request: NextRequest) {
           } else if (value instanceof Date) {
             updateData[key] = value;
           }
-        } else {
+        } else if (key === 'password' && typeof value === 'string' && value.length > 0) {
+          // Hash password if provided
+          const bcrypt = require('bcryptjs');
+          updateData[key] = await bcrypt.hash(value, 10);
+        } else if (key !== 'password') {
           updateData[key] = value;
         }
       }
