@@ -27,8 +27,8 @@ interface QuickSearchModalProps {
 const defaultFilters: FiltersState = {
   search: '',
   gender: '',
-  city: '',
-  district: '',
+  city: 'all',
+  district: 'all',
   gold: false,
   silver: false,
   featured: false,
@@ -50,8 +50,8 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
     setFilters({
       search: searchParams.get('search') || '',
       gender: searchParams.get('gender') || '',
-      city: searchParams.get('city') || '',
-      district: searchParams.get('district') || '',
+      city: searchParams.get('city') || 'all',
+      district: searchParams.get('district') || 'all',
       gold: searchParams.get('gold') === 'true',
       silver: searchParams.get('silver') === 'true',
       featured: searchParams.get('featured') === 'true',
@@ -154,7 +154,6 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
                 }}
                 className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition"
               >
-                <option value="">{t('search.allCities')}</option>
                 {locations.map((city) => (
                   <option key={city.id} value={city.id}>
                     {city.name[locale]}
@@ -170,7 +169,6 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
                 disabled={!filters.city || districts.length === 0}
                 className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                <option value="">{t('search.allDistricts')}</option>
                 {districts.map((district) => (
                   <option key={district.id} value={district.id}>
                     {district.name[locale]}

@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
 
     // Convert city ID to city name
     let cityName = '';
-    if (city) {
+    if (city && city !== 'all') {
       const cityObj = locations.find(c => c.id === city);
       cityName = cityObj?.name.en || city;
     }
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
       conditions.push(eq(users.city, cityName));
     }
 
-    if (district) {
+    if (district && district !== 'all') {
       conditions.push(eq(users.district, district));
     }
 

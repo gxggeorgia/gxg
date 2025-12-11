@@ -32,13 +32,13 @@ export default function HomePage() {
                 <RightSidebar />
               </div>
 
-              <SiteNotice />
-              <ProfileGrid />
-
               {/* Left Sidebar - Mobile Only (Cities) */}
               <div className="lg:hidden">
                 <LeftSidebar />
               </div>
+
+              <SiteNotice />
+              <ProfileGrid />
             </main>
 
             {/* Right Sidebar - Desktop Only */}

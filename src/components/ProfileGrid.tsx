@@ -102,6 +102,46 @@ export default function ProfileGrid() {
     fetchEscorts();
   }, [searchParams.toString(), currentPage]);
 
+  // Poll for online status updates
+  useEffect(() => {
+    if (escorts.length === 0) return;
+
+    const updateStatuses = async () => {
+      try {
+        const userIds = escorts.map(e => e.id);
+        const res = await fetch('/api/escorts/status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userIds }),
+        });
+
+        if (res.ok) {
+          const { statuses } = await res.json();
+          setEscorts(prev => prev.map(escort => {
+            if (statuses[escort.id] !== undefined) {
+              return {
+                ...escort,
+                lastActive: statuses[escort.id],
+                // Update isOnline based on new lastActive
+                isOnline: new Date(statuses[escort.id]).getTime() > Date.now() - 30000
+              } as Escort;
+            }
+            return escort;
+          }));
+        }
+      } catch (error) {
+        console.error('Error updating statuses:', error);
+      }
+    };
+
+    // Initial update after mount/escorts change
+    updateStatuses();
+
+    // Poll every 30 seconds
+    const interval = setInterval(updateStatuses, 30000);
+    return () => clearInterval(interval);
+  }, [escorts.map(e => e.id).join(',')]);
+
   // ... (loading state unchanged)
 
   // ... (error state unchanged)

@@ -73,6 +73,7 @@ export default function LeftSidebar() {
       <ul className={`p-2 ${isOpen ? 'block' : 'hidden'} lg:block`}>
         {locations.map((city) => {
           const isCityActive = currentCity === city.id;
+
           return (
             <li key={city.id} className="mb-1">
               <div className="flex items-center">
@@ -129,27 +130,7 @@ export default function LeftSidebar() {
         })}
       </ul>
 
-      {/* Telegram Link */}
-      <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z" />
-            </svg>
-          </div>
-          <div>
-            <p className="text-xs text-gray-600">{t('common.contactUsOn')}</p>
-            <a
-              href={process.env.NEXT_PUBLIC_TELEGRAM_LINK || 'https://t.me/gogoxgeorgia'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 font-semibold hover:underline"
-            >
-              {process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || (process.env.NEXT_PUBLIC_TELEGRAM_LINK ? `@${process.env.NEXT_PUBLIC_TELEGRAM_LINK.split('/').pop()}` : '@gogoxgeorgia')}
-            </a>
-          </div>
-        </div>
-      </div>
+
     </div>
   );
 }

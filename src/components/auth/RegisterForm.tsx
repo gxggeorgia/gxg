@@ -878,7 +878,7 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent disabled:bg-gray-100 text-gray-900"
                   >
                     <option value="">{t('auth.selectCity')}</option>
-                    {locations.map((city) => (
+                    {locations.filter(c => c.id !== 'all').map((city) => (
                       <option key={city.id} value={city.id}>
                         {city.name[locale]}
                       </option>
