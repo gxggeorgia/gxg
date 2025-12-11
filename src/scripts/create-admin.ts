@@ -8,7 +8,7 @@ import { generateSlug } from '../lib/slug';
 
 async function createAdmin() {
   try {
-    const email = 'gxg.georgia115500@gmail.com';
+    const email = 'admin@gmail.com';
     const password = 'admin123'; // Change this to a secure password
 
     console.log('🔍 Checking if admin user already exists...');
