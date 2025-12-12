@@ -12,9 +12,18 @@ export async function POST(request: NextRequest) {
     if (authResult instanceof NextResponse) return authResult;
     const { user } = authResult;
 
+    // Check if user is verified (public profile is active)
+    const isVerified = user.publicExpiry && new Date(user.publicExpiry) > new Date();
+    if (isVerified) {
+      return NextResponse.json(
+        { error: 'Cannot upload media. Your profile is verified. Please contact support to update photos.' },
+        { status: 403 }
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
-    
+
     if (!file) {
       return NextResponse.json(
         { error: 'No file provided' },
@@ -56,7 +65,7 @@ export async function POST(request: NextRequest) {
     // Save metadata to database
     if (type === 'image') {
       const currentImages = currentUser.images || [];
-      
+
       // Check max limit (10 images)
       if (currentImages.length >= 10) {
         return NextResponse.json({ error: 'Maximum 10 images allowed' }, { status: 400 });
@@ -65,7 +74,7 @@ export async function POST(request: NextRequest) {
       // Mark first image as primary
       const isPrimary = currentImages.length === 0;
       const imageMetadata = { ...fileMetadata, isPrimary };
-      
+
       const updatedImages = [...currentImages, imageMetadata];
 
       await db
@@ -74,12 +83,12 @@ export async function POST(request: NextRequest) {
         .where(eq(users.id, user.id));
     } else if (type === 'video') {
       const currentVideos = (currentUser.videos as any[]) || [];
-      
+
       // Check max limit (1 video)
       if (currentVideos.length >= 1) {
         return NextResponse.json({ error: 'Maximum 1 video allowed. Delete existing video first.' }, { status: 400 });
       }
-      
+
       const updatedVideos = [...currentVideos, fileMetadata];
 
       await db

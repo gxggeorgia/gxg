@@ -12,7 +12,6 @@ import type { RegisterFormData } from '@/types/auth';
 interface UserProfile extends Omit<RegisterFormData, 'password' | 'confirmPassword' | 'incallRates' | 'outcallRates'> {
   id: string;
   email: string;
-  status: 'public' | 'private';
   role: 'escort' | 'admin';
   isGold?: boolean;
   isFeatured?: boolean;
@@ -22,8 +21,28 @@ interface UserProfile extends Omit<RegisterFormData, 'password' | 'confirmPasswo
   silverExpiresAt: string | null;
 
   verifiedPhotos: boolean;
+  publicExpiry: string | null;
+  lastActive: string | null;
   createdAt: string;
+  slug: string;
   coverImage?: string | null;
+  images?: Array<{
+    url: string;
+    width?: number;
+    height?: number;
+    size: number;
+    mimeType: string;
+    isPrimary?: boolean;
+  }>;
+  videos?: Array<{
+    url: string;
+    width?: number;
+    height?: number;
+    duration?: number;
+    size: number;
+    mimeType: string;
+    thumbnailUrl?: string;
+  }>;
   rates?: {
     incall?: {
       thirtyMin?: string;
@@ -136,7 +155,7 @@ export default function ProfilePage() {
     // Validate files
     const MAX_SIZE = 10 * 1024 * 1024; // 10MB
     const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-    const currentCount = ((profile as any)?.images as any[])?.length || 0;
+    const currentCount = profile?.images?.length || 0;
     const newFiles: File[] = [];
     const newPreviews: string[] = [];
 
@@ -534,12 +553,16 @@ export default function ProfilePage() {
                     {profile.role}
                   </span>
                   {/* Status Badge */}
-                  <div className={`px-2 py-1 md:px-3 md:py-1.5 rounded-full flex items-center gap-1 md:gap-1.5 shadow-lg ${profile.status === 'public' ? 'bg-green-600' : 'bg-yellow-600'}`}>
-                    <svg className="w-3 h-3 md:w-4 md:h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
+                  <div className={`px-2 py-1 md:px-3 md:py-1.5 rounded-full flex items-center gap-1 md:gap-1.5 shadow-lg ${(profile.publicExpiry && new Date(profile.publicExpiry) > new Date()) ? 'bg-green-600' : 'bg-yellow-600'}`}>
+
+                    {(profile.publicExpiry && new Date(profile.publicExpiry) > new Date()) && (
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    )}
+
                     <span className="text-white font-bold text-[10px] md:text-xs uppercase">
-                      {profile.status === 'public' ? 'VERIFIED' : 'PENDING'}
+                      {(profile.publicExpiry && new Date(profile.publicExpiry) > new Date()) ? 'VERIFIED' : 'PENDING'}
                     </span>
                   </div>
                 </div>
@@ -578,7 +601,7 @@ export default function ProfilePage() {
         )}
 
         {/* Verification Alert */}
-        {profile.status === 'private' && (
+        {(!profile.publicExpiry || new Date(profile.publicExpiry) <= new Date()) && (
           <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-2xl p-6 mb-6 shadow-lg">
             <div className="flex items-start gap-4">
               <div className="flex-shrink-0">
@@ -619,13 +642,13 @@ export default function ProfilePage() {
                 Public Gallery (10 max)
               </h3>
               <p className="text-xs md:text-sm text-gray-600 mb-3">
-                {(profile as any)?.images?.length || 0} / 10 images uploaded
+                {profile?.images?.length || 0} / 10 images uploaded
               </p>
 
               {/* Uploaded Images */}
-              {(profile as any)?.images && (profile as any).images.length > 0 && (
+              {(profile?.images && profile.images.length > 0) && (
                 <div className="grid grid-cols-3 gap-2 mb-3">
-                  {(profile as any).images.map((image: any, index: number) => {
+                  {profile.images.map((image: any, index: number) => {
                     const isDeleting = deletingImages.has(image.url);
                     return (
                       <div key={index} className="relative aspect-square group">
@@ -669,28 +692,31 @@ export default function ProfilePage() {
                                 setCoverImage(image.url);
                               }}
                               disabled={settingCoverImage}
-                              className={`absolute bottom-1 left-1 rounded-full p-2 transition shadow-lg md:opacity-0 md:group-hover:opacity-100 ${profile?.coverImage === image.url
+                              className={`absolute bottom-1 left-1 rounded-md px-2 py-1 flex items-center gap-1 transition shadow-lg md:opacity-0 md:group-hover:opacity-100 ${profile?.coverImage === image.url
                                 ? 'bg-blue-600 text-white'
-                                : 'bg-gray-600 text-white hover:bg-blue-600'
+                                : 'bg-gray-600/80 text-white hover:bg-blue-600 backdrop-blur-sm'
                                 }`}
                               title={profile?.coverImage === image.url ? 'Cover image' : 'Set as cover'}
                             >
-                              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                               </svg>
+                              <span className="text-[10px] font-bold uppercase tracking-wide">Cover</span>
                             </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteImage(image.url);
-                              }}
-                              className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 md:opacity-0 md:group-hover:opacity-100 transition shadow-lg"
-                              title="Delete image"
-                            >
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                              </svg>
-                            </button>
+                            {(profile && (!profile.publicExpiry || new Date(profile.publicExpiry) <= new Date())) && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteImage(image.url);
+                                }}
+                                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 md:opacity-0 md:group-hover:opacity-100 transition shadow-lg"
+                                title="Delete image"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                              </button>
+                            )}
                           </>
                         )}
                       </div>
@@ -746,7 +772,8 @@ export default function ProfilePage() {
                           </div>
                         )}
 
-                        {!status && (
+                        {/* Delete Button */}
+                        {!status && (!profile?.publicExpiry || new Date(profile.publicExpiry) <= new Date()) && (
                           <button
                             onClick={() => removeSelectedImage(index)}
                             disabled={uploadingImages}
@@ -763,7 +790,7 @@ export default function ProfilePage() {
                 </div>
               )}
 
-              {imagePreviews.length === 0 && (profile as any)?.images?.length === 0 && (
+              {(!profile?.publicExpiry || new Date(profile.publicExpiry) <= new Date()) && imagePreviews.length === 0 && profile?.images?.length === 0 && (
                 <div
                   onClick={() => document.getElementById('image-upload')?.click()}
                   className="w-full h-32 md:h-40 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center hover:border-purple-400 transition cursor-pointer mb-3"
@@ -778,31 +805,33 @@ export default function ProfilePage() {
               <input
                 type="file"
                 id="image-upload"
-                accept="image/*"
                 multiple
+                accept="image/jpeg,image/jpg,image/png,image/webp"
                 className="hidden"
                 onChange={handleImageSelect}
-                disabled={uploadingImages}
+                disabled={uploadingImages || (profile?.publicExpiry && new Date(profile.publicExpiry) > new Date()) ? true : false}
               />
 
-              <div className="flex gap-2">
-                <button
-                  onClick={() => document.getElementById('image-upload')?.click()}
-                  disabled={uploadingImages}
-                  className="flex-1 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white py-2 rounded-lg font-semibold transition text-xs md:text-sm"
-                >
-                  Select Images
-                </button>
-                {selectedImages.length > 0 && (
+              {(!profile?.publicExpiry || new Date(profile.publicExpiry) <= new Date()) && (
+                <div className="flex gap-2">
                   <button
-                    onClick={uploadImages}
+                    onClick={() => document.getElementById('image-upload')?.click()}
                     disabled={uploadingImages}
-                    className="flex-1 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white py-2 rounded-lg font-semibold transition text-xs md:text-sm"
+                    className="flex-1 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white py-2 rounded-lg font-semibold transition text-xs md:text-sm"
                   >
-                    {uploadingImages ? 'Uploading...' : `Upload (${selectedImages.length})`}
+                    Select Images
                   </button>
-                )}
-              </div>
+                  {selectedImages.length > 0 && (
+                    <button
+                      onClick={uploadImages}
+                      disabled={uploadingImages}
+                      className="flex-1 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white py-2 rounded-lg font-semibold transition text-xs md:text-sm"
+                    >
+                      {uploadingImages ? 'Uploading...' : `Upload (${selectedImages.length})`}
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Video Section */}
@@ -814,15 +843,15 @@ export default function ProfilePage() {
                 Public Video (1 max)
               </h3>
               <p className="text-xs md:text-sm text-gray-600 mb-3">
-                {(profile as any)?.videos?.length > 0 ? '1 video uploaded' : 'No video uploaded'}
+                {profile?.videos && profile.videos.length > 0 ? '1 video uploaded' : 'No video uploaded'}
               </p>
 
               {/* Uploaded Video */}
-              {(profile as any)?.videos && (profile as any).videos.length > 0 && (
+              {(profile?.videos && profile.videos.length > 0) && (
                 <div className="relative mb-3 group">
                   <video
                     id="uploaded-video"
-                    src={(profile as any).videos[0].url}
+                    src={profile.videos[0].url}
                     className="w-full h-auto rounded-lg bg-black"
                     controls
                   />
@@ -839,7 +868,7 @@ export default function ProfilePage() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleDeleteVideo((profile as any).videos[0].url);
+                        handleDeleteVideo(profile.videos![0].url);
                       }}
                       className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 md:opacity-0 md:group-hover:opacity-100 transition shadow-lg"
                       title="Delete video"
@@ -867,7 +896,7 @@ export default function ProfilePage() {
                 </div>
               )}
 
-              {!videoPreviews && !((profile as any)?.videos?.length > 0) && (
+              {(!profile?.publicExpiry || new Date(profile.publicExpiry) <= new Date()) && !videoPreviews && !(profile?.videos && profile.videos.length > 0) && (
                 <div
                   onClick={() => document.getElementById('video-upload')?.click()}
                   className="w-full h-32 md:h-40 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center hover:border-blue-400 transition cursor-pointer mb-3"
@@ -882,30 +911,32 @@ export default function ProfilePage() {
               <input
                 type="file"
                 id="video-upload"
-                accept="video/*"
+                accept="video/mp4,video/webm,video/quicktime"
                 className="hidden"
                 onChange={handleVideoSelect}
-                disabled={uploadingVideo}
+                disabled={uploadingVideo || (profile?.publicExpiry && new Date(profile.publicExpiry) > new Date()) ? true : false}
               />
 
-              <div className="flex gap-2">
-                <button
-                  onClick={() => document.getElementById('video-upload')?.click()}
-                  disabled={uploadingVideo}
-                  className="flex-1 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white py-2 rounded-lg font-semibold transition text-xs md:text-sm"
-                >
-                  Select Video
-                </button>
-                {selectedVideo && (
+              {(!profile?.publicExpiry || new Date(profile.publicExpiry) <= new Date()) && (
+                <div className="flex gap-2">
                   <button
-                    onClick={uploadVideo}
+                    onClick={() => document.getElementById('video-upload')?.click()}
                     disabled={uploadingVideo}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-2 rounded-lg font-semibold transition text-xs md:text-sm"
+                    className="flex-1 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white py-2 rounded-lg font-semibold transition text-xs md:text-sm"
                   >
-                    {uploadingVideo ? 'Uploading...' : 'Upload'}
+                    Select Video
                   </button>
-                )}
-              </div>
+                  {selectedVideo && (
+                    <button
+                      onClick={uploadVideo}
+                      disabled={uploadingVideo}
+                      className="flex-1 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white py-2 rounded-lg font-semibold transition text-xs md:text-sm"
+                    >
+                      {uploadingVideo ? 'Uploading...' : 'Upload Video'}
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

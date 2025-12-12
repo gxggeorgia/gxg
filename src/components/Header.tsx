@@ -14,7 +14,8 @@ interface User {
   email: string;
   name: string | null;
   role: 'escort' | 'admin';
-  status: 'public' | 'private';
+
+  publicExpiry: string | null;
 }
 
 export default function Header() {
@@ -271,7 +272,7 @@ export default function Header() {
                           <User size={16} />
                           My Profile
                         </Link>
-                        {user.status === 'private' && (
+                        {(!user.publicExpiry || new Date(user.publicExpiry) <= new Date()) && (
                           <Link
                             href="/profile/verify"
                             className="flex items-center gap-2 px-4 py-2.5 text-sm text-amber-700 hover:bg-amber-50 hover:text-amber-800 transition font-medium"
@@ -379,7 +380,7 @@ export default function Header() {
                       <User size={18} />
                       My Profile
                     </Link>
-                    {user.status === 'private' && (
+                    {(!user.publicExpiry || new Date(user.publicExpiry) <= new Date()) && (
                       <Link
                         href="/profile/verify"
                         className="px-4 py-2 bg-amber-600 hover:bg-amber-700 rounded transition flex items-center gap-2 font-medium"

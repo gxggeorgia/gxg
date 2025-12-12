@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import StatusBar from './StatusBar';
 
 interface User {
-  status: 'public' | 'private';
+  publicExpiry: string | null;
   role: 'escort' | 'admin';
 }
 
@@ -57,5 +57,7 @@ export default function UserStatusBar() {
 
   if (!user || user.role === 'admin') return null;
 
-  return <StatusBar status={user.status} />;
+  const status = (user.publicExpiry && new Date(user.publicExpiry) > new Date()) ? 'public' : 'private';
+
+  return <StatusBar status={status} />;
 }

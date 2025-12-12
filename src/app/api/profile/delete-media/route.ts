@@ -14,6 +14,15 @@ export async function POST(request: NextRequest) {
     }
 
     const { user } = authResult;
+
+    // Check if user is verified (public profile is active)
+    const isVerified = user.publicExpiry && new Date(user.publicExpiry) > new Date();
+    if (isVerified) {
+      return NextResponse.json(
+        { error: 'Cannot delete media. Your profile is verified. Please contact support to remove photos.' },
+        { status: 403 }
+      );
+    }
     const { url, type } = await request.json();
 
     if (!url || !type) {

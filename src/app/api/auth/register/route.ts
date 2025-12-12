@@ -4,6 +4,7 @@ import { users, NewUser } from '@/db/schema/users';
 import { hashPassword, generateToken, setAuthCookie } from '@/lib/auth';
 import { generateSlug } from '@/lib/slug';
 import { verifyTurnstileToken } from '@/lib/turnstile';
+import { checkSubscriptionStatus } from '@/lib/subscription';
 import { eq } from 'drizzle-orm';
 import { locations } from '@/data/locations';
 
@@ -189,7 +190,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         message: 'Registration successful',
-        user: userWithoutPassword,
+        user: checkSubscriptionStatus(userWithoutPassword),
         token: token
       },
       { status: 201 }

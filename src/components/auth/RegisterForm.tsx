@@ -77,6 +77,7 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState('');
+  const [isVerified, setIsVerified] = useState(false);
   const errorRef = useRef<HTMLDivElement>(null);
 
   const selectedCityDistricts = useMemo(() => {
@@ -118,6 +119,11 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
               incallRates: user.rates?.incall || prev.incallRates,
               outcallRates: user.rates?.outcall || prev.outcallRates,
             }));
+
+            // Check if user is verified (public profile is active)
+            if (user.publicExpiry && new Date(user.publicExpiry) > new Date()) {
+              setIsVerified(true);
+            }
           }
         })
         .catch(err => console.error('Failed to load profile:', err));
@@ -568,7 +574,7 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
                     value={formData.gender}
                     onChange={handleChange}
                     required
-                    disabled={isLoading}
+                    disabled={isLoading || isVerified}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent disabled:bg-gray-100 text-gray-900 text-sm"
                   >
                     <option value="female">Female</option>
@@ -589,7 +595,7 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
                     value={formData.dateOfBirth}
                     onChange={handleChange}
                     required
-                    disabled={isLoading}
+                    disabled={isLoading || isVerified}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent disabled:bg-gray-100 text-gray-900 text-sm [color-scheme:light]"
                   />
                 </div>

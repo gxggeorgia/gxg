@@ -3,6 +3,7 @@ import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { verifyPassword, generateToken, setAuthCookie } from '@/lib/auth';
 import { verifyTurnstileToken } from '@/lib/turnstile';
+import { checkSubscriptionStatus } from '@/lib/subscription';
 import { eq } from 'drizzle-orm';
 
 export async function POST(request: NextRequest) {
@@ -74,7 +75,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         message: 'Login successful',
-        user: userWithoutPassword
+        user: checkSubscriptionStatus(userWithoutPassword)
       },
       { status: 200 }
     );

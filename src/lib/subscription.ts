@@ -14,8 +14,8 @@ export function checkSubscriptionStatus(user: any) {
 
     // Compute public/private status
     // If publicExpiry is in the future, it's public. Otherwise private.
-    const isPublic = updatedUser.publicExpiry ? new Date(updatedUser.publicExpiry) > now : false;
-    updatedUser.status = isPublic ? 'public' : 'private';
+    // const isPublic = updatedUser.publicExpiry ? new Date(updatedUser.publicExpiry) > now : false;
+    // updatedUser.status = isPublic ? 'public' : 'private';
 
     return updatedUser;
 }

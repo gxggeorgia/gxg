@@ -23,6 +23,9 @@ export async function PUT(request: NextRequest) {
       updatedAt: new Date(),
     };
 
+    // Check if user is verified (public profile is active)
+    const isVerified = user.publicExpiry && new Date(user.publicExpiry) > new Date();
+
     // Add optional fields if provided
     if (body.name !== undefined) allowedFields.name = body.name || null;
     if (body.phone !== undefined) allowedFields.phone = body.phone;
@@ -35,8 +38,13 @@ export async function PUT(request: NextRequest) {
     if (body.facebook !== undefined) allowedFields.facebook = body.facebook || null;
     if (body.city !== undefined) allowedFields.city = body.city;
     if (body.district !== undefined) allowedFields.district = body.district || null;
-    if (body.gender !== undefined) allowedFields.gender = body.gender;
-    if (body.dateOfBirth !== undefined) allowedFields.dateOfBirth = body.dateOfBirth;
+
+    // RESTRICTED FIELDS: Cannot be changed if verified
+    if (!isVerified) {
+      if (body.gender !== undefined) allowedFields.gender = body.gender;
+      if (body.dateOfBirth !== undefined) allowedFields.dateOfBirth = body.dateOfBirth;
+    }
+
     if (body.ethnicity !== undefined) allowedFields.ethnicity = body.ethnicity;
     if (body.height !== undefined) allowedFields.height = body.height ? parseInt(body.height) : null;
     if (body.weight !== undefined) allowedFields.weight = body.weight ? body.weight.toString() : null;
@@ -56,7 +64,17 @@ export async function PUT(request: NextRequest) {
     if (body.languages !== undefined) allowedFields.languages = (body.languages || []).filter((l: any) => l.name && l.level);
     if (body.services !== undefined) allowedFields.services = body.services || [];
 
-    if (body.coverImage !== undefined) allowedFields.coverImage = body.coverImage || null;
+    if (body.coverImage !== undefined) {
+      if (!isVerified) {
+        allowedFields.coverImage = body.coverImage || null;
+      } else {
+        // If verified, ONLY allow update if the image is already in their approved gallery
+        const existingImage = (user.images as any[])?.find((img: any) => img.url === body.coverImage);
+        if (existingImage) {
+          allowedFields.coverImage = body.coverImage;
+        }
+      }
+    }
 
     // Update user with allowed fields
     const [updatedUser] = await db
