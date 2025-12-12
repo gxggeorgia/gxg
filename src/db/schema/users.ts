@@ -17,7 +17,6 @@ export const users = pgTable('users', {
   // Auth fields
   password: text('password').notNull(),
   email: text('email').notNull().unique(),
-  emailVerified: boolean('email_verified').notNull().default(false),
   slug: text('slug').notNull().unique(), // Unique slug for SEO-friendly URLs (e.g., "natalia-tbilisi-123")
   publicExpiry: timestamp('public_expiry'),
   role: userRoleEnum('role').notNull().default('escort'),

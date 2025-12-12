@@ -29,7 +29,6 @@ async function createAdmin() {
         .set({
           role: 'admin',
           publicExpiry: new Date('2099-01-01'),
-          emailVerified: true,
         })
         .where(eq(users.email, email))
         .returning();
@@ -58,7 +57,6 @@ async function createAdmin() {
         slug: string;
         phone: string;
         publicExpiry: Date | null;
-        emailVerified: boolean;
         city: string;
         gender: string;
         dateOfBirth: string;
@@ -76,7 +74,6 @@ async function createAdmin() {
         phone: '+990000000000',
         role: 'admin',
         publicExpiry: new Date('2099-01-01'),
-        emailVerified: true,
         city: 'Tbilisi',
         gender: 'male',
         dateOfBirth: '1990-01-01',

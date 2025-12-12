@@ -106,7 +106,6 @@ export async function POST(request: NextRequest) {
       password: hashedPassword,
       slug,
       role: 'escort', // Default role
-      emailVerified: false, // Default
 
       // Basic Info
       phone,

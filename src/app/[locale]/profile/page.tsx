@@ -12,7 +12,6 @@ import type { RegisterFormData } from '@/types/auth';
 interface UserProfile extends Omit<RegisterFormData, 'password' | 'confirmPassword' | 'incallRates' | 'outcallRates'> {
   id: string;
   email: string;
-  emailVerified: boolean;
   status: 'public' | 'private';
   role: 'escort' | 'admin';
   isGold?: boolean;
