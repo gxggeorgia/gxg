@@ -5,6 +5,7 @@ import { hashPassword, generateToken, setAuthCookie } from '@/lib/auth';
 import { generateSlug } from '@/lib/slug';
 import { verifyTurnstileToken } from '@/lib/turnstile';
 import { eq } from 'drizzle-orm';
+import { locations } from '@/data/locations';
 
 export async function POST(request: NextRequest) {
   try {
@@ -120,9 +121,9 @@ export async function POST(request: NextRequest) {
       twitter: twitter || null,
       facebook: facebook || null,
 
-      // Location
-      city,
-      district: district || null,
+      // Location (Convert IDs to Names for consistency with Search/Display)
+      city: locations.find(c => c.id === city)?.name.en || city,
+      district: district ? (locations.find(c => c.id === city)?.districts.find(d => d.id === district)?.name.en || district) : null,
 
       // Personal Info (required)
       gender,
@@ -159,7 +160,7 @@ export async function POST(request: NextRequest) {
       videos: [],
 
       // Timestamps
-      publicExpiry: null,
+      publicExpiry: null, // need to set by admin after verification
       goldExpiresAt: null,
       featuredExpiresAt: null,
       silverExpiresAt: null,

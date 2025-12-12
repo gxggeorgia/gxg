@@ -51,11 +51,20 @@ export async function GET(request: NextRequest) {
     }
 
     if (cityName) {
-      conditions.push(eq(users.city, cityName));
+      conditions.push(ilike(users.city, cityName));
     }
 
     if (district && district !== 'all') {
-      conditions.push(eq(users.district, district));
+      // Find district name from ID
+      let districtName = district;
+      const cityObj = locations.find(c => c.id === city);
+      if (cityObj) {
+        const districtObj = cityObj.districts.find(d => d.id === district);
+        if (districtObj) {
+          districtName = districtObj.name.en;
+        }
+      }
+      conditions.push(ilike(users.district, districtName));
     }
 
     if (gender) {
