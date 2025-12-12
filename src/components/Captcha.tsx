@@ -1,7 +1,6 @@
-"use client";
-
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useTheme } from "next-themes";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 
 interface CaptchaProps {
     onSuccess: (token: string) => void;
@@ -9,9 +8,22 @@ interface CaptchaProps {
     onExpire?: () => void;
 }
 
-export default function Captcha({ onSuccess, onError, onExpire }: CaptchaProps) {
+export interface CaptchaRef {
+    reset: () => void;
+}
+
+const Captcha = forwardRef<CaptchaRef, CaptchaProps>(({ onSuccess, onError, onExpire }, ref) => {
     const { theme } = useTheme();
     const siteKey = process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY;
+    const turnstileRef = useRef<any>(null);
+
+    useImperativeHandle(ref, () => ({
+        reset: () => {
+            if (turnstileRef.current) {
+                turnstileRef.current.reset();
+            }
+        }
+    }));
 
     if (!siteKey) {
         console.error("NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY is not defined");
@@ -21,6 +33,7 @@ export default function Captcha({ onSuccess, onError, onExpire }: CaptchaProps) 
     return (
         <div className="w-full flex justify-center my-4">
             <Turnstile
+                ref={turnstileRef}
                 siteKey={siteKey}
                 onSuccess={onSuccess}
                 onError={onError}
@@ -31,4 +44,8 @@ export default function Captcha({ onSuccess, onError, onExpire }: CaptchaProps) 
             />
         </div>
     );
-}
+});
+
+Captcha.displayName = "Captcha";
+
+export default Captcha;

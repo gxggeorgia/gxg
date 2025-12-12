@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter, Link } from '@/i18n/routing';
 import { Globe, Instagram, MessageCircle, Twitter, Facebook, Phone, X, Eye, EyeOff } from 'lucide-react';
-import Captcha from '../Captcha';
+import Captcha, { CaptchaRef } from '../Captcha';
 import Image from 'next/image';
 import type { RegisterFormData } from '@/types/auth';
 import { locations } from '@/data/locations';
@@ -79,6 +79,7 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
   const [turnstileToken, setTurnstileToken] = useState('');
   const [isVerified, setIsVerified] = useState(false);
   const errorRef = useRef<HTMLDivElement>(null);
+  const captchaRef = useRef<CaptchaRef>(null);
 
   const selectedCityDistricts = useMemo(() => {
     const city = locations.find(loc => loc.id === formData.city);
@@ -326,6 +327,11 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
       if (!response.ok) {
         setError(data.error || t('auth.registrationFailed'));
         setIsLoading(false);
+        // Reset captcha on failure
+        if (!isEditMode) {
+          setTurnstileToken('');
+          captchaRef.current?.reset();
+        }
         return;
       }
 
@@ -362,6 +368,11 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
     } catch (err) {
       setError(t('auth.errorOccurred'));
       setIsLoading(false);
+      // Reset captcha on failure
+      if (!isEditMode) {
+        setTurnstileToken('');
+        captchaRef.current?.reset();
+      }
     }
   };
 
@@ -1197,6 +1208,7 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
               {/* Captcha - Only show in register mode */}
               {!isEditMode && (
                 <Captcha
+                  ref={captchaRef}
                   onSuccess={(token: string) => setTurnstileToken(token)}
                   onExpire={() => setTurnstileToken('')}
                 />

@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { X, Eye, EyeOff } from 'lucide-react';
-import Captcha from '../Captcha';
+import Captcha, { CaptchaRef } from '../Captcha';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -20,6 +20,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess, onSwitchToRegis
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState('');
+  const captchaRef = useRef<CaptchaRef>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +41,9 @@ export default function LoginModal({ isOpen, onClose, onSuccess, onSwitchToRegis
       if (!response.ok) {
         setError(data.error || 'Login failed');
         setIsLoading(false);
+        // Reset captcha on failure
+        setTurnstileToken('');
+        captchaRef.current?.reset();
         return;
       }
 
@@ -54,6 +58,9 @@ export default function LoginModal({ isOpen, onClose, onSuccess, onSwitchToRegis
     } catch (err) {
       setError('An error occurred. Please try again.');
       setIsLoading(false);
+      // Reset captcha on failure
+      setTurnstileToken('');
+      captchaRef.current?.reset();
     }
   };
 
@@ -132,10 +139,10 @@ export default function LoginModal({ isOpen, onClose, onSuccess, onSwitchToRegis
           </div>
 
           <Captcha
+            ref={captchaRef}
             onSuccess={(token: string) => setTurnstileToken(token)}
             onExpire={() => setTurnstileToken('')}
           />
-
           <button
             type="submit"
             disabled={isLoading || !turnstileToken}
