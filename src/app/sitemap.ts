@@ -1,10 +1,10 @@
 import { MetadataRoute } from 'next';
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://escortdirectorygeorgia.com';
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gogoxgeorgia.ge';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const locales = ['en', 'ka', 'ru'];
-  const routes = ['', '/about', '/contact', '/privacy', '/terms'];
+  const routes = ['', '/contact', '/privacy', '/terms'];
 
   const sitemapEntries: MetadataRoute.Sitemap = [];
 

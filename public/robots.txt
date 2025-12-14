@@ -6,7 +6,7 @@ Disallow: /*.json$
 Disallow: /*?*sort=
 Disallow: /*?*filter=
 
-Sitemap: https://escortdirectorygeorgia.com/sitemap.xml
+Sitemap: https://gogoxgeorgia.ge/sitemap.xml
 
 User-agent: AdsBot-Google
 Allow: /

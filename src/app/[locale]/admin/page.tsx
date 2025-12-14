@@ -5,6 +5,8 @@ import { useRouter } from '@/i18n/routing';
 import { Users, Search, Edit, Crown, Star, Trash2 } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import EditUserModal from '@/components/admin/EditUserModal';
+import ViewProfileModal from '@/components/admin/ViewProfileModal';
+import { Eye } from 'lucide-react';
 
 interface User {
   id: string;
@@ -28,6 +30,7 @@ export default function AdminPage() {
   const [roleFilter, setRoleFilter] = useState<string>('all');
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [editModalUser, setEditModalUser] = useState<User | null>(null);
+  const [viewModalUser, setViewModalUser] = useState<User | null>(null);
 
   useEffect(() => {
     fetchUsers();
@@ -249,7 +252,10 @@ export default function AdminPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <button onClick={() => setEditModalUser(user)} className="text-purple-600 hover:text-purple-900 mr-3">
+                        <button onClick={() => setViewModalUser(user)} className="text-blue-600 hover:text-blue-900 mr-3" title="View Profile">
+                          <Eye className="w-5 h-5" />
+                        </button>
+                        <button onClick={() => setEditModalUser(user)} className="text-purple-600 hover:text-purple-900 mr-3" title="Edit User">
                           <Edit className="w-5 h-5" />
                         </button>
                         <button onClick={() => handleDeleteUser(user.id)} className="text-red-600 hover:text-red-900">
@@ -275,6 +281,19 @@ export default function AdminPage() {
           user={editModalUser}
           onClose={() => setEditModalUser(null)}
           onSave={handleSaveUser}
+        />
+      )}
+
+      {/* View Modal */}
+      {viewModalUser && (
+        <ViewProfileModal
+          userId={viewModalUser.id}
+          onClose={() => setViewModalUser(null)}
+          onUpdate={() => {
+            fetchUsers();
+            setSuccessMessage('Profile extended successfully!');
+            setTimeout(() => setSuccessMessage(null), 2000);
+          }}
         />
       )}
     </AdminLayout>
