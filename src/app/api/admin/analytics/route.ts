@@ -53,9 +53,14 @@ export async function GET(req: NextRequest) {
             .select({
                 id: users.id,
                 name: users.name,
+                email: users.email,
                 slug: users.slug,
                 publicExpiry: users.publicExpiry,
                 role: users.role,
+                goldExpiresAt: users.goldExpiresAt,
+                topExpiresAt: users.topExpiresAt,
+                newExpiresAt: users.newExpiresAt,
+                featuredExpiresAt: users.featuredExpiresAt,
             })
             .from(users);
 
