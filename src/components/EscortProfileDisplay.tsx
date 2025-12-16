@@ -62,6 +62,8 @@ interface EscortProfile {
     facebook?: string | null;
     isGold?: boolean;
     isSilver?: boolean;
+    isTop?: boolean;
+    isNew?: boolean;
     verifiedPhotos?: boolean;
     isFeatured?: boolean;
     status?: string;
@@ -239,6 +241,16 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                                             {profile.isFeatured && (
                                                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">
                                                     FEATURED
+                                                </span>
+                                            )}
+                                            {profile.isTop && (
+                                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800">
+                                                    TOP
+                                                </span>
+                                            )}
+                                            {profile.isNew && (
+                                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-800">
+                                                    NEW
                                                 </span>
                                             )}
                                             {profile.verifiedPhotos && (

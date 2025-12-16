@@ -10,6 +10,7 @@ interface Escort {
   slug: string;
   name: string;
   city: string;
+  district?: string;
   isGold: boolean;
   isSilver: boolean;
   verifiedPhotos: boolean;
@@ -218,6 +219,7 @@ export default function FeaturedProfileSlider() {
                       slug: profile.slug,
                       name: profile.name,
                       city: profile.city,
+                      district: profile.district,
                       isGold: profile.isGold,
                       isSilver: profile.isSilver,
                       verifiedPhotos: profile.verifiedPhotos,

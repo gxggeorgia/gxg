@@ -28,6 +28,8 @@ export const users = pgTable('users', {
   featuredExpiresAt: timestamp('featured_expires_at'),
 
   silverExpiresAt: timestamp('silver_expires_at'),
+  topExpiresAt: timestamp('top_expires_at'),
+  newExpiresAt: timestamp('new_expires_at'),
   verifiedPhotosExpiry: timestamp('verified_photos_expiry'),
 
   // Basic Info

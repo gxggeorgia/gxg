@@ -12,6 +12,7 @@ type FiltersState = {
   city: string;
   district: string;
   gold: boolean;
+  top: boolean;
   silver: boolean;
   featured: boolean;
   verifiedPhotos: boolean;
@@ -30,6 +31,7 @@ const defaultFilters: FiltersState = {
   city: 'all',
   district: 'all',
   gold: false,
+  top: false,
   silver: false,
   featured: false,
   verifiedPhotos: false,
@@ -53,6 +55,7 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
       city: searchParams.get('city') || 'all',
       district: searchParams.get('district') || 'all',
       gold: searchParams.get('gold') === 'true',
+      top: searchParams.get('top') === 'true',
       silver: searchParams.get('silver') === 'true',
       featured: searchParams.get('featured') === 'true',
       verifiedPhotos: searchParams.get('verifiedPhotos') === 'true',
@@ -83,6 +86,7 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
     if (filters.city) params.set('city', filters.city);
     if (filters.district) params.set('district', filters.district);
     if (filters.gold) params.set('gold', 'true');
+    if (filters.top) params.set('top', 'true');
     if (filters.silver) params.set('silver', 'true');
     if (filters.featured) params.set('featured', 'true');
     if (filters.verifiedPhotos) params.set('verifiedPhotos', 'true');
@@ -101,6 +105,8 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
     params.delete('city');
     params.delete('district');
     params.delete('gold');
+    params.delete('top');
+    params.delete('silver');
     params.delete('silver');
     params.delete('featured');
     params.delete('verifiedPhotos');
@@ -195,6 +201,15 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
           <div>
             <p className="text-sm font-semibold text-gray-800 mb-3">{t('search.quickFilters')}</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition">
+                <input
+                  type="checkbox"
+                  checked={!!filters.top}
+                  onChange={() => handleCheckboxToggle('top')}
+                  className="w-4 h-4 text-purple-600 accent-purple-600 rounded"
+                />
+                <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.top')}</span>
+              </label>
               <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition">
                 <input
                   type="checkbox"

@@ -84,6 +84,8 @@ export default function ViewProfileModal({ userId, onClose, onUpdate }: ViewProf
         isGold: user.goldExpiresAt ? new Date(user.goldExpiresAt) > now : false,
         isSilver: user.silverExpiresAt ? new Date(user.silverExpiresAt) > now : false,
         isFeatured: user.featuredExpiresAt ? new Date(user.featuredExpiresAt) > now : false,
+        isTop: user.topExpiresAt ? new Date(user.topExpiresAt) > now : false,
+        isNew: user.newExpiresAt ? new Date(user.newExpiresAt) > now : false,
         verifiedPhotos: user.verifiedPhotosExpiry ? new Date(user.verifiedPhotosExpiry) > now : false,
         // Ensure dateOfBirth is a Date object if needed, or string. EscortProfile accepts both.
     };

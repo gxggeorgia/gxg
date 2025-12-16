@@ -12,6 +12,8 @@ interface User {
   publicExpiry: string | null;
   goldExpiresAt: string | null;
   featuredExpiresAt: string | null;
+  topExpiresAt: string | null;
+  newExpiresAt: string | null;
   silverExpiresAt: string | null;
   verifiedPhotosExpiry: string | null;
 }
@@ -29,6 +31,8 @@ export default function EditUserModal({ user, onClose, onSave }: EditUserModalPr
     publicExpiry: user.publicExpiry ? new Date(user.publicExpiry).toISOString().split('T')[0] : '',
     goldExpiresAt: user.goldExpiresAt ? new Date(user.goldExpiresAt).toISOString().split('T')[0] : '',
     featuredExpiresAt: user.featuredExpiresAt ? new Date(user.featuredExpiresAt).toISOString().split('T')[0] : '',
+    topExpiresAt: user.topExpiresAt ? new Date(user.topExpiresAt).toISOString().split('T')[0] : '',
+    newExpiresAt: user.newExpiresAt ? new Date(user.newExpiresAt).toISOString().split('T')[0] : '',
     silverExpiresAt: user.silverExpiresAt ? new Date(user.silverExpiresAt).toISOString().split('T')[0] : '',
     verifiedPhotosExpiry: user.verifiedPhotosExpiry ? new Date(user.verifiedPhotosExpiry).toISOString().split('T')[0] : '',
     password: '',
@@ -51,6 +55,12 @@ export default function EditUserModal({ user, onClose, onSave }: EditUserModalPr
 
       if (data.featuredExpiresAt) updates.featuredExpiresAt = new Date(data.featuredExpiresAt + 'T23:59:59').toISOString();
       else updates.featuredExpiresAt = null;
+
+      if (data.topExpiresAt) updates.topExpiresAt = new Date(data.topExpiresAt + 'T23:59:59').toISOString();
+      else updates.topExpiresAt = null;
+
+      if (data.newExpiresAt) updates.newExpiresAt = new Date(data.newExpiresAt + 'T23:59:59').toISOString();
+      else updates.newExpiresAt = null;
 
       if (data.silverExpiresAt) updates.silverExpiresAt = new Date(data.silverExpiresAt + 'T23:59:59').toISOString();
       else updates.silverExpiresAt = null;
@@ -196,6 +206,52 @@ export default function EditUserModal({ user, onClose, onSave }: EditUserModalPr
                   </button>
                 </div>
                 {isPastDate(data.featuredExpiresAt) && (
+                  <p className="text-xs text-amber-600 ml-auto mr-8">⚠️ Date is in the past</p>
+                )}
+              </div>
+
+              {/* TOP */}
+              <div className="flex flex-col gap-1 p-3 bg-purple-50 rounded-lg">
+                <div className="flex items-center gap-4">
+                  <label className="flex-1 font-medium text-purple-900">Top Expiry</label>
+                  <input
+                    type="date"
+                    value={data.topExpiresAt}
+                    onChange={(e) => setData({ ...data, topExpiresAt: e.target.value })}
+                    className={`px-3 py-1 text-gray-900 bg-white border rounded text-sm [color-scheme:light] ${isPastDate(data.topExpiresAt) ? 'border-amber-500' : 'border-purple-300'}`}
+                  />
+                  <button
+                    onClick={() => setData({ ...data, topExpiresAt: '' })}
+                    className="p-1 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded transition"
+                    title="Clear date"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+                {isPastDate(data.topExpiresAt) && (
+                  <p className="text-xs text-amber-600 ml-auto mr-8">⚠️ Date is in the past</p>
+                )}
+              </div>
+
+              {/* NEW */}
+              <div className="flex flex-col gap-1 p-3 bg-green-50 rounded-lg">
+                <div className="flex items-center gap-4">
+                  <label className="flex-1 font-medium text-green-900">New Expiry</label>
+                  <input
+                    type="date"
+                    value={data.newExpiresAt}
+                    onChange={(e) => setData({ ...data, newExpiresAt: e.target.value })}
+                    className={`px-3 py-1 text-gray-900 bg-white border rounded text-sm [color-scheme:light] ${isPastDate(data.newExpiresAt) ? 'border-amber-500' : 'border-green-300'}`}
+                  />
+                  <button
+                    onClick={() => setData({ ...data, newExpiresAt: '' })}
+                    className="p-1 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded transition"
+                    title="Clear date"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+                {isPastDate(data.newExpiresAt) && (
                   <p className="text-xs text-amber-600 ml-auto mr-8">⚠️ Date is in the past</p>
                 )}
               </div>

@@ -10,9 +10,12 @@ interface Escort {
   slug: string;
   name: string;
   city: string;
+  district?: string;
   isFeatured: boolean;
   isGold: boolean;
   isSilver: boolean;
+  isTop: boolean;
+  isNew: boolean;
   verifiedPhotos: boolean;
   languages?: Array<{ name: string; level: string }>;
   images: Array<{ url: string; width?: number; height?: number; isPrimary?: boolean }>;
@@ -25,21 +28,6 @@ interface Pagination {
   totalPages: number;
   hasNextPage: boolean;
   hasPreviousPage: boolean;
-}
-
-interface Profile {
-  id: string;
-  slug: string;
-  name: string;
-  city: string;
-  isGold: boolean;
-  isSilver: boolean;
-  verifiedPhotos: boolean;
-  isOnline: boolean;
-  languages?: Array<{ name: string; level: string }>;
-  coverImage?: string;
-  imageWidth?: number;
-  imageHeight?: number;
 }
 
 export default function ProfileGrid() {
@@ -55,6 +43,12 @@ export default function ProfileGrid() {
     hasPreviousPage: false,
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const paramsString = searchParams.toString();
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [paramsString]);
 
   useEffect(() => {
     const fetchEscorts = async () => {
@@ -67,6 +61,8 @@ export default function ProfileGrid() {
         const featured = searchParams.get('featured') || '';
         const gold = searchParams.get('gold') || '';
         const silver = searchParams.get('silver') || '';
+        const top = searchParams.get('top') || '';
+        const newFilter = searchParams.get('new') || '';
         const verifiedPhotos = searchParams.get('verifiedPhotos') || '';
         const online = searchParams.get('online') || '';
 
@@ -79,6 +75,8 @@ export default function ProfileGrid() {
         if (featured) params.append('featured', featured);
         if (gold) params.append('gold', gold);
         if (silver) params.append('silver', silver);
+        if (top) params.append('top', top);
+        if (newFilter) params.append('new', newFilter);
         if (verifiedPhotos) params.append('verifiedPhotos', verifiedPhotos);
         if (online) params.append('online', online);
         const pageSize = parseInt(process.env.NEXT_PUBLIC_ESCORTS_LIMIT || '20');
@@ -142,10 +140,6 @@ export default function ProfileGrid() {
     return () => clearInterval(interval);
   }, [escorts.map(e => e.id).join(',')]);
 
-  // ... (loading state unchanged)
-
-  // ... (error state unchanged)
-
   return (
     <div className="space-y-6">
       {/* All Escorts */}
@@ -171,8 +165,11 @@ export default function ProfileGrid() {
                   slug: escort.slug,
                   name: escort.name,
                   city: escort.city,
+                  district: escort.district,
                   isGold: escort.isGold,
                   isSilver: escort.isSilver,
+                  isTop: escort.isTop,
+                  isNew: escort.isNew,
                   verifiedPhotos: escort.verifiedPhotos,
                   isOnline: (escort as any).isOnline,
                   lastActive: (escort as any).lastActive,

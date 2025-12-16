@@ -21,6 +21,8 @@ export async function GET(request: NextRequest) {
       goldExpiresAt: users.goldExpiresAt,
       featuredExpiresAt: users.featuredExpiresAt,
       silverExpiresAt: users.silverExpiresAt,
+      topExpiresAt: users.topExpiresAt,
+      newExpiresAt: users.newExpiresAt,
       city: users.city,
       createdAt: users.createdAt,
     }).from(users);

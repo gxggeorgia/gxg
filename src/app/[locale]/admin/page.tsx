@@ -18,6 +18,8 @@ interface User {
   goldExpiresAt: string | null;
   featuredExpiresAt: string | null;
   silverExpiresAt: string | null;
+  topExpiresAt: string | null;
+  newExpiresAt: string | null;
   verifiedPhotosExpiry: string | null;
 }
 
@@ -244,6 +246,17 @@ export default function AdminPage() {
                               <span className="text-xs font-medium text-gray-600">SILVER</span>
                             </div>
                           )}
+                          {user.topExpiresAt && new Date(user.topExpiresAt) > new Date() && (
+                            <div className="flex items-center gap-1">
+                              <Crown className="w-4 h-4 text-purple-600" />
+                              <span className="text-xs font-medium text-purple-600">TOP</span>
+                            </div>
+                          )}
+                          {user.newExpiresAt && new Date(user.newExpiresAt) > new Date() && (
+                            <div className="flex items-center gap-1">
+                              <span className="text-xs font-bold text-green-600 bg-green-100 px-1.5 py-0.5 rounded-full">NEW</span>
+                            </div>
+                          )}
                           {user.verifiedPhotosExpiry && new Date(user.verifiedPhotosExpiry) > new Date() && (
                             <div className="flex items-center gap-1">
                               <span className="text-xs font-bold text-green-600 bg-green-100 px-1.5 py-0.5 rounded-full">VERIFIED PHOTOS</span>
@@ -276,26 +289,30 @@ export default function AdminPage() {
       </div>
 
       {/* Edit Modal */}
-      {editModalUser && (
-        <EditUserModal
-          user={editModalUser}
-          onClose={() => setEditModalUser(null)}
-          onSave={handleSaveUser}
-        />
-      )}
+      {
+        editModalUser && (
+          <EditUserModal
+            user={editModalUser}
+            onClose={() => setEditModalUser(null)}
+            onSave={handleSaveUser}
+          />
+        )
+      }
 
       {/* View Modal */}
-      {viewModalUser && (
-        <ViewProfileModal
-          userId={viewModalUser.id}
-          onClose={() => setViewModalUser(null)}
-          onUpdate={() => {
-            fetchUsers();
-            setSuccessMessage('Profile extended successfully!');
-            setTimeout(() => setSuccessMessage(null), 2000);
-          }}
-        />
-      )}
-    </AdminLayout>
+      {
+        viewModalUser && (
+          <ViewProfileModal
+            userId={viewModalUser.id}
+            onClose={() => setViewModalUser(null)}
+            onUpdate={() => {
+              fetchUsers();
+              setSuccessMessage('Profile extended successfully!');
+              setTimeout(() => setSuccessMessage(null), 2000);
+            }}
+          />
+        )
+      }
+    </AdminLayout >
   );
 }

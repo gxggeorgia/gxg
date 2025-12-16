@@ -8,6 +8,7 @@ import { checkSubscriptionStatus } from '@/lib/subscription';
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
+
     const search = searchParams.get('search') || '';
     const city = searchParams.get('city') || '';
     const district = searchParams.get('district') || '';
@@ -15,6 +16,7 @@ export async function GET(request: NextRequest) {
     const featured = searchParams.get('featured') === 'true';
     const gold = searchParams.get('gold') === 'true';
     const silver = searchParams.get('silver') === 'true';
+    const top = searchParams.get('top') === 'true';
     const verifiedPhotos = searchParams.get('verifiedPhotos') === 'true';
     const limit = parseInt(searchParams.get('limit') || process.env.NEXT_PUBLIC_ESCORTS_LIMIT || '20');
     const offset = parseInt(searchParams.get('offset') || '0');
@@ -40,6 +42,10 @@ export async function GET(request: NextRequest) {
 
     if (gold) {
       conditions.push(gt(users.goldExpiresAt, now));
+    }
+
+    if (top) {
+      conditions.push(gt(users.topExpiresAt, now));
     }
 
     if (silver) {
@@ -72,9 +78,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (searchParams.get('new') === 'true') {
-      const thirtyDaysAgo = new Date();
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-      conditions.push(gt(users.createdAt, thirtyDaysAgo));
+      conditions.push(gt(users.newExpiresAt, now));
     }
 
     if (searchParams.get('online') === 'true') {
@@ -111,12 +115,13 @@ export async function GET(request: NextRequest) {
     const total = countResult[0]?.count || 0;
 
     // Check if any filters are applied
-    const hasFilters = search || city || district || gender || featured || gold || silver || verifiedPhotos || searchParams.get('new') === 'true' || searchParams.get('online') === 'true';
+    const hasFilters = search || city || district || gender || featured || gold || silver || top || verifiedPhotos || searchParams.get('new') === 'true' || searchParams.get('online') === 'true';
 
     const orderByClauses = [];
     if (!hasFilters) {
       // Sort by valid gold/silver status (isGold/isSilver AND not expired)
       orderByClauses.push(
+        desc(sql`CASE WHEN ${users.topExpiresAt} > ${now} THEN 1 ELSE 0 END`),
         desc(sql`CASE WHEN ${users.goldExpiresAt} > ${now} THEN 1 ELSE 0 END`),
         desc(sql`CASE WHEN ${users.silverExpiresAt} > ${now} THEN 1 ELSE 0 END`),
         desc(users.createdAt)
@@ -158,6 +163,7 @@ export async function GET(request: NextRequest) {
           district: district || null,
           gender: gender || null,
           featured,
+          top,
           gold,
           silver,
           verifiedPhotos

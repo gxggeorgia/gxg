@@ -8,6 +8,8 @@ export function checkSubscriptionStatus(user: any) {
     updatedUser.isGold = updatedUser.goldExpiresAt ? new Date(updatedUser.goldExpiresAt) > now : false;
     updatedUser.isSilver = updatedUser.silverExpiresAt ? new Date(updatedUser.silverExpiresAt) > now : false;
     updatedUser.isFeatured = updatedUser.featuredExpiresAt ? new Date(updatedUser.featuredExpiresAt) > now : false;
+    updatedUser.isTop = updatedUser.topExpiresAt ? new Date(updatedUser.topExpiresAt) > now : false;
+    updatedUser.isNew = updatedUser.newExpiresAt ? new Date(updatedUser.newExpiresAt) > now : false;
 
     // Compute verification status
     updatedUser.verifiedPhotos = updatedUser.verifiedPhotosExpiry ? new Date(updatedUser.verifiedPhotosExpiry) > now : false;

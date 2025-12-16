@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
     const allowedFields = [
       'role', 'publicExpiry', 'verifiedPhotosExpiry',
       'goldExpiresAt', 'featuredExpiresAt', 'silverExpiresAt',
+      'topExpiresAt', 'newExpiresAt',
       'name', 'phone', 'city', 'district'
     ];
 

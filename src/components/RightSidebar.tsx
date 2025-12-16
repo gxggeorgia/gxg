@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations, useLocale } from 'next-intl';
-import { Search, ChevronDown } from 'lucide-react';
+import { Search, ChevronDown, Crown, Sparkles } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { locations } from '@/data/locations';
@@ -19,6 +19,7 @@ export default function RightSidebar() {
     city: searchParams.get('city') || 'all',
     district: searchParams.get('district') || 'all',
     gold: searchParams.get('gold') === 'true',
+    top: searchParams.get('top') === 'true',
     silver: searchParams.get('silver') === 'true',
     featured: searchParams.get('featured') === 'true',
     verifiedPhotos: searchParams.get('verifiedPhotos') === 'true',
@@ -33,6 +34,7 @@ export default function RightSidebar() {
       city: searchParams.get('city') || 'all',
       district: searchParams.get('district') || 'all',
       gold: searchParams.get('gold') === 'true',
+      top: searchParams.get('top') === 'true',
       silver: searchParams.get('silver') === 'true',
       featured: searchParams.get('featured') === 'true',
       verifiedPhotos: searchParams.get('verifiedPhotos') === 'true',
@@ -55,6 +57,7 @@ export default function RightSidebar() {
     if (filters.city) params.set('city', filters.city);
     if (filters.district) params.set('district', filters.district);
     if (filters.gold) params.set('gold', 'true');
+    if (filters.top) params.set('top', 'true');
     if (filters.silver) params.set('silver', 'true');
     if (filters.featured) params.set('featured', 'true');
     if (filters.verifiedPhotos) params.set('verifiedPhotos', 'true');
@@ -98,7 +101,7 @@ export default function RightSidebar() {
               {locations.map(city => (
                 <option key={city.id} value={city.id}>{city.name[locale]}</option>
               ))}
-            </select>
+            </select> 
           </div>
 
           {/* District Dropdown */}
@@ -134,6 +137,15 @@ export default function RightSidebar() {
 
         {/* Filters */}
         <div className="grid grid-cols-2 gap-2">
+          <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-red-300 transition">
+            <input
+              type="checkbox"
+              checked={filters.top}
+              onChange={() => handleCheckboxChange('top')}
+              className="w-4 h-4 text-red-600 accent-red-600 rounded"
+            />
+            <span className="text-xs sm:text-sm text-gray-700 font-medium">{t('search.top')}</span>
+          </label>
           <label className="flex items-center gap-2 cursor-pointer bg-white p-2.5 rounded-lg border-2 border-gray-200 hover:border-red-300 transition">
             <input
               type="checkbox"
@@ -207,6 +219,7 @@ export default function RightSidebar() {
               city: '',
               district: '',
               gold: false,
+              top: false,
               silver: false,
               featured: false,
               verifiedPhotos: false,

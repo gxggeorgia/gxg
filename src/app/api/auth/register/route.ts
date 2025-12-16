@@ -165,6 +165,8 @@ export async function POST(request: NextRequest) {
       goldExpiresAt: null,
       featuredExpiresAt: null,
       silverExpiresAt: null,
+      topExpiresAt: null,
+      newExpiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days default
       verifiedPhotosExpiry: null,
       coverImage: null,
     };

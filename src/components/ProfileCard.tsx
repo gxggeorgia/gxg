@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations, useLocale } from 'next-intl';
-import { Heart, MapPin, MessageCircle } from 'lucide-react';
+import { Heart, MapPin, MessageCircle, Crown, Sparkles } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
@@ -11,7 +11,9 @@ interface ProfileCardProps {
     slug?: string; // SEO-friendly URL slug
     name: string;
     city: string;
+    district?: string;
     isGold?: boolean;
+    isTop?: boolean;
     isSilver?: boolean;
     verifiedPhotos?: boolean;
     isNew?: boolean;
@@ -122,30 +124,42 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
           )}
 
           {/* Badges */}
-          <div className="absolute top-2 left-2 md:top-2 md:left-2 flex flex-col gap-0.5">
+          <div className="absolute top-2 left-2 md:top-2 md:left-2 flex flex-col gap-0.5 z-10">
             {profile.isSilver && (
-              <span className="bg-gray-400 text-white text-[9px] md:text-[10px] font-bold px-1 md:px-1.5 py-0.5 rounded whitespace-nowrap">
+              <span className="bg-gray-400 text-white text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm">
                 {t('profile.silver')}
               </span>
             )}
             {profile.isGold && (
-              <span className="bg-yellow-500 text-white text-[9px] md:text-[10px] font-bold px-1 md:px-1.5 py-0.5 rounded whitespace-nowrap">
+              <span className="bg-yellow-500 text-white text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm">
                 {t('profile.gold')}
               </span>
             )}
           </div>
 
-
-
-          {/* Online Status (Online only) */}
-          {onlineStatus && onlineStatus.isOnline && (
-            <div className="absolute top-2 right-2 z-10">
-              <span className="bg-green-500 text-white text-[10px] md:text-xs px-1.5 md:px-2 py-0.5 md:py-1 rounded-full flex items-center gap-0.5 md:gap-1 whitespace-nowrap backdrop-blur-sm shadow-sm">
-                <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-white rounded-full animate-pulse"></span>
-                {onlineStatus.text}
+          {/* Premium Right-Side Badges */}
+          <div className="absolute top-2 right-2 z-10 flex flex-col items-end gap-1">
+            {profile.isTop && (
+              <span className="flex items-center gap-1 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-[10px] md:text-xs font-bold px-2 py-1 rounded-full shadow-md shadow-purple-900/20 backdrop-blur-sm">
+                <Crown size={12} className="fill-white/20" />
+                {t('profile.top')}
               </span>
-            </div>
-          )}
+            )}
+            {profile.isNew && (
+              <span className="flex items-center gap-1 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-[10px] md:text-xs font-bold px-2 py-1 rounded-full shadow-md shadow-emerald-900/20 backdrop-blur-sm">
+                <Sparkles size={12} className="fill-white/20" />
+                {t('profile.new')}
+              </span>
+            )}
+
+            {/* Online Status (Moved below premium badges) */}
+          </div>
+
+
+
+
+
+
 
           {/* Like Button */}
           <button
@@ -185,7 +199,7 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
             <h4 className="font-semibold text-gray-900 truncate flex-1 text-sm">{profile.name}</h4>
             <div className="flex items-center gap-0.5 text-gray-500 shrink-0 text-[11px]">
               <MapPin size={11} />
-              <span className="truncate max-w-[50px]">{profile.city}</span>
+              <span className="truncate max-w-[120px]">{profile.city}{profile.district ? `, ${profile.district}` : ''}</span>
             </div>
           </div>
           {profile.languages && profile.languages.length > 0 && (
@@ -197,11 +211,23 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
             </div>
           )}
 
-          {/* Last Seen Status (Offline) */}
-          {onlineStatus && !onlineStatus.isOnline && (
-            <div className="text-[10px] text-gray-800 flex items-center gap-1">
-              <div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
-              {onlineStatus.text}
+          {/* Online/Last Seen Status */}
+          {onlineStatus && (
+            <div className={`text-[10px] flex items-center gap-1 ${onlineStatus.isOnline ? 'justify-end' : 'justify-start'}`}>
+              {onlineStatus.isOnline ? (
+                <span className="flex items-center gap-1.5 bg-green-50 text-green-700 px-2 py-0.5 rounded-full border border-green-200 font-medium">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
+                  </span>
+                  {onlineStatus.text}
+                </span>
+              ) : (
+                <div className="flex items-center gap-1 text-gray-500">
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
+                  {onlineStatus.text}
+                </div>
+              )}
             </div>
           )}
         </div>
