@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
@@ -23,16 +22,23 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://escortdirectorygeorgia.com";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://gogoxgeorgia.ge";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
-  title: "Escort Directory Georgia | Verified Escorts & Companions",
-  description: "Find verified escorts and companions in Georgia. Browse profiles, rates, and services. Safe, discreet, and professional escort directory.",
-  keywords: ["escorts Georgia", "companions Georgia", "escort services", "verified escorts"],
-  authors: [{ name: "Escort Directory Georgia" }],
-  creator: "Escort Directory Georgia",
-  publisher: "Escort Directory Georgia",
+  title: "GOGOXGEORGIA.GE | Escort Girls, Companions & VIP Services in Georgia",
+  description: "GOGOXGEORGIA.GE | GOGOXGEORGIA.GE Escort Girls, eskort gogoebi, gogoxgeorgia, batumi escort, eskort batumi, escort girls, escort tbilisi, whores tbilisi, eskortebi, escorts, gogoxgeorgia tbilisi, escortebi, escort batumi, escort kutaisi, bozebis saiti, eskortebi Telavi, georgian escort, gogoxgeorgia vip, escort, intim gacnoba, gogoebi tbilisi batumi kutaisi, georgian intim dating site, bozebis nomrebi, bozebi batumi gamodzaxebit, escort Georgia.",
+  keywords: [
+    "eskort gogoebi", "gogoxgeorgia", "batumi escort", "eskort batumi", "escort girls",
+    "escort tbilisi", "whores tbilisi", "eskortebi", "escorts", "gogoxgeorgia tbilisi",
+    "escortebi", "escort batumi", "escort kutaisi", "bozebis saiti", "eskortebi Telavi",
+    "georgian escort", "gogoxgeorgia vip", "escort", "intim gacnoba",
+    "gogoebi tbilisi batumi kutaisi", "georgian intim dating site", "bozebis nomrebi",
+    "bozebi batumi gamodzaxebit", "escort Georgia"
+  ],
+  authors: [{ name: "GOGO X GEORGIA" }],
+  creator: "GOGO X GEORGIA",
+  publisher: "GOGO X GEORGIA",
   robots: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
   alternates: {
     canonical: baseUrl,
@@ -41,25 +47,25 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: baseUrl,
-    siteName: "Escort Directory Georgia",
-    title: "Escort Directory Georgia | Verified Escorts & Companions",
+    siteName: "GOGO X GEORGIA",
+    title: "GOGOXGEORGIA.GE | Escort Girls, Companions & VIP Services in Georgia",
     description: "Find verified escorts and companions in Georgia. Browse profiles, rates, and services.",
     images: [
       {
         url: `${baseUrl}/icons/logo.png`,
         width: 1200,
         height: 630,
-        alt: "Escort Directory Georgia Logo",
+        alt: "GOGO X GEORGIA Logo",
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Escort Directory Georgia | Verified Escorts & Companions",
+    title: "GOGOXGEORGIA.GE | Escort Girls, Companions & VIP Services in Georgia",
     description: "Find verified escorts and companions in Georgia.",
     images: [`${baseUrl}/icons/logo.png`],
-    creator: "@escortdirectoryga",
+    creator: "@gogoxgeorgia",
   },
   icons: {
     icon: [
@@ -73,7 +79,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Escort Directory Georgia",
+    title: "GOGO X GEORGIA",
   },
   formatDetection: {
     telephone: false,
@@ -108,10 +114,10 @@ export default async function LocaleLayout({
   const organizationSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Escort Directory Georgia',
+    name: 'GOGO X GEORGIA',
     url: baseUrl,
     logo: `${baseUrl}/icons/logo.png`,
-    description: 'Find verified escorts and companions in Georgia',
+    description: 'GOGOXGEORGIA.GE | Escort Girls, Companions & VIP Services in Georgia',
     sameAs: [
       'https://www.facebook.com/escortdirectoryga',
       'https://www.twitter.com/escortdirectoryga',
@@ -120,14 +126,14 @@ export default async function LocaleLayout({
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'Customer Service',
-      email: 'support@escortdirectorygeorgia.com',
+      email: 'support@gogoxgeorgia.ge',
     },
   };
 
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'Escort Directory Georgia',
+    name: 'GOGO X GEORGIA',
     url: baseUrl,
     potentialAction: {
       '@type': 'SearchAction',

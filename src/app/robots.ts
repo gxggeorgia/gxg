@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://escortdirectorygeorgia.com';
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://gogoxgeorgia.ge';
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -8,16 +8,19 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/', '/admin/', '/*.json$', '/*?*sort=', '/*?*filter='],
+        disallow: [
+          '/api/',
+          '/admin/',
+          '/*?*sort=',
+          '/*?*filter=',
+          '/*?*page=',
+          '/account/',
+        ],
       },
       {
-        userAgent: 'AdsBot-Google',
-        allow: '/',
-      },
-      {
-        userAgent: 'Googlebot',
-        allow: '/',
-      },
+        userAgent: 'Googlebot-Image',
+        allow: ['/*'], // Allow images to be indexed
+      }
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
   };

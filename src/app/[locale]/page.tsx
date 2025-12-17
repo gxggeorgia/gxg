@@ -39,6 +39,15 @@ export default function HomePage() {
 
               <SiteNotice />
               <ProfileGrid />
+
+              <div className="mt-8 p-4 bg-red-50 border border-red-100 rounded-lg text-center space-y-2">
+                <p className="font-bold text-red-600 text-lg">
+                  ჩვენი 18+ საიტი არის მარტო GOGOXGEORGIA.GE სხვა საიტები არ გვაქვს. ყოველთვის მუშა და აქტუალური საიტის ლინკი იქნება ჩვენ ჯგუფში. დააწკაპუნეთ და შემოგვიერთდით
+                </p>
+                <p className="font-medium text-red-500">
+                  (Наш сайт только GOGOXGEORGIA.GE других сайтов нету. В случае блокировки сайта рабочий и актуальный линк будет в группе, нажмите и подписывайтесь)
+                </p>
+              </div>
             </main>
 
             {/* Right Sidebar - Desktop Only */}

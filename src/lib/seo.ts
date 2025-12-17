@@ -1,23 +1,23 @@
 import { Metadata } from 'next';
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://escortdirectorygeorgia.com';
-const siteName = 'Escort Directory Georgia';
-const description = 'Find verified escorts and companions in Georgia. Browse profiles, rates, and services. Safe, discreet, and professional escort directory.';
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://gogoxgeorgia.ge';
+const siteName = 'GOGO X GEORGIA';
+const description = 'GOGOXGEORGIA.GE | GOGOXGEORGIA.GE Escort Girls, eskort gogoebi, gogoxgeorgia, batumi escort, eskort batumi, escort girls, escort tbilisi, whores tbilisi, eskortebi, escorts, gogoxgeorgia tbilisi, escortebi, escort batumi, escort kutaisi, bozebis saiti, eskortebi Telavi, georgian escort, gogoxgeorgia vip, escort, intim gacnoba, gogoebi tbilisi batumi kutaisi, georgian intim dating site, bozebis nomrebi, bozebi batumi gamodzaxebit, escort Georgia.';
 
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: `${siteName} | Verified Escorts & Companions`,
+    default: `${siteName} | Escort Girls, Companions & VIP Services in Georgia`,
     template: `%s | ${siteName}`,
   },
   description,
   keywords: [
-    'escorts Georgia',
-    'companions Georgia',
-    'escort services',
-    'verified escorts',
-    'escort directory',
-    'Georgia escorts',
+    "eskort gogoebi", "gogoxgeorgia", "batumi escort", "eskort batumi", "escort girls",
+    "escort tbilisi", "whores tbilisi", "eskortebi", "escorts", "gogoxgeorgia tbilisi",
+    "escortebi", "escort batumi", "escort kutaisi", "bozebis saiti", "eskortebi Telavi",
+    "georgian escort", "gogoxgeorgia vip", "escort", "intim gacnoba",
+    "gogoebi tbilisi batumi kutaisi", "georgian intim dating site", "bozebis nomrebi",
+    "bozebi batumi gamodzaxebit", "escort Georgia"
   ],
   authors: [{ name: siteName }],
   creator: siteName,
@@ -39,8 +39,8 @@ export const defaultMetadata: Metadata = {
     locale: 'en_US',
     url: baseUrl,
     siteName,
-    title: `${siteName} | Verified Escorts & Companions`,
-    description,
+    title: `${siteName} | Escort Girls, Companions & VIP Services in Georgia`,
+    description: "Find verified escorts and companions in Georgia. Browse profiles, rates, and services.",
     images: [
       {
         url: `${baseUrl}/icons/logo.png`,
@@ -53,10 +53,10 @@ export const defaultMetadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${siteName} | Verified Escorts & Companions`,
-    description,
+    title: `${siteName} | Escort Girls, Companions & VIP Services in Georgia`,
+    description: "Find verified escorts and companions in Georgia.",
     images: [`${baseUrl}/icons/logo.png`],
-    creator: '@escortdirectoryga',
+    creator: '@gogoxgeorgia',
   },
   icons: {
     icon: [
@@ -103,10 +103,11 @@ export function generatePageMetadata(
   title: string,
   description: string,
   path: string = '',
-  image?: string
+  image?: string,
+  noIndex: boolean = false
 ): Metadata {
   const url = `${baseUrl}${path}`;
-  const ogImage = image || `${baseUrl}/icons/logo.jpeg`;
+  const ogImage = image || `${baseUrl}/icons/logo.png`;
 
   return {
     title,
@@ -114,11 +115,16 @@ export function generatePageMetadata(
     alternates: {
       canonical: url,
     },
+    robots: {
+      index: !noIndex,
+      follow: !noIndex,
+    },
     openGraph: {
       title,
       description,
       url,
       type: 'website',
+      siteName,
       images: [
         {
           url: ogImage,
@@ -129,9 +135,11 @@ export function generatePageMetadata(
       ],
     },
     twitter: {
+      card: 'summary_large_image',
       title,
       description,
       images: [ogImage],
+      creator: '@gogoxgeorgia',
     },
   };
 }
