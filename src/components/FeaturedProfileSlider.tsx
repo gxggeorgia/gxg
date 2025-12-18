@@ -66,9 +66,7 @@ export default function FeaturedProfileSlider() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 640) setItemsPerView(2);
-      else if (window.innerWidth < 768) setItemsPerView(2);
-      else if (window.innerWidth < 1024) setItemsPerView(3);
+      if (window.innerWidth < 1024) setItemsPerView(2);
       else if (window.innerWidth < 1280) setItemsPerView(4);
       else setItemsPerView(5);
     };
@@ -161,7 +159,7 @@ export default function FeaturedProfileSlider() {
           </div>
           <div className="flex gap-3 sm:gap-4">
             {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="shrink-0 w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.5rem)] md:w-[calc(33.333%-0.667rem)] lg:w-[calc(25%-0.75rem)] xl:w-[calc(20%-0.8rem)]">
+              <div key={i} className="shrink-0 w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)] xl:w-[calc(20%-0.8rem)]">
                 <div className="bg-white rounded-lg shadow overflow-hidden">
                   <div className="relative w-full bg-gray-200" style={{ aspectRatio: '3/4' }}></div>
                   <div className="p-2.5 space-y-1.5">

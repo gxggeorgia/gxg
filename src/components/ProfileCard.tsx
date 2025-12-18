@@ -99,14 +99,14 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
     <Link href={profileUrl}>
       <div className="bg-white rounded-lg   hover:shadow-xl transition cursor-pointer group overflow-hidden">
         {/* Image Container - Relative for badges */}
-        <div className="relative w-full" style={{ aspectRatio: profile.imageWidth && profile.imageHeight ? `${profile.imageWidth}/${profile.imageHeight}` : '3/4' }}>
+        <div className="relative w-full aspect-[3/4]">
           {/* Profile Image or Placeholder */}
           {profile.coverImage ? (
             <>
               <img
                 src={profile.coverImage}
                 alt={profile.name}
-                className="h-full w-full object-contain bg-gray-100"
+                className="h-full w-full object-cover bg-gray-100"
               />
               {/* Watermark */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-90">
