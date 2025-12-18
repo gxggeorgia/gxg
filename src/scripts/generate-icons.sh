@@ -81,7 +81,7 @@ echo "- mstile-*.png (Microsoft tiles)"
 echo "- safari-pinned-tab.png"
 echo ""
 echo "Add these to your HTML <head>:"
-echo '<link rel="icon" type="image/x-icon" href="/favicon.ico">'
-echo '<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">'
-echo '<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">'
-echo '<link rel="manifest" href="/site.webmanifest">'
+echo '<link rel="icon" type="image/x-icon" href="/icons/favicon/favicon.ico">'
+echo '<link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon/favicon-96x96.png">'
+echo '<link rel="apple-touch-icon" sizes="180x180" href="/icons/favicon/apple-touch-icon.png">'
+echo '<link rel="manifest" href="/icons/favicon/site.webmanifest">'

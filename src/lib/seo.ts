@@ -7,7 +7,7 @@ const description = 'GOGOXGEORGIA.GE | GOGOXGEORGIA.GE Escort Girls, eskort gogo
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: `${siteName} | Escort Girls, Companions & VIP Services in Georgia`,
+    default: 'GOGOXGEORGIA.GE Escort Girls, Tbilisi, Batumi, Kutaisi | ესკორტ გოგოები, ესკორტი თბილისი, ბათუმი, ქუთაისი, ინტიმ გაცნობა, ბოზების საიტი | Эскорт Грузия, Тбилиси, Батуми, Эскорт Девушки, Интим Знакомства - GOGOXGEORGIA',
     template: `%s | ${siteName}`,
   },
   description,
@@ -39,7 +39,7 @@ export const defaultMetadata: Metadata = {
     locale: 'en_US',
     url: baseUrl,
     siteName,
-    title: `${siteName} | Escort Girls, Companions & VIP Services in Georgia`,
+    title: 'GOGOXGEORGIA.GE Escort Girls, Tbilisi, Batumi, Kutaisi | ესკორტ გოგოები, ესკორტი თბილისი, ბათუმი, ქუთაისი, ინტიმ გაცნობა, ბოზების საიტი | Эскорт Грузия, Тбилиси, Батуми, Эскорт Девушки, Интим Знакомства - GOGOXGEORGIA',
     description: "Find verified escorts and companions in Georgia. Browse profiles, rates, and services.",
     images: [
       {
@@ -53,34 +53,34 @@ export const defaultMetadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${siteName} | Escort Girls, Companions & VIP Services in Georgia`,
+    title: 'GOGOXGEORGIA.GE Escort Girls, Tbilisi, Batumi, Kutaisi | ესკორტ გოგოები, ესკორტი თბილისი, ბათუმი, ქუთაისი, ინტიმ გაცნობა, ბოზების საიტი | Эскорт Грузия, Тбилиси, Батуми, Эскорт Девушки, Интим Знакомства - GOGOXGEORGIA',
     description: "Find verified escorts and companions in Georgia.",
     images: [`${baseUrl}/icons/logo.png`],
     creator: '@gogoxgeorgia',
   },
   icons: {
     icon: [
-      { url: '/favicon/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon/favicon.ico', type: 'image/x-icon' },
+      { url: '/icons/favicon/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/icons/favicon/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icons/favicon/favicon.ico', type: 'image/x-icon' },
     ],
-    apple: { url: '/favicon/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    apple: { url: '/icons/favicon/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     other: [
       {
         rel: 'icon',
-        url: '/favicon/android-chrome-192x192.png',
+        url: '/icons/favicon/android-chrome-192x192.png',
         sizes: '192x192',
         type: 'image/png',
       },
       {
         rel: 'icon',
-        url: '/favicon/android-chrome-512x512.png',
+        url: '/icons/favicon/android-chrome-512x512.png',
         sizes: '512x512',
         type: 'image/png',
       },
     ],
   },
-  manifest: '/favicon/site.webmanifest',
+  manifest: '/icons/favicon/site.webmanifest',
   viewport: {
     width: 'device-width',
     initialScale: 1,

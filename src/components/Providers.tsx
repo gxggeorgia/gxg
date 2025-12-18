@@ -11,7 +11,7 @@ interface ProvidersProps {
 
 export default function Providers({ children, messages, locale }: ProvidersProps) {
     return (
-        <NextIntlClientProvider messages={messages} locale={locale}>
+        <NextIntlClientProvider messages={messages} locale={locale} timeZone="Asia/Tbilisi">
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
                 {children}
             </ThemeProvider>

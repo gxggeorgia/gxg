@@ -26,7 +26,7 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://gogoxgeorgia.ge";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
-  title: "GOGOXGEORGIA.GE | Escort Girls, Companions & VIP Services in Georgia",
+  title: "GOGOXGEORGIA.GE Escort Girls, Tbilisi, Batumi, Kutaisi | ესკორტ გოგოები, ესკორტი თბილისი, ბათუმი, ქუთაისი, ინტიმ გაცნობა, ბოზების საიტი | Эскорт Грузия, Тбилиси, Батуми, Эскорт Девушки, Интим Знакомства - GOGOXGEORGIA",
   description: "GOGOXGEORGIA.GE | GOGOXGEORGIA.GE Escort Girls, eskort gogoebi, gogoxgeorgia, batumi escort, eskort batumi, escort girls, escort tbilisi, whores tbilisi, eskortebi, escorts, gogoxgeorgia tbilisi, escortebi, escort batumi, escort kutaisi, bozebis saiti, eskortebi Telavi, georgian escort, gogoxgeorgia vip, escort, intim gacnoba, gogoebi tbilisi batumi kutaisi, georgian intim dating site, bozebis nomrebi, bozebi batumi gamodzaxebit, escort Georgia.",
   keywords: [
     "eskort gogoebi", "gogoxgeorgia", "batumi escort", "eskort batumi", "escort girls",
@@ -48,11 +48,11 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: baseUrl,
     siteName: "GOGO X GEORGIA",
-    title: "GOGOXGEORGIA.GE | Escort Girls, Companions & VIP Services in Georgia",
+    title: "GOGOXGEORGIA.GE Escort Girls, Tbilisi, Batumi, Kutaisi | ესკორტ გოგოები, ესკორტი თბილისი, ბათუმი, ქუთაისი, ინტიმ გაცნობა, ბოზების საიტი | Эскорт Грузия, Тбилиси, Батуми, Эскорт Девушки, Интим Знакомства - GOGOXGEORGIA",
     description: "Find verified escorts and companions in Georgia. Browse profiles, rates, and services.",
     images: [
       {
-        url: `${baseUrl}/icons/logo.png`,
+        url: `/icons/logo.png`,
         width: 1200,
         height: 630,
         alt: "GOGO X GEORGIA Logo",
@@ -62,20 +62,20 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "GOGOXGEORGIA.GE | Escort Girls, Companions & VIP Services in Georgia",
+    title: "GOGOXGEORGIA.GE Escort Girls, Tbilisi, Batumi, Kutaisi | ესკორტ გოგოები, ესკორტი თბილისი, ბათუმი, ქუთაისი, ინტიმ გაცნობა, ბოზების საიტი | Эскорт Грузия, Тбилиси, Батуми, Эскорт Девушки, Интим Знакомства - GOGOXGEORGIA",
     description: "Find verified escorts and companions in Georgia.",
-    images: [`${baseUrl}/icons/logo.png`],
+    images: [`/icons/logo.png`],
     creator: "@gogoxgeorgia",
   },
   icons: {
     icon: [
-      { url: "/favicon/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon/favicon.ico", type: "image/x-icon" },
+      { url: "/icons/favicon/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/icons/favicon/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icons/favicon/favicon.ico", type: "image/x-icon" },
     ],
-    apple: { url: "/favicon/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    apple: { url: "/icons/favicon/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
   },
-  manifest: "/favicon/site.webmanifest",
+  manifest: "/icons/favicon/site.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
