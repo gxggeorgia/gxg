@@ -73,7 +73,12 @@
     "escortsCityList": "Escorts City List:",
     "contactUsOn": "Contact us on",
     "allCities": "All Cities",
-    "scrollToTop": "Top"
+    "scrollToTop": "Top",
+    "ageVerificationTitle": "18+ Age Verification",
+    "ageVerificationText": "This website contains material that is restricted to adults only. You must be 18 years of age or older to enter.",
+    "ageVerificationDisclaimer": "By entering this site you agree to our Terms of Service and Privacy Policy.",
+    "exit": "Exit",
+    "enter": "I am 18+ - Enter"
   },
   "myAccount": "My Account",
   "auth": {

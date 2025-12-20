@@ -4,11 +4,12 @@ import LeftSidebar from '@/components/LeftSidebar';
 import ProfileGrid from '@/components/ProfileGrid';
 import RightSidebar from '@/components/RightSidebar';
 import SiteNotice from '@/components/SiteNotice';
-import SecurityCheck from '@/components/SecurityCheck';
+// import SecurityCheck from '@/components/SecurityCheck'; 
+import AgeCheck from '@/components/AgeCheck';
 
 export default function HomePage() {
   return (
-    <SecurityCheck>
+    <AgeCheck>
       <div className="min-h-screen bg-gray-50">
 
         {/* Featured Slider - Full Width */}
@@ -58,6 +59,6 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-    </SecurityCheck>
+    </AgeCheck>
   );
 }
