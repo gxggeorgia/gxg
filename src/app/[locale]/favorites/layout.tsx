@@ -1,7 +1,7 @@
 import { generatePageMetadata } from '@/lib/seo';
 
 export const metadata = generatePageMetadata(
-    'My Favorites | GOGO X GEORGIA',
+    'My Favorites | GOGO XGEORGIA',
     'Your curated list of verified escorts and companions in Georgia on GOGOXGEORGIA.GE. Save profiles to view later.',
     '/favorites',
     undefined,

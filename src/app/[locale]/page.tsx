@@ -4,7 +4,7 @@ import LeftSidebar from '@/components/LeftSidebar';
 import ProfileGrid from '@/components/ProfileGrid';
 import RightSidebar from '@/components/RightSidebar';
 import SiteNotice from '@/components/SiteNotice';
-// import SecurityCheck from '@/components/SecurityCheck'; 
+
 import AgeCheck from '@/components/AgeCheck';
 
 export default function HomePage() {

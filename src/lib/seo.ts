@@ -1,23 +1,49 @@
 import { Metadata } from 'next';
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://gogoxgeorgia.ge';
-const siteName = 'GOGO X GEORGIA';
-const description = 'GOGOXGEORGIA.GE | GOGOXGEORGIA.GE Escort Girls, eskort gogoebi, gogoxgeorgia, batumi escort, eskort batumi, escort girls, escort tbilisi, whores tbilisi, eskortebi, escorts, gogoxgeorgia tbilisi, escortebi, escort batumi, escort kutaisi, bozebis saiti, eskortebi Telavi, georgian escort, gogoxgeorgia vip, escort, intim gacnoba, gogoebi tbilisi batumi kutaisi, georgian intim dating site, bozebis nomrebi, bozebi batumi gamodzaxebit, escort Georgia.';
+const siteName = 'GOGO XGEORGIA';
+
+
 
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'GOGOXGEORGIA.GE Escort Girls, Tbilisi, Batumi, Kutaisi | ესკორტ გოგოები, ესკორტი თბილისი, ბათუმი, ქუთაისი, ინტიმ გაცნობა, ბოზების საიტი | Эскорт Грузия, Тбилиси, Батуми, Эскорт Девушки, Интим Знакомства - GOGOXGEORGIA',
+    default: "Gogo xgeorgia, ესკორტ გოგოები, Escort gogoebi, ესკორტი xgeorgia, escort batumi, Tbilisi escort, Escort Georgia, Xgeorgia, Gogoxgeorgia",
     template: `%s | ${siteName}`,
   },
-  description,
+  description: "Gogoxgeorgia - Leading ესკორტ გოგოები platform. Verified Escort gogoebi, Tbilisi escort & escort batumi profiles. Premium ესკორტი xgeorgia in Escort Georgia. Find Gogo xgeorgia today.",
   keywords: [
-    "eskort gogoebi", "gogoxgeorgia", "batumi escort", "eskort batumi", "escort girls",
-    "escort tbilisi", "whores tbilisi", "eskortebi", "escorts", "gogoxgeorgia tbilisi",
-    "escortebi", "escort batumi", "escort kutaisi", "bozebis saiti", "eskortebi Telavi",
-    "georgian escort", "gogoxgeorgia vip", "escort", "intim gacnoba",
-    "gogoebi tbilisi batumi kutaisi", "georgian intim dating site", "bozebis nomrebi",
-    "bozebi batumi gamodzaxebit", "escort Georgia"
+    "Gogo xgeorgia",
+    "Gogoxgeorgia",
+    "gogoxgeorgia",
+    "Xgeorgia",
+    "ესკორტ გოგოები",
+    "ესკორტი xgeorgia",
+    "Escort gogoebi",
+    "eskort gogoebi",
+    "escort batumi",
+    "batumi escort",
+    "eskort batumi",
+    "Tbilisi escort",
+    "escort tbilisi",
+    "Escort Georgia",
+    "escort Georgia",
+    "georgian escort",
+    "escort girls",
+    "escorts",
+    "eskortebi",
+    "escortebi",
+    "gogoxgeorgia tbilisi",
+    "escort kutaisi",
+    "eskortebi Telavi",
+    "bozebis saiti",
+    "gogoebi tbilisi batumi kutaisi",
+    "whores tbilisi",
+    "escort",
+    "intim gacnoba",
+    "georgian intim dating site",
+    "bozebis nomrebi",
+    "bozebi batumi gamodzaxebit"
   ],
   authors: [{ name: siteName }],
   creator: siteName,
@@ -39,8 +65,8 @@ export const defaultMetadata: Metadata = {
     locale: 'en_US',
     url: baseUrl,
     siteName,
-    title: 'GOGOXGEORGIA.GE Escort Girls, Tbilisi, Batumi, Kutaisi | ესკორტ გოგოები, ესკორტი თბილისი, ბათუმი, ქუთაისი, ინტიმ გაცნობა, ბოზების საიტი | Эскорт Грузия, Тбилиси, Батуми, Эскорт Девушки, Интим Знакомства - GOGOXGEORGIA',
-    description: "Find verified escorts and companions in Georgia. Browse profiles, rates, and services.",
+    title: "Gogo xgeorgia, ესკორტ გოგოები, Escort gogoebi, ესკორტი xgeorgia, escort batumi, Tbilisi escort, Escort Georgia, Xgeorgia, Gogoxgeorgia",
+    description: "Gogoxgeorgia - Leading ესკორტ გოგოები platform. Verified Escort gogoebi, Tbilisi escort & escort batumi profiles. Premium ესკორტი xgeorgia in Escort Georgia.",
     images: [
       {
         url: `${baseUrl}/icons/logo.png`,
@@ -53,8 +79,8 @@ export const defaultMetadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'GOGOXGEORGIA.GE Escort Girls, Tbilisi, Batumi, Kutaisi | ესკორტ გოგოები, ესკორტი თბილისი, ბათუმი, ქუთაისი, ინტიმ გაცნობა, ბოზების საიტი | Эскорт Грузия, Тбилиси, Батуми, Эскорт Девушки, Интим Знакомства - GOGOXGEORGIA',
-    description: "Find verified escorts and companions in Georgia.",
+    title: "Gogo xgeorgia, ესკორტ გოგოები, Escort gogoebi, ესკორტი xgeorgia, escort batumi, Tbilisi escort, Escort Georgia, Xgeorgia, Gogoxgeorgia",
+    description: "Gogoxgeorgia - Leading ესკორტ გოგოები platform. Verified Escort gogoebi, Tbilisi escort & escort batumi profiles. Premium ესკორტი xgeorgia.",
     images: [`${baseUrl}/icons/logo.png`],
     creator: '@gogoxgeorgia',
   },
