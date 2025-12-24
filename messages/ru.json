@@ -271,7 +271,7 @@
   },
   "siteNotice": {
     "officialSiteAndTelegram": "Официальный сайт и Telegram",
-    "telegramInfo": "Официальный Telegram GogoXGeorgia: {telegramUsername}. Мы не используем другие аккаунты.",
+    "telegramInfo": "Официальный Telegram GogoXGeorgia: <link>{telegramUsername}</link>. Мы не используем другие аккаунты.",
     "siteInfo": "Наш официальный сайт 18+: {domain}. Для получения последних обновлений и рабочих ссылок присоединяйтесь к нашему Telegram-каналу:",
     "hide": "Скрыть",
     "more": "Еще"

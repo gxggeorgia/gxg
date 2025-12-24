@@ -273,7 +273,7 @@
   },
   "siteNotice": {
     "officialSiteAndTelegram": "Official Site & Telegram",
-    "telegramInfo": "Our TELEGRAM chat is only this one: {telegramUsername}. We don’t have another number.",
+    "telegramInfo": "Our TELEGRAM chat is only this one: <link>{telegramUsername}</link>. We don’t have another number.",
     "siteInfo": "Our 18+ site is only {domain}. We don’t have other sites. In case of site blocking, the working and current link will always be in our group. Click and join:",
     "hide": "Hide",
     "more": "More"

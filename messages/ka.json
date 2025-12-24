@@ -269,7 +269,7 @@
   },
   "siteNotice": {
     "officialSiteAndTelegram": "ოფიციალური საიტი და Telegram",
-    "telegramInfo": "ოფიციალური GogoXGeorgia Telegram: {telegramUsername}. ჩვენ არ ვიყენებთ სხვა ანგარიშებს.",
+    "telegramInfo": "ოფიციალური GogoXGeorgia Telegram: <link>{telegramUsername}</link>. ჩვენ არ ვიყენებთ სხვა ანგარიშებს.",
     "siteInfo": "ჩვენი ოფიციალური 18+ საიტი არის {domain}. სიახლეებისა და მუშა ლინკებისთვის შემოგვიერთდით Telegram არხზე:",
     "hide": "დამალვა",
     "more": "მეტი"
