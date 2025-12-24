@@ -6,8 +6,10 @@ import { ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react';
 
 export default function SiteNotice() {
     const t = useTranslations('siteNotice');
-    const telegramUsername = process.env.NEXT_PUBLIC_TELEGRAM_GROUP_USERNAME || '@gogoxgeorgia';
-    const telegramLink = process.env.NEXT_PUBLIC_TELEGRAM_GROUP_LINK || 'https://t.me/gogoxgeorgia';
+    const telegramUsername = process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || '@gogoxgeorgia';
+    const telegramLink = process.env.NEXT_PUBLIC_TELEGRAM_LINK || 'https://t.me/gogoxgeorgia';
+    const telegramGroupUsername = process.env.NEXT_PUBLIC_TELEGRAM_GROUP_USERNAME || 'GXG(GogoXGeorgia) Official Channel';
+    const telegramGroupLink = process.env.NEXT_PUBLIC_TELEGRAM_GROUP_LINK || 'https://t.me/+4syYxv5NwgY1ZTI6';
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'gogoxgeorgia.ge';
     const domain = siteUrl.replace(/^https?:\/\//, '').replace(/\/$/, '').toUpperCase();
 
@@ -50,9 +52,7 @@ export default function SiteNotice() {
             {/* Content */}
             {isExpanded && (
                 <div className="max-w-7xl mx-auto px-3 pb-6 space-y-4 animate-in slide-in-from-top-2 duration-200">
-                    {/* Telegram Info */}
-
-                    {/* Telegram Info */}
+                    {/* Telegram Info: Direct Message */}
                     <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-center gap-3">
                         <svg className="w-8 h-8 text-blue-500 shrink-0" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z" />
@@ -74,10 +74,10 @@ export default function SiteNotice() {
                         </p>
                     </div>
 
-                    {/* Site Info */}
+                    {/* Site Info: Channel/Group */}
                     <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
                         <p className="text-green-800 font-medium">
-                            {t('siteInfo', { domain })} <a href={telegramLink} target="_blank" rel="noopener noreferrer" className="text-green-600 underline font-bold ml-1">{telegramUsername}</a>
+                            {t('siteInfo', { domain })} <a href={telegramGroupLink} target="_blank" rel="noopener noreferrer" className="text-green-600 underline font-bold ml-1">{telegramGroupUsername}</a>
                         </p>
                     </div>
                 </div>
