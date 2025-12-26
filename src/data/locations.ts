@@ -82,43 +82,27 @@ export const locations: City[] = [
     },
     districts: [
       {
-        id: 'tsereteli',
+        id: 'avlabari',
         name: {
-          en: 'Tsereteli',
-          ka: 'წერეთელი',
-          ru: 'Церетели'
+          en: 'Avlabari',
+          ka: 'ავლაბარი',
+          ru: 'Авлабари'
         }
       },
       {
-        id: 'saburtalo',
+        id: 'didi-dighomi',
         name: {
-          en: 'Saburtalo',
-          ka: 'საბურთალო',
-          ru: 'Сабуртало'
+          en: 'Didi Dighomi',
+          ka: 'დიდი დიღომი',
+          ru: 'Диди Дигоми'
         }
       },
       {
-        id: 'varketili',
+        id: 'didube',
         name: {
-          en: 'Varketili',
-          ka: 'ვარკეთილი',
-          ru: 'Варкетили'
-        }
-      },
-      {
-        id: 'isani',
-        name: {
-          en: 'Isani',
-          ka: 'ისანი',
-          ru: 'Исани'
-        }
-      },
-      {
-        id: 'gldani',
-        name: {
-          en: 'Gldani',
-          ka: 'გლდანი',
-          ru: 'Глдани'
+          en: 'Didube',
+          ka: 'დიდუბე',
+          ru: 'Дидубе'
         }
       },
       {
@@ -130,11 +114,107 @@ export const locations: City[] = [
         }
       },
       {
+        id: 'gldani',
+        name: {
+          en: 'Gldani',
+          ka: 'გლდანი',
+          ru: 'Глдани'
+        }
+      },
+      {
+        id: 'grmagele',
+        name: {
+          en: 'Grmagele',
+          ka: 'გრმაგელე',
+          ru: 'Грмагеле'
+        }
+      },
+      {
+        id: 'isani',
+        name: {
+          en: 'Isani',
+          ka: 'ისანი',
+          ru: 'Исани'
+        }
+      },
+      {
+        id: 'marjanishvili',
+        name: {
+          en: 'Marjanishvili',
+          ka: 'მარჯანიშვილი',
+          ru: 'Марджанишвили'
+        }
+      },
+      {
+        id: 'nadzaladevi',
+        name: {
+          en: 'Nadzaladevi',
+          ka: 'ნაძალადევი',
+          ru: 'Надзаладеви'
+        }
+      },
+      {
+        id: 'ortachala',
+        name: {
+          en: 'Ortachala',
+          ka: 'ორთაჭალა',
+          ru: 'Ортачала'
+        }
+      },
+      {
+        id: 'other',
+        name: {
+          en: 'Other',
+          ka: 'სხვა',
+          ru: 'Другое'
+        }
+      },
+      {
         id: 'rustaveli',
         name: {
           en: 'Rustaveli',
           ka: 'რუსთაველი',
           ru: 'Руставели'
+        }
+      },
+      {
+        id: 'saburtalo',
+        name: {
+          en: 'Saburtalo',
+          ka: 'საბურთალო',
+          ru: 'Сабуртало'
+        }
+      },
+      {
+        id: 'temka',
+        name: {
+          en: 'Temka',
+          ka: 'თემქა',
+          ru: 'Темка'
+        }
+      },
+      {
+        id: 'tsereteli',
+        name: {
+          en: 'Tsereteli',
+          ka: 'წერეთელი',
+          ru: 'Церетели'
+        }
+      },
+      {
+        id: 'vake',
+        name: {
+          en: 'Vake',
+          ka: 'ვაკე',
+          ru: 'Ваке'
+        }
+      },
+      {
+        id: 'varketili',
+        name: {
+          en: 'Varketili',
+          ka: 'ვარკეთილი',
+          ru: 'Варкетили'
         }
       },
       allDistrict
