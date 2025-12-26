@@ -7,6 +7,8 @@ const SUPPORT_EMAIL = process.env.NEXT_PUBLIC_MAIL_ADDRESS || 'contact@escortgeo
 const TELEGRAM_LINK = process.env.NEXT_PUBLIC_TELEGRAM_LINK || 'https://t.me/escortgeorgia';
 const TELEGRAM_USERNAME = process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || '@escortgeorgia';
 
+
+
 export default function SupportPage() {
   const t = useTranslations('support');
 

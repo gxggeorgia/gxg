@@ -184,6 +184,7 @@
     "online": "Online",
     "verifiedPhotos": "100% Photos",
     "searchResultsFor": "Search results for",
+    "searchDescription": "Find the best escorts matching \"{search}\" in Georgia. Verified photos, reviews and more.",
     "filteredResults": "Filtered Results",
     "search": "Search",
     "quickFilters": "Quick Filters",
@@ -304,5 +305,23 @@
     "faq2A": "Please provide as much detail as possible about your issue to help us assist you better.",
     "faq3Q": "Do you offer phone support?",
     "faq3A": "Currently, we offer support via email and Telegram only."
+  },
+  "seo": {
+    "profileTitle": "{name} | {ethnicity} Escort {city} - Verified & Real Photos",
+    "profileDescription": "Meet {name}, a {age} years old {ethnicity} verified escort {city}. {services}. Available for Incall/Outcall. Book now on GOGOXGEORGIA.GE.",
+    "favoritesTitle": "My Favorites | GOGO XGEORGIA",
+    "favoritesDesc": "View your saved escort profiles on GOGO XGEORGIA.",
+    "supportTitle": "Support | GOGO XGEORGIA",
+    "supportDesc": "Contact our support team for any assistance.",
+    "registerTitle": "Register | GOGO XGEORGIA",
+    "registerDesc": "Join GOGO XGEORGIA today.",
+    "termsTitle": "Terms of Service | GOGO XGEORGIA",
+    "termsDesc": "Read our Terms of Service.",
+    "privacyTitle": "Privacy Policy | GOGO XGEORGIA",
+    "privacyDesc": "Read our Privacy Policy.",
+    "dashboardTitle": "Dashboard | GOGO XGEORGIA",
+    "adminTitle": "Admin Panel | GOGO XGEORGIA",
+    "homeTitle": "Gogo xgeorgia, ესკორტ გოგოები, Escort gogoebi, ესკორტი xgeorgia, escort batumi, Tbilisi escort, Escort Georgia, Xgeorgia, Gogoxgeorgia",
+    "homeDesc": "Gogoxgeorgia - Leading ესკორტ გოგოები platform. Verified Escort gogoebi, Tbilisi escort & escort batumi profiles. Premium ესკორტი xgeorgia in Escort Georgia. Find Gogo xgeorgia today."
   }
 }

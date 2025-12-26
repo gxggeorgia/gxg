@@ -16,6 +16,10 @@ interface EscortDetailPageProps {
   }>;
 }
 
+import { getTranslations } from 'next-intl/server';
+
+import { locations } from '@/data/locations';
+
 export async function generateMetadata({ params }: EscortDetailPageProps) {
   const { slug, locale } = await params;
   const rawEscort = await db.select().from(users).where(eq(users.slug, slug)).limit(1).then(res => res[0]);
@@ -25,26 +29,38 @@ export async function generateMetadata({ params }: EscortDetailPageProps) {
   }
 
   const escort = checkSubscriptionStatus(rawEscort);
+  const t = await getTranslations({ locale, namespace: 'seo' });
 
-  // Richer Description Logic
-  const ageText = escort.age ? `${escort.age} years old` : 'Young';
-  const cityText = escort.city ? `in ${escort.city}` : 'in Georgia';
-  const ethnicityText = escort.ethnicity ? `${escort.ethnicity} ` : '';
-  const servicesList = escort.services || [];
-  const servicesText = servicesList.length > 0
-    ? `. Specializing in: ${servicesList.slice(0, 5).join(', ')}`
-    : '';
+  // Helper to get localized city name
+  const getCityName = (id: string) => {
+    const c = locations.find(l => l.id === id);
+    return c?.name[locale as keyof typeof c.name] || id;
+  };
 
-  const title = `${escort.name} | ${ethnicityText}Escort ${cityText} - Verified & Real Photos`;
-  const description = `Meet ${escort.name}, a ${ageText} ${ethnicityText}verified escort ${cityText}. ${servicesText}. Available for Incall/Outcall. Book now on GOGOXGEORGIA.GE.`;
+  const localizedCity = escort.city ? getCityName(escort.city) : 'Georgia';
+  const siteUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://gogoxgeorgia.ge';
+  const ogImage = escort.coverImage ? `${siteUrl}${escort.coverImage}` : undefined;
+
+  // Variables for templates
+  const variables = {
+    name: escort.name,
+    age: escort.age ? escort.age.toString() : '',
+    ethnicity: escort.ethnicity || '',
+    city: localizedCity,
+    services: escort.services ? escort.services.slice(0, 5).join(', ') : ''
+  };
+
+  const title = t('profileTitle', variables);
+  const description = t('profileDescription', variables);
 
   // Specific Keywords
   const specificKeywords = [
     `${escort.name} escort`,
-    `${escort.city} escort`,
-    `escort in ${escort.city}`,
+    `${localizedCity} escort`, // Localized keyword
+    `${escort.city} escort`, // Keep English ID as keyword too? Maybe prudent.
+    `escort in ${localizedCity}`,
     `${escort.ethnicity} escort`,
-    ...servicesList.map((s: string) => `${s} ${escort.city}`),
+    ...(escort.services || []).map((s: string) => `${s} ${localizedCity}`),
     "verified profile",
     "real photos"
   ];
@@ -54,7 +70,7 @@ export async function generateMetadata({ params }: EscortDetailPageProps) {
     title,
     description,
     `/escort/${slug}`,
-    escort.coverImage || undefined,
+    ogImage,
     false,
     locale // Pass locale here
   );
@@ -65,8 +81,10 @@ export async function generateMetadata({ params }: EscortDetailPageProps) {
   };
 }
 
+
+
 export default async function EscortDetailPage({ params }: EscortDetailPageProps) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const rawEscort = await db.select().from(users).where(eq(users.slug, slug)).limit(1).then(res => res[0]);
 
   if (!rawEscort || !rawEscort.publicExpiry || new Date(rawEscort.publicExpiry) <= new Date()) {
@@ -131,19 +149,19 @@ export default async function EscortDetailPage({ params }: EscortDetailPageProps
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: siteUrl
+        item: `${siteUrl}/${locale}`
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Escorts',
-        item: `${siteUrl}` // Technically home is the directory, or maybe /search
+        item: `${siteUrl}/${locale}`
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: escort.name,
-        item: `${siteUrl}/escort/${slug}`
+        item: `${siteUrl}/${locale}/escort/${slug}`
       }
     ]
   };
@@ -156,7 +174,7 @@ export default async function EscortDetailPage({ params }: EscortDetailPageProps
     image: escort.coverImage ? `${siteUrl}${escort.coverImage}` : undefined,
     description: escort.aboutYou,
     gender: escort.gender,
-    url: `${siteUrl}/escort/${slug}`,
+    url: `${siteUrl}/${locale}/escort/${slug}`,
     height: escort.height ? `${escort.height} cm` : undefined,
     address: {
       '@type': 'PostalAddress',
@@ -169,7 +187,7 @@ export default async function EscortDetailPage({ params }: EscortDetailPageProps
       '@type': 'Offer',
       priceCurrency: escort.currency || 'GEL',
       availability: 'https://schema.org/InStock',
-      url: `${siteUrl}/escort/${slug}` // Deep link to offer
+      url: `${siteUrl}/${locale}/escort/${slug}` // Deep link to offer
     }
   };
 

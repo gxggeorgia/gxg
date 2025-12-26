@@ -180,6 +180,7 @@
     "online": "ონლაინ",
     "verifiedPhotos": "100% ფოტოები",
     "searchResultsFor": "ძებნის შედეგები",
+    "searchDescription": "იპოვეთ საუკეთესო ესკორტები \"{search}\" საქართველოში. გადამოწმებული ფოტოები, მიმოხილვები და სხვა.",
     "filteredResults": "გაფილტრული შედეგები",
     "search": "ძებნა",
     "quickFilters": "სწრაფი ფილტრები",
@@ -300,5 +301,23 @@
     "faq2A": "გთხოვთ მოგვაწოდოთ რაც შეიძლება მეტი დეტალი თქვენი პრობლემის შესახებ.",
     "faq3Q": "გთავაზობთ თუ არა სატელეფონო მხარდაჭერას?",
     "faq3A": "ამჟამად ჩვენ გთავაზობთ მხარდაჭერას მხოლოდ ელ.ფოსტით და Telegram-ით."
+  },
+  "seo": {
+    "profileTitle": "{name} | {ethnicity} ესკორტი {city} - გადამოწმებული ფოტოები",
+    "profileDescription": "გაიცანით {name}, {age} წლის {ethnicity} ესკორტი {city}-ში. {services}. ხელმისაწვდომია გამოძახებით/ადგილზე. დაჯავშნეთ GOGOXGEORGIA.GE-ზე.",
+    "favoritesTitle": "ჩემი ფავორიტები | GOGO XGEORGIA",
+    "favoritesDesc": "ნახეთ თქვენი შენახული ესკორტის პროფილები.",
+    "supportTitle": "მხარდაჭერა | GOGO XGEORGIA",
+    "supportDesc": "დაუკავშირდით ჩვენს მხარდაჭერის გუნდს.",
+    "registerTitle": "რეგისტრაცია | GOGO XGEORGIA",
+    "registerDesc": "დარეგისტრირდით GOGO XGEORGIA-ზე დღესვე.",
+    "termsTitle": "მომსახურების პირობები | GOGO XGEORGIA",
+    "termsDesc": "გაეცანით ჩვენს მომსახურების პირობებს.",
+    "privacyTitle": "კონფიდენციალურობის პოლიტიკა | GOGO XGEORGIA",
+    "privacyDesc": "გაეცანით ჩვენს კონფიდენციალურობის პოლიტიკას.",
+    "dashboardTitle": "დაფა | GOGO XGEORGIA",
+    "adminTitle": "ადმინისტრატორის პანელი | GOGO XGEORGIA",
+    "homeTitle": "Gogo xgeorgia, ესკორტ გოგოები, Escort gogoebi, ესკორტი xgeorgia, escort batumi, Tbilisi escort, Escort Georgia, Xgeorgia, Gogoxgeorgia",
+    "homeDesc": "Gogoxgeorgia - Leading ესკორტ გოგოები platform. Verified Escort gogoebi, Tbilisi escort & escort batumi profiles. Premium ესკორტი xgeorgia in Escort Georgia. Find Gogo xgeorgia today."
   }
 }

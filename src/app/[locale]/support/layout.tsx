@@ -11,19 +11,15 @@ export async function generateMetadata({ params }: Props) {
     const t = await getTranslations({ locale, namespace: 'seo' });
 
     return generatePageMetadata(
-        t('favoritesTitle'),
-        t('favoritesDesc'),
-        '/favorites',
+        t('supportTitle'),
+        t('supportDesc'),
+        '/support',
         undefined,
         false,
         locale
     );
 }
 
-export default function FavoritesLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
-    return <>{children}</>;
+export default function SupportLayout({ children }: Props) {
+    return children;
 }

@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { Heart } from 'lucide-react';
 import ProfileCard from '@/components/ProfileCard';
 
+
+
 interface Escort {
   id: string;
   slug: string;

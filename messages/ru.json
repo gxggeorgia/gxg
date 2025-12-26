@@ -182,6 +182,7 @@
     "online": "Онлайн",
     "verifiedPhotos": "100% фото",
     "searchResultsFor": "Результаты поиска для",
+    "searchDescription": "Найдите лучших эскортниц по запросу \"{search}\" в Грузии. Проверенные фото, отзывы и многое другое.",
     "filteredResults": "Отфильтрованные результаты",
     "search": "Поиск",
     "quickFilters": "Быстрые фильтры",
@@ -302,5 +303,23 @@
     "faq2A": "Пожалуйста, предоставьте как можно больше деталей о вашей проблеме.",
     "faq3Q": "Предлагаете ли вы поддержку по телефону?",
     "faq3A": "В настоящее время мы предлагаем поддержку только по электронной почте и Telegram."
+  },
+  "seo": {
+    "profileTitle": "{name} | {ethnicity} Эскорт {city} - Проверенные Фото",
+    "profileDescription": "Знакомьтесь с {name}, {age}-летняя {ethnicity} эскортница в {city}. {services}. Доступна для выезда/апартаментов. Бронируйте на GOGOXGEORGIA.GE.",
+    "favoritesTitle": "Избранное | GOGO XGEORGIA",
+    "favoritesDesc": "Просмотрите сохраненные профили эскортниц.",
+    "supportTitle": "Поддержка | GOGO XGEORGIA",
+    "supportDesc": "Свяжитесь с нашей службой поддержки.",
+    "registerTitle": "Регистрация | GOGO XGEORGIA",
+    "registerDesc": "Присоединяйтесь к GOGO XGEORGIA сегодня.",
+    "termsTitle": "Условия использования | GOGO XGEORGIA",
+    "termsDesc": "Ознакомьтесь с нашими условиями использования.",
+    "privacyTitle": "Политика конфиденциальности | GOGO XGEORGIA",
+    "privacyDesc": "Ознакомьтесь с нашей политикой конфиденциальности.",
+    "dashboardTitle": "Панель управления | GOGO XGEORGIA",
+    "adminTitle": "Панель администратора | GOGO XGEORGIA",
+    "homeTitle": "Gogo xgeorgia, ესკორტ გოგოები, Escort gogoebi, ესკორტი xgeorgia, escort batumi, Tbilisi escort, Escort Georgia, Xgeorgia, Gogoxgeorgia",
+    "homeDesc": "Gogoxgeorgia - Leading ესკორტ გოგოები platform. Verified Escort gogoebi, Tbilisi escort & escort batumi profiles. Premium ესკორტი xgeorgia in Escort Georgia. Find Gogo xgeorgia today."
   }
 }

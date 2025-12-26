@@ -1,4 +1,20 @@
 import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
+import { generatePageMetadata } from '@/lib/seo';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: 'seo' });
+
+    return generatePageMetadata(
+        t('privacyTitle'),
+        t('privacyDesc'),
+        '/privacy',
+        undefined,
+        false,
+        locale
+    );
+}
 
 export default function PrivacyPage() {
     const t = useTranslations('common');

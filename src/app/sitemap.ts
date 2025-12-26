@@ -3,10 +3,12 @@ import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { eq, isNotNull, and, gt } from 'drizzle-orm';
 
+import { routing } from '@/i18n/routing';
+
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://gogoxgeorgia.ge';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const locales = ['en', 'ka', 'ru'];
+  const locales = routing.locales;
   const staticRoutes = ['', '/privacy', '/terms', '/support', '/register', '/favorites'];
 
   const sitemapEntries: MetadataRoute.Sitemap = [];
