@@ -107,12 +107,6 @@ export const defaultMetadata: Metadata = {
     ],
   },
   manifest: '/icons/favicon/site.webmanifest',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-    userScalable: true,
-  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
@@ -135,7 +129,10 @@ export function generatePageMetadata(
 ): Metadata {
   // If locale is provided, path is relative to locale root (e.g. /escort/slug)
   // If no locale, assume path is full path (legacy behavior)
-  const finalPath = locale ? `/${locale}${path}` : path;
+  // For the default locale (en), we serve at the root without prefix
+  const defaultLocale = process.env.NEXT_PUBLIC_DEFAULT_LOCALE || 'en';
+  const prefix = (locale && locale !== defaultLocale) ? `/${locale}` : '';
+  const finalPath = locale ? `${prefix}${path}` : path;
   const url = `${baseUrl}${finalPath}`;
   const ogImage = image || `${baseUrl}/icons/logo.png`;
 
@@ -147,7 +144,7 @@ export function generatePageMetadata(
   // If we have a locale and this is a localized page, add hreflangs
   if (locale && (locale === 'en' || locale === 'ka' || locale === 'ru')) {
     alternates.languages = {
-      en: `${baseUrl}/en${path}`,
+      en: `${baseUrl}${path}`, // English is served at root
       ka: `${baseUrl}/ka${path}`,
       ru: `${baseUrl}/ru${path}`,
     };

@@ -92,11 +92,14 @@ export async function generateSearchMetadata({ locale, searchParams }: SearchMet
 }
 
 export function generateOrganizationSchema(locale: string) {
+    const defaultLocale = process.env.NEXT_PUBLIC_DEFAULT_LOCALE || 'en';
+    const localizedUrl = locale === defaultLocale ? baseUrl : `${baseUrl}/${locale}`;
+
     return {
         '@context': 'https://schema.org',
         '@type': 'Organization',
         name: 'GOGO XGEORGIA',
-        url: `${baseUrl}/${locale}`,
+        url: localizedUrl,
         logo: `${baseUrl}/icons/logo.png`,
         description: 'GOGOXGEORGIA.GE | Escort Girls, Companions & VIP Services in Georgia',
         sameAs: [
@@ -113,16 +116,19 @@ export function generateOrganizationSchema(locale: string) {
 }
 
 export function generateWebsiteSchema(locale: string) {
+    const defaultLocale = process.env.NEXT_PUBLIC_DEFAULT_LOCALE || 'en';
+    const localizedUrl = locale === defaultLocale ? baseUrl : `${baseUrl}/${locale}`;
+
     return {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         name: 'GOGO XGEORGIA',
-        url: `${baseUrl}/${locale}`,
+        url: localizedUrl,
         potentialAction: {
             '@type': 'SearchAction',
             target: {
                 '@type': 'EntryPoint',
-                urlTemplate: `${baseUrl}/${locale}?search={search_term_string}`,
+                urlTemplate: `${localizedUrl}?search={search_term_string}`,
             },
             query_input: 'required name=search_term_string',
         },

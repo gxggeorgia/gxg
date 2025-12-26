@@ -15,9 +15,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Add static routes
   locales.forEach((locale) => {
+    const prefix = locale === routing.defaultLocale ? '' : `/${locale}`;
     staticRoutes.forEach((route) => {
       sitemapEntries.push({
-        url: `${baseUrl}/${locale}${route}`,
+        url: `${baseUrl}${prefix}${route}`,
         lastModified: new Date(),
         changeFrequency: route === '' ? 'daily' : 'monthly',
         priority: route === '' ? 1 : 0.7,
@@ -40,11 +41,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       )
     );
 
-  // Add dyanmic escort routes
+  // Add dynamic escort routes
   activeEscorts.forEach((escort) => {
     locales.forEach((locale) => {
+      const prefix = locale === routing.defaultLocale ? '' : `/${locale}`;
       sitemapEntries.push({
-        url: `${baseUrl}/${locale}/escort/${escort.slug}`,
+        url: `${baseUrl}${prefix}/escort/${escort.slug}`,
         lastModified: escort.updatedAt || new Date(),
         changeFrequency: 'daily',
         priority: 0.9,
