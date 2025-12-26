@@ -3,19 +3,68 @@ import FeaturedProfileSlider from '@/components/FeaturedProfileSlider';
 import LeftSidebar from '@/components/LeftSidebar';
 import ProfileGrid from '@/components/ProfileGrid';
 import RightSidebar from '@/components/RightSidebar';
+import SearchHeader from '@/components/SearchHeader';
 import SiteNotice from '@/components/SiteNotice';
 
 import AgeCheck from '@/components/AgeCheck';
 
-export default function HomePage() {
+import { generateSearchMetadata } from '@/lib/searchMetadata';
+import { Metadata } from 'next';
+
+type Props = {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  return generateSearchMetadata({ locale, searchParams });
+}
+
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const {
+    search,
+    city,
+    district,
+    gender,
+    featured,
+    gold,
+    silver,
+    top,
+    verifiedPhotos,
+    new: newFilter,
+    online,
+  } = await searchParams;
+
+  const hasFilters =
+    search ||
+    (city && city !== 'all') ||
+    (district && district !== 'all') ||
+    gender ||
+    featured === 'true' ||
+    gold === 'true' ||
+    silver === 'true' ||
+    top === 'true' ||
+    verifiedPhotos === 'true' ||
+    newFilter === 'true' ||
+    online === 'true';
+
+  const showFeatured = !hasFilters;
+
   return (
     <AgeCheck>
       <div className="min-h-screen bg-gray-50">
 
-        {/* Featured Slider - Full Width */}
-        <div className="w-full border-b border-gray-200 bg-white mb-6">
-          <FeaturedProfileSlider />
-        </div>
+        {/* Featured Slider - Full Width - Only show on main page */}
+        {showFeatured && (
+          <div className="w-full border-b border-gray-200 bg-white mb-6">
+            <FeaturedProfileSlider />
+          </div>
+        )}
 
         <div className="mx-auto lg:px-8 pb-8">
           <div className="flex flex-col lg:grid lg:grid-cols-[280px_1fr_320px] lg:gap-6 items-start">
@@ -39,6 +88,7 @@ export default function HomePage() {
               </div>
 
               <SiteNotice />
+              <SearchHeader />
               <ProfileGrid />
 
               <div className="mt-8 p-4 bg-red-50 border border-red-100 rounded-lg text-center space-y-2">

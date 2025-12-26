@@ -17,7 +17,7 @@ interface EscortDetailPageProps {
 }
 
 export async function generateMetadata({ params }: EscortDetailPageProps) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const rawEscort = await db.select().from(users).where(eq(users.slug, slug)).limit(1).then(res => res[0]);
 
   if (!rawEscort) {
@@ -54,7 +54,9 @@ export async function generateMetadata({ params }: EscortDetailPageProps) {
     title,
     description,
     `/escort/${slug}`,
-    escort.coverImage || undefined
+    escort.coverImage || undefined,
+    false,
+    locale // Pass locale here
   );
 
   return {

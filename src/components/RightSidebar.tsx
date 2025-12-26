@@ -15,6 +15,7 @@ export default function RightSidebar() {
 
   // Initialize state from URL params
   const [filters, setFilters] = useState({
+    search: searchParams.get('search') || '',
     gender: searchParams.get('gender') || '',
     city: searchParams.get('city') || 'all',
     district: searchParams.get('district') || 'all',
@@ -30,6 +31,7 @@ export default function RightSidebar() {
   // Sync state with URL params
   useEffect(() => {
     setFilters({
+      search: searchParams.get('search') || '',
       gender: searchParams.get('gender') || '',
       city: searchParams.get('city') || 'all',
       district: searchParams.get('district') || 'all',
@@ -53,9 +55,10 @@ export default function RightSidebar() {
 
   const handleSearch = () => {
     const params = new URLSearchParams();
+    if (filters.search) params.set('search', filters.search);
     if (filters.gender) params.set('gender', filters.gender);
-    if (filters.city) params.set('city', filters.city);
-    if (filters.district) params.set('district', filters.district);
+    if (filters.city && filters.city !== 'all') params.set('city', filters.city);
+    if (filters.district && filters.district !== 'all') params.set('district', filters.district);
     if (filters.gold) params.set('gold', 'true');
     if (filters.top) params.set('top', 'true');
     if (filters.silver) params.set('silver', 'true');
@@ -88,6 +91,20 @@ export default function RightSidebar() {
 
       {/* Search Content - Collapsible on mobile, always open on desktop */}
       <div className={`px-4 pb-4 sm:px-6 sm:pb-6 space-y-3 sm:space-y-4 ${isOpen ? 'block' : 'hidden'} lg:block`}>
+
+        {/* Search by Name */}
+        <div>
+          <label className="block text-xs font-medium text-gray-700 mb-1">Search by Name</label>
+          <input
+            type="text"
+            value={filters.search}
+            onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+            placeholder="Search escorts..."
+            className="w-full px-2 py-2 bg-white border-2 border-gray-200 rounded-lg text-xs font-medium text-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition"
+          />
+        </div>
+
         {/* Location Filters */}
         <div className="grid grid-cols-2 gap-2">
           {/* City Dropdown */}
@@ -101,7 +118,7 @@ export default function RightSidebar() {
               {locations.map(city => (
                 <option key={city.id} value={city.id}>{city.name[locale]}</option>
               ))}
-            </select> 
+            </select>
           </div>
 
           {/* District Dropdown */}
@@ -215,6 +232,7 @@ export default function RightSidebar() {
         <button
           onClick={() => {
             setFilters({
+              search: '',
               gender: '',
               city: '',
               district: '',

@@ -130,17 +130,38 @@ export function generatePageMetadata(
   description: string,
   path: string = '',
   image?: string,
-  noIndex: boolean = false
+  noIndex: boolean = false,
+  locale?: string
 ): Metadata {
-  const url = `${baseUrl}${path}`;
+  // If locale is provided, path is relative to locale root (e.g. /escort/slug)
+  // If no locale, assume path is full path (legacy behavior)
+  const finalPath = locale ? `/${locale}${path}` : path;
+  const url = `${baseUrl}${finalPath}`;
   const ogImage = image || `${baseUrl}/icons/logo.png`;
+
+  // Base alternates with canonical
+  const alternates: Metadata['alternates'] = {
+    canonical: url,
+  };
+
+  // If we have a locale and this is a localized page, add hreflangs
+  if (locale && (locale === 'en' || locale === 'ka' || locale === 'ru')) {
+    alternates.languages = {
+      en: `${baseUrl}/en${path}`,
+      ka: `${baseUrl}/ka${path}`,
+      ru: `${baseUrl}/ru${path}`,
+    };
+  }
+
+  // Map locale to OG locale
+  let ogLocale = 'en_US';
+  if (locale === 'ka') ogLocale = 'ka_GE';
+  else if (locale === 'ru') ogLocale = 'ru_RU';
 
   return {
     title,
     description,
-    alternates: {
-      canonical: url,
-    },
+    alternates,
     robots: {
       index: !noIndex,
       follow: !noIndex,
@@ -151,6 +172,7 @@ export function generatePageMetadata(
       url,
       type: 'website',
       siteName,
+      locale: ogLocale,
       images: [
         {
           url: ogImage,

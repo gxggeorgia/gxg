@@ -83,8 +83,8 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
     const params = new URLSearchParams();
     if (filters.search) params.set('search', filters.search);
     if (filters.gender) params.set('gender', filters.gender);
-    if (filters.city) params.set('city', filters.city);
-    if (filters.district) params.set('district', filters.district);
+    if (filters.city && filters.city !== 'all') params.set('city', filters.city);
+    if (filters.district && filters.district !== 'all') params.set('district', filters.district);
     if (filters.gold) params.set('gold', 'true');
     if (filters.top) params.set('top', 'true');
     if (filters.silver) params.set('silver', 'true');
@@ -144,6 +144,7 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
               type="text"
               value={filters.search}
               onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value }))}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
               placeholder="Search escorts..."
               className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition"
             />

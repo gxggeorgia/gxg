@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import { defaultMetadata } from '@/lib/seo';
+
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -11,6 +13,7 @@ import UserStatusBar from '@/components/UserStatusBar';
 import ScrollToTop from '@/components/ScrollToTop';
 import Providers from '@/components/Providers';
 import "../globals.css";
+import { generateOrganizationSchema, generateWebsiteSchema } from '@/lib/searchMetadata';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,93 +27,25 @@ const geistMono = Geist_Mono({
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://gogoxgeorgia.ge";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(baseUrl),
-  title: "Gogo xgeorgia, ესკორტ გოგოები, Escort gogoebi, ესკორტი xgeorgia, escort batumi, Tbilisi escort, Escort Georgia, Xgeorgia, Gogoxgeorgia",
-  description: "Gogoxgeorgia - Leading ესკორტ გოგოები platform. Verified Escort gogoebi, Tbilisi escort & escort batumi profiles. Premium ესკორტი xgeorgia in Escort Georgia. Find Gogo xgeorgia today.",
-  keywords: [
-    "Gogo xgeorgia",
-    "Gogoxgeorgia",
-    "gogoxgeorgia",
-    "Xgeorgia",
-    "ესკორტ გოგოები",
-    "ესკორტი xgeorgia",
-    "Escort gogoebi",
-    "eskort gogoebi",
-    "escort batumi",
-    "batumi escort",
-    "eskort batumi",
-    "Tbilisi escort",
-    "escort tbilisi",
-    "Escort Georgia",
-    "escort Georgia",
-    "georgian escort",
-    "gogoxgeorgia vip",
-    "escort girls",
-    "escorts",
-    "eskortebi",
-    "escortebi",
-    "gogoxgeorgia tbilisi",
-    "escort kutaisi",
-    "eskortebi Telavi",
-    "bozebis saiti",
-    "gogoebi tbilisi batumi kutaisi",
-    "whores tbilisi",
-    "escort",
-    "intim gacnoba",
-    "georgian intim dating site",
-    "bozebis nomrebi",
-    "bozebi batumi gamodzaxebit"
-  ],
-  authors: [{ name: "GOGO XGEORGIA" }],
-  creator: "GOGO XGEORGIA",
-  publisher: "GOGO XGEORGIA",
-  robots: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-  alternates: {
-    canonical: baseUrl,
-  },
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: baseUrl,
-    siteName: "GOGO XGEORGIA",
-    title: "Gogo xgeorgia, ესკორტ გოგოები, Escort gogoebi, ესკორტი xgeorgia, escort batumi, Tbilisi escort, Escort Georgia, Xgeorgia, Gogoxgeorgia",
-    description: "Gogoxgeorgia - Leading ესკორტ გოგოები platform. Verified Escort gogoebi, Tbilisi escort & escort batumi profiles. Premium ესკორტი xgeorgia in Escort Georgia.",
-    images: [
-      {
-        url: `/icons/logo.png`,
-        width: 1200,
-        height: 630,
-        alt: "GOGO XGEORGIA Logo",
-        type: "image/png",
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+
+  return {
+    ...defaultMetadata,
+    alternates: {
+      canonical: `${baseUrl}/${locale}`,
+      languages: {
+        en: `${baseUrl}/en`,
+        ka: `${baseUrl}/ka`,
+        ru: `${baseUrl}/ru`,
       },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Gogo xgeorgia, ესკორტ გოგოები, Escort gogoebi, ესკორტი xgeorgia, escort batumi, Tbilisi escort, Escort Georgia, Xgeorgia, Gogoxgeorgia",
-    description: "Gogoxgeorgia - Leading ესკორტ გოგოები platform. Verified Escort gogoebi, Tbilisi escort & escort batumi profiles. Premium ესკორტი xgeorgia.",
-    images: [`/icons/logo.png`],
-    creator: "@gogoxgeorgia",
-  },
-  icons: {
-    icon: [
-      { url: "/icons/favicon/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/icons/favicon/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/icons/favicon/favicon.ico", type: "image/x-icon" },
-    ],
-    apple: { url: "/icons/favicon/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-  },
-  manifest: "/icons/favicon/site.webmanifest",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "black-translucent",
-    title: "GOGO XGEORGIA",
-  },
-  formatDetection: {
-    telephone: false,
-  },
-};
+    },
+  };
+}
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -137,39 +72,8 @@ export default async function LocaleLayout({
   // side is the easiest way to get started
   const messages = await getMessages();
 
-  const organizationSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'GOGO XGEORGIA',
-    url: baseUrl,
-    logo: `${baseUrl}/icons/logo.png`,
-    description: 'GOGOXGEORGIA.GE | Escort Girls, Companions & VIP Services in Georgia',
-    sameAs: [
-      'https://www.facebook.com/escortdirectoryga',
-      'https://www.twitter.com/escortdirectoryga',
-      'https://www.instagram.com/escortdirectoryga',
-    ],
-    contactPoint: {
-      '@type': 'ContactPoint',
-      contactType: 'Customer Service',
-      email: 'support@gogoxgeorgia.ge',
-    },
-  };
-
-  const websiteSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'GOGO XGEORGIA',
-    url: baseUrl,
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: `${baseUrl}/search?q={search_term_string}`,
-      },
-      query_input: 'required name=search_term_string',
-    },
-  };
+  const organizationSchema = generateOrganizationSchema(locale);
+  const websiteSchema = generateWebsiteSchema(locale);
 
   return (
     <html lang={locale} suppressHydrationWarning>
