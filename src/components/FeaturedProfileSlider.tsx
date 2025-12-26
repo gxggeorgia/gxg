@@ -279,7 +279,9 @@ export default function FeaturedProfileSlider() {
             <div className="flex items-center gap-3">
               {/* Counter */}
               <div className="bg-white px-3 py-2 rounded-full shadow-md border border-slate-200 min-w-[3.5rem] flex justify-center">
-                <span className="text-slate-700 text-xs font-bold whitespace-nowrap">{currentIndex + 1} / {maxIndex + 1}</span>
+                <span className="text-slate-700 text-xs font-bold whitespace-nowrap">
+                  {currentIndex + 1}-{Math.min(currentIndex + itemsPerView, profiles.length)} / {profiles.length}
+                </span>
               </div>
 
               {/* Play/Pause Button */}
