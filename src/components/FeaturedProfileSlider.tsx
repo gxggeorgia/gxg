@@ -258,14 +258,14 @@ export default function FeaturedProfileSlider() {
 
         {/* Controls at Bottom - Only show if scrollable */}
         {canScroll && (
-          <div className="flex justify-center items-center gap-3 mt-6 sm:mt-8">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-3 mt-6 sm:mt-8 px-4">
             {/* Indicators */}
-            <div className="flex gap-2 bg-slate-100 px-4 py-3 rounded-full shadow-md border border-slate-200">
+            <div className="flex flex-wrap justify-center gap-2 bg-slate-100 px-4 py-3 rounded-2xl sm:rounded-full shadow-md border border-slate-200 w-full sm:w-auto max-w-full">
               {Array.from({ length: maxIndex + 1 }).map((_, index) => (
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}
-                  className={`transition-all duration-300 rounded-full w-2.5 h-2.5 ${index === currentIndex
+                  className={`transition-all duration-300 rounded-full w-2.5 h-2.5 shrink-0 ${index === currentIndex
                     ? 'bg-red-600'
                     : 'bg-slate-400 hover:bg-slate-500'
                     }`}
@@ -275,20 +275,23 @@ export default function FeaturedProfileSlider() {
               ))}
             </div>
 
-            {/* Counter */}
-            <div className="bg-white px-2.5 py-1.5 rounded-full shadow-md border border-slate-200">
-              <span className="text-slate-700 text-xs font-bold text-center">{currentIndex + 1}/{maxIndex + 1}</span>
-            </div>
+            {/* Actions group for mobile layout */}
+            <div className="flex items-center gap-3">
+              {/* Counter */}
+              <div className="bg-white px-3 py-2 rounded-full shadow-md border border-slate-200 min-w-[3.5rem] flex justify-center">
+                <span className="text-slate-700 text-xs font-bold whitespace-nowrap">{currentIndex + 1} / {maxIndex + 1}</span>
+              </div>
 
-            {/* Play/Pause Button */}
-            <button
-              onClick={toggleAutoPlay}
-              className="bg-red-600 hover:bg-red-700 text-white p-2.5 rounded-full transition-all duration-300 shadow-md border border-red-500 flex items-center justify-center"
-              aria-label={isAutoPlaying ? 'Pause autoplay' : 'Play autoplay'}
-              title={isAutoPlaying ? 'Pause' : 'Play'}
-            >
-              {isAutoPlaying ? <Pause size={16} /> : <Play size={16} />}
-            </button>
+              {/* Play/Pause Button */}
+              <button
+                onClick={toggleAutoPlay}
+                className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full transition-all duration-300 shadow-md border border-red-500 flex items-center justify-center shrink-0"
+                aria-label={isAutoPlaying ? 'Pause autoplay' : 'Play autoplay'}
+                title={isAutoPlaying ? 'Pause' : 'Play'}
+              >
+                {isAutoPlaying ? <Pause size={16} /> : <Play size={16} />}
+              </button>
+            </div>
           </div>
         )}
       </div>

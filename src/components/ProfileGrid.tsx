@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ProfileCard from './ProfileCard';
 import ProfileCardSkeleton from './ProfileCardSkeleton';
@@ -43,6 +43,7 @@ export default function ProfileGrid() {
     hasPreviousPage: false,
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const gridTopRef = useRef<HTMLDivElement>(null);
   const paramsString = searchParams.toString();
 
   // Reset page when filters change
@@ -140,10 +141,19 @@ export default function ProfileGrid() {
     return () => clearInterval(interval);
   }, [escorts.map(e => e.id).join(',')]);
 
+  // Scroll to top of grid when page changes
+  useEffect(() => {
+    if (gridTopRef.current && !loading) {
+      const offset = 100; // Offset to account for header
+      const top = gridTopRef.current.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  }, [currentPage]);
+
   return (
     <div className="space-y-6">
       {/* All Escorts */}
-      <div>
+      <div ref={gridTopRef}>
         <h3 className="text-lg font-bold mb-4 text-gray-900">All Escorts</h3>
         {loading ? (
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
@@ -196,41 +206,63 @@ export default function ProfileGrid() {
             </div>
 
             {/* Pagination Controls */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide max-w-full justify-center">
               <button
                 onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                 disabled={!pagination.hasPreviousPage}
-                className="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white transition"
+                className="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white transition shrink-0"
                 aria-label="Previous page"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
 
-              <div className="flex gap-1">
-                {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`w-10 h-10 rounded-lg font-medium transition ${page === currentPage
-                      ? 'bg-red-600 text-white shadow-md'
-                      : 'bg-white text-gray-700 border border-gray-300 hover:border-red-300 hover:text-red-600'
-                      }`}
-                    aria-current={page === currentPage ? 'page' : undefined}
-                  >
-                    {page}
-                  </button>
-                ))}
+              <div className="flex gap-1 items-center">
+                {(() => {
+                  const pages = [];
+                  const totalPages = pagination.totalPages;
+                  const delta = 1; // Number of pages to show around current page
+
+                  for (let i = 1; i <= totalPages; i++) {
+                    if (
+                      i === 1 || // Always show first
+                      i === totalPages || // Always show last
+                      (i >= currentPage - delta && i <= currentPage + delta) // Show window around current
+                    ) {
+                      pages.push(
+                        <button
+                          key={i}
+                          onClick={() => setCurrentPage(i)}
+                          className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg font-medium transition shrink-0 ${i === currentPage
+                            ? 'bg-red-600 text-white shadow-md'
+                            : 'bg-white text-gray-700 border border-gray-300 hover:border-red-300 hover:text-red-600'
+                            }`}
+                          aria-current={i === currentPage ? 'page' : undefined}
+                        >
+                          {i}
+                        </button>
+                      );
+                    } else if (
+                      i === currentPage - delta - 1 ||
+                      i === currentPage + delta + 1
+                    ) {
+                      pages.push(
+                        <span key={i} className="px-1 text-gray-400">...</span>
+                      );
+                    }
+                  }
+                  return pages;
+                })()}
               </div>
 
               <button
                 onClick={() => setCurrentPage(Math.min(pagination.totalPages, currentPage + 1))}
                 disabled={!pagination.hasNextPage}
-                className="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white transition"
+                className="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white transition shrink-0"
                 aria-label="Next page"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
