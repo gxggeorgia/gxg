@@ -3,7 +3,8 @@
 import { useTranslations, useLocale } from 'next-intl';
 import { Search, ChevronDown, Crown, Sparkles } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, usePathname } from '@/i18n/routing';
+import { useSearchParams } from 'next/navigation';
 import { locations } from '@/data/locations';
 
 export default function RightSidebar() {
@@ -53,6 +54,8 @@ export default function RightSidebar() {
     setFilters(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
+  const pathname = usePathname();
+
   const handleSearch = () => {
     const params = new URLSearchParams();
     if (filters.search) params.set('search', filters.search);
@@ -67,7 +70,7 @@ export default function RightSidebar() {
     if (filters.new) params.set('new', 'true');
     if (filters.online) params.set('online', 'true');
 
-    router.push(`/?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   // Reset district when city changes

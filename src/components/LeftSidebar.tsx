@@ -26,19 +26,18 @@ export default function LeftSidebar() {
   }, [currentCity]);
 
   const handleFilter = (cityId: string, districtId?: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+    // Start with fresh params to remove any existing search or filter from rightside or search modal
+    const params = new URLSearchParams();
 
     // Update city
-    if (currentCity === cityId && !districtId) {
-      // Toggle off if clicking the same city without district
-      params.delete('city');
-      params.delete('district');
+    if (cityId === 'all') {
+      // Nothing to set for "All" city
+    } else if (currentCity === cityId && !districtId) {
+      // Toggle off if clicking the same city without district - params stays empty
     } else {
       params.set('city', cityId);
-      if (districtId) {
+      if (districtId && districtId !== 'all') {
         params.set('district', districtId);
-      } else {
-        params.delete('district');
       }
     }
 

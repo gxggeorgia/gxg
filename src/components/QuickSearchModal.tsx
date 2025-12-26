@@ -2,7 +2,8 @@
 
 import { useTranslations, useLocale } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, usePathname } from '@/i18n/routing';
+import { useSearchParams } from 'next/navigation';
 import { X, Search } from 'lucide-react';
 import { locations } from '@/data/locations';
 
@@ -43,6 +44,7 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
   const t = useTranslations();
   const locale = useLocale() as 'en' | 'ka' | 'ru';
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const [filters, setFilters] = useState<FiltersState>(defaultFilters);
 
@@ -86,6 +88,7 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
     if (filters.city && filters.city !== 'all') params.set('city', filters.city);
     if (filters.district && filters.district !== 'all') params.set('district', filters.district);
     if (filters.gold) params.set('gold', 'true');
+    if (filters.gold) params.set('gold', 'true');
     if (filters.top) params.set('top', 'true');
     if (filters.silver) params.set('silver', 'true');
     if (filters.featured) params.set('featured', 'true');
@@ -93,7 +96,7 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
     if (filters.new) params.set('new', 'true');
     if (filters.online) params.set('online', 'true');
 
-    router.push(`/?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`);
     onClose();
   };
 
@@ -112,7 +115,7 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
     params.delete('verifiedPhotos');
     params.delete('new');
     params.delete('online');
-    router.push(`/?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`);
     onClose();
   };
 
