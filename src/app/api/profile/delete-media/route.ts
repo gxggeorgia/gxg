@@ -34,9 +34,15 @@ export async function POST(request: NextRequest) {
       const images = (user.images as any[]) || [];
       const updatedImages = images.filter((img: any) => img.url !== url);
 
+      // Also clear coverImage if it was the deleted image
+      const updateData: any = { images: updatedImages };
+      if (user.coverImage === url) {
+        updateData.coverImage = null;
+      }
+
       await db
         .update(users)
-        .set({ images: updatedImages })
+        .set(updateData)
         .where(eq(users.id, user.id));
     } else if (type === 'video') {
       // Remove video from videos array

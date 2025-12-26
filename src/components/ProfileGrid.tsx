@@ -184,7 +184,7 @@ export default function ProfileGrid() {
                   isOnline: (escort as any).isOnline,
                   lastActive: (escort as any).lastActive,
                   languages: escort.languages,
-                  coverImage: escort.coverImage || (escort.images as any)?.[0]?.url,
+                  coverImage: (escort.images?.some(img => img.url === escort.coverImage) ? escort.coverImage : null) || (escort.images as any)?.[0]?.url,
                   imageWidth: (escort.images as any)?.[0]?.width,
                   imageHeight: (escort.images as any)?.[0]?.height,
                 }}
