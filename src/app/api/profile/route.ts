@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/middleware';
+import { getCurrentUser } from '@/lib/auth';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { eq } from 'drizzle-orm';
@@ -7,12 +7,15 @@ import { eq } from 'drizzle-orm';
 export async function GET(request: NextRequest) {
   try {
     // Check authentication
-    const authResult = await requireAuth(request);
-    if (authResult instanceof NextResponse) {
-      return authResult; // Return error response
-    }
+    
+    const user = await getCurrentUser();
 
-    const { user } = authResult;
+    if (!user) {
+      return NextResponse.json(
+        { user: null },
+        { status: 200 } // so it does not console errors
+      );
+    }
 
     // Update lastActive timestamp
     await db.update(users)

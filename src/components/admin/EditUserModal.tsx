@@ -103,8 +103,9 @@ export default function EditUserModal({ user, onClose, onSave }: EditUserModalPr
           {/* Role and Status */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+              <label htmlFor="user-role" className="block text-sm font-medium text-gray-700 mb-1">Role</label>
               <select
+                id="user-role"
                 value={data.role}
                 onChange={handleInputChange}
                 name="role"

@@ -109,8 +109,9 @@ export default function RightSidebar() {
         <div className="grid grid-cols-2 gap-2">
           {/* City Dropdown */}
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">{t('search.city')}</label>
+            <label htmlFor="city-select" className="block text-xs font-medium text-gray-700 mb-1">{t('search.city')}</label>
             <select
+              id="city-select"
               value={filters.city}
               onChange={(e) => handleCityChange(e.target.value)}
               className="w-full px-2 py-2 bg-white border-2 border-gray-200 rounded-lg text-xs font-medium text-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition"
@@ -123,8 +124,9 @@ export default function RightSidebar() {
 
           {/* District Dropdown */}
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">{t('search.district')}</label>
+            <label htmlFor="district-select" className="block text-xs font-medium text-gray-700 mb-1">{t('search.district')}</label>
             <select
+              id="district-select"
               value={filters.district}
               onChange={(e) => setFilters(prev => ({ ...prev, district: e.target.value }))}
               disabled={!filters.city || districts.length === 0}
@@ -139,8 +141,9 @@ export default function RightSidebar() {
 
         {/* Gender Dropdown */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('search.gender')}</label>
+          <label htmlFor="gender-select" className="block text-sm font-medium text-gray-700 mb-1.5">{t('search.gender')}</label>
           <select
+            id="gender-select"
             value={filters.gender}
             onChange={(e) => setFilters(prev => ({ ...prev, gender: e.target.value }))}
             className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition"

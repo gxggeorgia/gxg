@@ -23,9 +23,13 @@ export default function UserStatusBar() {
           const data = await response.json();
           setUser(data.user);
 
-          // Start polling if not already started (20 seconds)
-          if (!intervalId) {
+          // Start polling if user exists and not already started
+          if (data.user && !intervalId) {
             intervalId = setInterval(fetchUser, 20000);
+          } else if (!data.user && intervalId) {
+            // Stop polling if user logged out or session expired
+            clearInterval(intervalId);
+            intervalId = null;
           }
         } else if (response.status === 401) {
           setUser(null);

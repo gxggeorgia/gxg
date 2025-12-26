@@ -126,10 +126,11 @@ export default function ReportModal({ isOpen, onClose, profileId, profileUrl, pr
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Reason */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="report-reason" className="block text-sm font-medium text-gray-700 mb-2">
                   Reason for Report <span className="text-red-500">*</span>
                 </label>
                 <select
+                  id="report-reason"
                   value={formData.reason}
                   onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"

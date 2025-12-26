@@ -106,7 +106,9 @@ export default function Header() {
               </a>
 
               <div className="relative flex-1 h-[32px]">
+                <label htmlFor="language-switcher-mobile" className="sr-only">Select Language</label>
                 <select
+                  id="language-switcher-mobile"
                   value={locale}
                   className="w-full h-full bg-slate-700/50 text-white pl-2 pr-6 py-1.5 rounded text-xs font-medium border border-slate-600 appearance-none text-center"
                   onChange={(e) => {
@@ -220,7 +222,9 @@ export default function Header() {
 
             {/* Right Section */}
             <div className="flex items-center gap-3">
+              <label htmlFor="language-switcher-desktop" className="sr-only">Select Language</label>
               <select
+                id="language-switcher-desktop"
                 value={locale}
                 className="bg-slate-700/50 text-white px-4 py-2 rounded-lg text-sm border border-slate-600 hover:bg-slate-600 transition shadow-md cursor-pointer"
                 onChange={(e) => {

@@ -70,6 +70,20 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
+        {/*  - 
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                console.log = function() {};
+                console.debug = function() {};
+                console.info = function() {};
+                // Keep console.error and console.warn but maybe filter them if needed
+              }
+            `
+          }}
+        />
+        */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}

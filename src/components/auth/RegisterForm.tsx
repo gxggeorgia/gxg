@@ -954,7 +954,9 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
                       }}
                       className="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 text-gray-900 bg-white"
                     />
+                    <label htmlFor={`lang-level-${index}`} className="sr-only">Language Level</label>
                     <select
+                      id={`lang-level-${index}`}
                       value={formData.languages?.[index]?.level || ''}
                       onChange={(e) => {
                         const newLangs = [...(formData.languages || [])];
@@ -1021,6 +1023,7 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
                     <div className="flex items-center gap-3">
                       <p className="text-sm font-medium text-gray-700">{t('auth.rates')}</p>
                       {/* Currency Selector */}
+                      <label htmlFor="currency" className="sr-only">Currency</label>
                       <select
                         id="currency"
                         name="currency"

@@ -152,8 +152,9 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('search.city')}</label>
+              <label htmlFor="modal-city-select" className="block text-sm font-medium text-gray-700 mb-1.5">{t('search.city')}</label>
               <select
+                id="modal-city-select"
                 value={filters.city}
                 onChange={(event) => {
                   const cityId = event.target.value;
@@ -169,8 +170,9 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('search.district')}</label>
+              <label htmlFor="modal-district-select" className="block text-sm font-medium text-gray-700 mb-1.5">{t('search.district')}</label>
               <select
+                id="modal-district-select"
                 value={filters.district}
                 onChange={(event) => setFilterValue('district', event.target.value)}
                 disabled={!filters.city || districts.length === 0}
@@ -186,8 +188,9 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('search.gender')}</label>
+            <label htmlFor="modal-gender-select" className="block text-sm font-medium text-gray-700 mb-1.5">{t('search.gender')}</label>
             <select
+              id="modal-gender-select"
               value={filters.gender}
               onChange={(event) => setFilterValue('gender', event.target.value)}
               className="w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition"
