@@ -145,13 +145,14 @@ export default function Header() {
               </button>
 
               {user ? (
-                <button
-                  onClick={() => setIsMenuOpen(!isMenuOpen)} // Open menu to show user options
+                <Link
+                  href="/profile"
+                  onClick={() => setIsMenuOpen(false)}
                   className="flex items-center gap-2 px-3 py-1.5 bg-red-600 rounded text-sm font-medium flex-1 justify-center truncate"
                 >
                   <User size={16} />
                   <span className="truncate">{user.name || 'Profile'}</span>
-                </button>
+                </Link>
               ) : (
                 <>
                   <button
