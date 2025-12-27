@@ -12,6 +12,8 @@ import { locations } from '@/data/locations';
 
 import { generateSearchMetadata } from '@/lib/searchMetadata';
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import { routing } from '@/i18n/routing';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -61,6 +63,13 @@ export default async function HomePage({
   const showFeatured = !hasFilters;
 
   const siteUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://gogoxgeorgia.ge';
+  const common = await getTranslations({ locale, namespace: 'common' });
+  const defaultLocale = routing.defaultLocale;
+
+  const getLocalizedUrlClient = (l: string, path: string) => {
+    const prefix = l === defaultLocale ? '' : `/${l}`;
+    return `${siteUrl}${prefix}${path}`;
+  };
 
   // Helper to get localized names
   const getCityName = (id: string) => {
@@ -79,25 +88,27 @@ export default async function HomePage({
     {
       '@type': 'ListItem',
       position: 1,
-      name: 'Home',
-      item: `${siteUrl}/${locale}`
+      name: common('home'),
+      item: getLocalizedUrlClient(locale, '')
     }
   ];
 
   if (city && city !== 'all' && typeof city === 'string') {
+    const cityPath = `/?city=${city}`;
     breadcrumbElements.push({
       '@type': 'ListItem',
       position: 2,
       name: getCityName(city),
-      item: `${siteUrl}/${locale}?city=${city}`
+      item: getLocalizedUrlClient(locale, cityPath)
     });
 
     if (district && district !== 'all' && typeof district === 'string') {
+      const districtPath = `/?city=${city}&district=${district}`;
       breadcrumbElements.push({
         '@type': 'ListItem',
         position: 3,
         name: getDistrictName(city, district),
-        item: `${siteUrl}/${locale}?city=${city}&district=${district}`
+        item: getLocalizedUrlClient(locale, districtPath)
       });
     }
   }
@@ -105,6 +116,7 @@ export default async function HomePage({
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
+    name: 'Breadcrumbs',
     itemListElement: breadcrumbElements
   };
 

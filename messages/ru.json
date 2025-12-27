@@ -220,7 +220,57 @@
     "dailyViews": "Просмотров сегодня",
     "noPhotos": "Фотографии недоступны",
     "about": "О себе",
-    "availability": "Доступность"
+    "availability": "Доступность",
+    "details": "Личные данные",
+    "ethnicity": "Этнос",
+    "height": "Рост",
+    "weight": "Вес",
+    "hairColor": "Цвет волос",
+    "bustSize": "Размер груди",
+    "build": "Телосложение",
+    "traits": {
+      "hair": {
+        "black": "Черные",
+        "blonde": "Блонд",
+        "brown": "Коричневые",
+        "brunette": "Брюнетка",
+        "chestnut": "Каштановые",
+        "auburn": "Рыже-каштановые",
+        "dark_blonde": "Темный блонд",
+        "golden": "Золотистые",
+        "red": "Рыжие",
+        "grey": "Седые",
+        "silver": "Серебристые",
+        "other": "Другое"
+      },
+      "bust": {
+        "very_small": "Очень маленькая",
+        "small_a": "Маленькая (A)",
+        "medium_b": "Средняя (B)",
+        "large_c": "Большая (C)",
+        "very_large_d": "Очень большая (D)",
+        "enormous_e_plus": "Огромная (E+)"
+      },
+      "build": {
+        "skinny": "Худая",
+        "slim": "стройная",
+        "regular": "Обычная",
+        "sport": "Спортивная",
+        "fat": "С формами"
+      },
+      "ethnicity": {
+        "georgian": "Грузинка",
+        "russian": "Русская",
+        "black": "Темнокожая",
+        "turk": "Турчанка",
+        "armenian": "Армянка",
+        "azerbaijan": "Азербайджанка",
+        "kazakh": "Казашка",
+        "greek": "Гречанка",
+        "ukraine": "Украинка",
+        "other": "Другое"
+      }
+    }
   },
   "cities": {
     "tbilisi": "Тбилиси",

@@ -3,11 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter, usePathname } from '@/i18n/routing';
-import { Phone, MapPin, Edit2, Globe, Ruler, Heart, Languages as LanguagesIcon, DollarSign, Star, Crown, MessageCircle, Clock, Zap, ExternalLink, Instagram, Facebook, Twitter, Flag, Eye, TrendingUp } from 'lucide-react';
+import { Phone, MapPin, Edit2, Globe, Ruler, Heart, Languages as LanguagesIcon, DollarSign, MessageCircle, Clock, ExternalLink, Instagram, Facebook, Twitter, Flag, Eye, Scale, Hourglass, Shirt,Palette, User, Star, Zap, TrendingUp } from 'lucide-react';
 import Image from 'next/image';
 import ImageLightbox from './ImageLightbox';
 import Link from 'next/link';
 import ReportModal from './ReportModal';
+import { locations } from '@/data/locations';
 
 interface EscortProfile {
     id: string;
@@ -84,6 +85,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
     const tCommon = useTranslations('common');
     const tProfile = useTranslations('profile');
     const tServices = useTranslations('services');
+    const tGender = useTranslations('gender');
     const router = useRouter();
     const pathname = usePathname();
     const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -172,6 +174,18 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
     };
 
     const age = calculateAge(profile.dateOfBirth);
+
+    // Localization helpers
+    const getCityName = (id: string) => {
+        const c = locations.find(l => l.id === id);
+        return c?.name[locale as keyof typeof c.name] || id;
+    };
+
+    const getDistrictName = (cityId: string, districtId: string) => {
+        const c = locations.find(l => l.id === cityId);
+        const d = c?.districts.find(d => d.id === districtId);
+        return d?.name[locale as keyof typeof d.name] || districtId;
+    };
 
     const durationLabels: Record<string, string> = {
         thirtyMin: tAuth('thirtyMin'),
@@ -266,19 +280,19 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                                             <div className="flex items-center">
                                                 <MapPin className="w-4 h-4 mr-1 text-red-500" />
                                                 <span className="font-medium">
-                                                    {profile.city}{profile.district && `, ${profile.district}`}
+                                                    {getCityName(profile.city)}{profile.district && `, ${getDistrictName(profile.city, profile.district)}`}
                                                 </span>
                                             </div>
                                             <span className="text-gray-400">•</span>
                                             <span className="font-medium">{age} {tProfile('years')}</span>
                                             <span className="text-gray-400">•</span>
-                                            <span className="font-medium capitalize">{profile.gender}</span>
+                                            <span className="font-medium text-gray-900 font-bold">{tGender(profile.gender.toLowerCase())}</span>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Analytics Stats  */}
-                                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-5 bg-gray-50 p-3 rounded-lg border border-gray-100 w-fit">
+                                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-5 bg-gray-50 p-1.5 rounded-lg border border-gray-100 w-fit">
                                     <div className="flex items-center gap-2">
                                         <div className="p-1.5 bg-white rounded-full shadow-sm text-gray-500">
                                             <Eye className="w-4 h-4" />
@@ -300,36 +314,80 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                                     </div>
                                 </div>
 
-                                {/* Second Row: Additional Details */}
-                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                {/* Second Row: Additional Details (Physical Traits) */}
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
                                     {profile.bustSize && (
-                                        <div className="bg-pink-50 rounded-lg p-2.5 border border-pink-100">
-                                            <div className="text-xs font-semibold text-pink-600">{tAuth('bustSize')}</div>
-                                            <div className="text-sm font-bold text-pink-900 uppercase">{profile.bustSize.replace('_', ' ')}</div>
+                                        <div className="bg-pink-50 rounded-lg p-1.5 border border-pink-100 flex items-center gap-2">
+                                            <div className="p-1.5 bg-white rounded-md shadow-sm">
+                                                <Shirt size={14} className="text-pink-600" />
+                                            </div>
+                                            <div>
+                                                <div className="text-[10px] font-bold text-pink-400 uppercase tracking-tight leading-none mb-1">{tProfile('bustSize')}</div>
+                                                <div className="text-xs font-bold text-pink-900 uppercase">
+                                                    {tProfile(`traits.bust.${profile.bustSize}`)}
+                                                </div>
+                                            </div>
                                         </div>
                                     )}
                                     {profile.height && (
-                                        <div className="bg-teal-50 rounded-lg p-2.5 border border-teal-100">
-                                            <div className="text-xs font-semibold text-teal-600">{tAuth('height')}</div>
-                                            <div className="text-sm font-bold text-teal-900">{profile.height} cm</div>
+                                        <div className="bg-teal-50 rounded-lg p-2 border border-teal-100 flex items-center gap-2">
+                                            <div className="p-1.5 bg-white rounded-md shadow-sm">
+                                                <Ruler size={14} className="text-teal-600" />
+                                            </div>
+                                            <div>
+                                                <div className="text-[10px] font-bold text-teal-400 uppercase tracking-tight leading-none mb-1">{tProfile('height')}</div>
+                                                <div className="text-xs font-bold text-teal-900">{profile.height} cm</div>
+                                            </div>
                                         </div>
                                     )}
-                                    {profile.build && (
-                                        <div className="bg-amber-50 rounded-lg p-2.5 border border-amber-100">
-                                            <div className="text-xs font-semibold text-amber-600">{tAuth('build')}</div>
-                                            <div className="text-sm font-bold text-amber-900 capitalize">{profile.build}</div>
+                                    {profile.weight && (
+                                        <div className="bg-slate-50 rounded-lg p-2 border border-slate-100 flex items-center gap-2">
+                                            <div className="p-1.5 bg-white rounded-md shadow-sm">
+                                                <Scale size={14} className="text-slate-600" />
+                                            </div>
+                                            <div>
+                                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-tight leading-none mb-1">{tProfile('weight')}</div>
+                                                <div className="text-xs font-bold text-slate-900">{profile.weight} kg</div>
+                                            </div>
                                         </div>
                                     )}
                                     {profile.hairColor && (
-                                        <div className="bg-indigo-50 rounded-lg p-2.5 border border-indigo-100">
-                                            <div className="text-xs font-semibold text-indigo-600">{tAuth('hairColor')}</div>
-                                            <div className="text-sm font-bold text-indigo-900 capitalize">{profile.hairColor}</div>
+                                        <div className="bg-indigo-50 rounded-lg p-2 border border-indigo-100 flex items-center gap-2">
+                                            <div className="p-1.5 bg-white rounded-md shadow-sm">
+                                                <Palette size={14} className="text-indigo-600" />
+                                            </div>
+                                            <div>
+                                                <div className="text-[10px] font-bold text-indigo-400 uppercase tracking-tight leading-none mb-1">{tProfile('hairColor')}</div>
+                                                <div className="text-xs font-bold text-indigo-900">
+                                                    {tProfile(`traits.hair.${profile.hairColor}`)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {profile.build && (
+                                        <div className="bg-amber-50 rounded-lg p-2 border border-amber-100 flex items-center gap-2">
+                                            <div className="p-1.5 bg-white rounded-md shadow-sm">
+                                                <User size={14} className="text-amber-600" />
+                                            </div>
+                                            <div>
+                                                <div className="text-[10px] font-bold text-amber-400 uppercase tracking-tight leading-none mb-1">{tProfile('build')}</div>
+                                                <div className="text-xs font-bold text-amber-900 capitalize">
+                                                    {tProfile(`traits.build.${profile.build}`)}
+                                                </div>
+                                            </div>
                                         </div>
                                     )}
                                     {profile.ethnicity && (
-                                        <div className="bg-rose-50 rounded-lg p-2.5 border border-rose-100">
-                                            <div className="text-xs font-semibold text-rose-600">{tAuth('ethnicity')}</div>
-                                            <div className="text-sm font-bold text-rose-900 capitalize">{profile.ethnicity}</div>
+                                        <div className="bg-rose-50 rounded-lg p-2 border border-rose-100 flex items-center gap-2">
+                                            <div className="p-1.5 bg-white rounded-md shadow-sm">
+                                                <Globe size={14} className="text-rose-600" />
+                                            </div>
+                                            <div>
+                                                <div className="text-[10px] font-bold text-rose-400 uppercase tracking-tight leading-none mb-1">{tProfile('ethnicity')}</div>
+                                                <div className="text-xs font-bold text-rose-900">
+                                                    {tProfile(`traits.ethnicity.${profile.ethnicity}`)}
+                                                </div>
+                                            </div>
                                         </div>
                                     )}
                                 </div>

@@ -17,8 +17,8 @@ interface EscortDetailPageProps {
 }
 
 import { getTranslations } from 'next-intl/server';
-
 import { locations } from '@/data/locations';
+import { routing } from '@/i18n/routing';
 
 export async function generateMetadata({ params }: EscortDetailPageProps) {
   const { slug, locale } = await params;
@@ -38,6 +38,20 @@ export async function generateMetadata({ params }: EscortDetailPageProps) {
   };
 
   const localizedCity = escort.city ? getCityName(escort.city) : 'Georgia';
+
+  // Calculate age from dateOfBirth
+  const calculateAge = (dob: string | Date) => {
+    const birthDate = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
+  const age = calculateAge(escort.dateOfBirth);
   const siteUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://gogoxgeorgia.ge';
 
   // Robust cover image fallback
@@ -45,15 +59,24 @@ export async function generateMetadata({ params }: EscortDetailPageProps) {
     ? escort.coverImage
     : (escort.images as any[])?.[0]?.url;
 
-  const ogImage = calculatedCoverImage ? `${siteUrl}${calculatedCoverImage}` : undefined;
+  const ogImage = calculatedCoverImage
+    ? (calculatedCoverImage.startsWith('http') ? calculatedCoverImage : `${siteUrl}${calculatedCoverImage}`)
+    : undefined;
 
-  // Variables for templates
+  const tTraits = await getTranslations({ locale, namespace: 'profile' });
+  const tServices = await getTranslations({ locale, namespace: 'services' });
+
+  const localizedEthnicity = escort.ethnicity ? tTraits(`traits.ethnicity.${escort.ethnicity}`) : '';
+  const localizedServicesList = escort.services
+    ? escort.services.slice(0, 5).map((s: string) => tServices(s)).join(', ')
+    : '';
+
   const variables = {
     name: escort.name,
-    age: escort.age ? escort.age.toString() : '',
-    ethnicity: escort.ethnicity || '',
+    age: age.toString(),
+    ethnicity: localizedEthnicity,
     city: localizedCity,
-    services: escort.services ? escort.services.slice(0, 5).join(', ') : ''
+    services: localizedServicesList
   };
 
   const title = t('profileTitle', variables);
@@ -62,11 +85,11 @@ export async function generateMetadata({ params }: EscortDetailPageProps) {
   // Specific Keywords
   const specificKeywords = [
     `${escort.name} escort`,
-    `${localizedCity} escort`, // Localized keyword
-    `${escort.city} escort`, // Keep English ID as keyword too? Maybe prudent.
+    `${localizedCity} escort`,
     `escort in ${localizedCity}`,
-    `${escort.ethnicity} escort`,
-    ...(escort.services || []).map((s: string) => `${s} ${localizedCity}`),
+    `${localizedEthnicity} escort`,
+    ...(escort.services || []).map((s: string) => `${tServices(s)} ${localizedCity}`),
+    ...(escort.services || []).map((s: string) => `${tServices(s)}`),
     "verified profile",
     "real photos"
   ];
@@ -155,29 +178,38 @@ export default async function EscortDetailPage({ params }: EscortDetailPageProps
   // 1. Breadcrumb Schema
   const localizedCityName = escort.city ? getCityName(escort.city) : 'Georgia';
 
+  const common = await getTranslations({ locale, namespace: 'common' });
+  const defaultLocale = routing.defaultLocale;
+
+  const getLocalizedUrlClient = (l: string, path: string) => {
+    const prefix = l === defaultLocale ? '' : `/${l}`;
+    return `${siteUrl}${prefix}${path}`;
+  };
+
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
+    name: 'Breadcrumbs',
     itemListElement: [
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'Home',
-        item: `${siteUrl}/${locale}`
+        name: common('home'),
+        item: getLocalizedUrlClient(locale, '')
       },
       ...(escort.city ? [
         {
           '@type': 'ListItem',
           position: 2,
           name: localizedCityName,
-          item: `${siteUrl}/${locale}?city=${escort.city}`
+          item: getLocalizedUrlClient(locale, `/?city=${escort.city}`)
         }
       ] : []),
       {
         '@type': 'ListItem',
         position: escort.city ? 3 : 2,
         name: escort.name,
-        item: `${siteUrl}/${locale}/escort/${slug}`
+        item: getLocalizedUrlClient(locale, `/escort/${slug}`)
       }
     ]
   };
@@ -192,7 +224,9 @@ export default async function EscortDetailPage({ params }: EscortDetailPageProps
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: escort.name,
-    image: calculatedCoverImage ? `${siteUrl}${calculatedCoverImage}` : undefined,
+    image: calculatedCoverImage
+      ? (calculatedCoverImage.startsWith('http') ? calculatedCoverImage : `${siteUrl}${calculatedCoverImage}`)
+      : undefined,
     description: escort.aboutYou,
     gender: escort.gender,
     url: `${siteUrl}/${locale}/escort/${slug}`,

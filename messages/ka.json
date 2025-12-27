@@ -218,7 +218,57 @@
     "dailyViews": "ნახვა დღეს",
     "noPhotos": "ფოტოები არ არის ხელმისაწვდომი",
     "about": "შესახებ",
-    "availability": "ხელმისაწვდომობა"
+    "availability": "ხელმისაწვდომობა",
+    "details": "პირადი დეტალები",
+    "ethnicity": "ეთნიკურობა",
+    "height": "სიმაღლე",
+    "weight": "წონა",
+    "hairColor": "თმის ფერი",
+    "bustSize": "ბიუსტის ზომა",
+    "build": "აგებულება",
+    "traits": {
+      "hair": {
+        "black": "შავი",
+        "blonde": "ქერა",
+        "brown": "ყავისფერი",
+        "brunette": "შავგვრემანი",
+        "chestnut": "წაბლისფერი",
+        "auburn": "მოწითალო-ყავისფერი",
+        "dark_blonde": "მუქი ქერა",
+        "golden": "ოქროსფერი",
+        "red": "წითური",
+        "grey": "ჭაღარა",
+        "silver": "ვერცხლისფერი",
+        "other": "სხვა"
+      },
+      "bust": {
+        "very_small": "ძალიან პატარა",
+        "small_a": "პატარა (A)",
+        "medium_b": "საშუალო (B)",
+        "large_c": "დიდი (C)",
+        "very_large_d": "ძალიან დიდი (D)",
+        "enormous_e_plus": "უზარმაზარი (E+)"
+      },
+      "build": {
+        "skinny": "გამხდარი",
+        "slim": "ტანადი",
+        "regular": "საშუალო",
+        "sport": "სპორტული",
+        "fat": "ფორმებიანი"
+      },
+      "ethnicity": {
+        "georgian": "ქართველი",
+        "russian": "რუსი",
+        "black": "აფრიკელი",
+        "turk": "თურქი",
+        "armenian": "სომეხი",
+        "azerbaijan": "აზერბაიჯანელი",
+        "kazakh": "ყაზახი",
+        "greek": "ბერძენი",
+        "ukraine": "უკრაინელი",
+        "other": "სხვა"
+      }
+    }
   },
   "cities": {
     "tbilisi": "თბილისი",

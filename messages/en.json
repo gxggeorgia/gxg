@@ -222,7 +222,57 @@
     "dailyViews": "Views Today",
     "noPhotos": "No photos available",
     "about": "About",
-    "availability": "Availability"
+    "availability": "Availability",
+    "details": "Personal Details",
+    "ethnicity": "Ethnicity",
+    "height": "Height",
+    "weight": "Weight",
+    "hairColor": "Hair Color",
+    "bustSize": "Bust Size",
+    "build": "Build",
+    "traits": {
+      "hair": {
+        "black": "Black",
+        "blonde": "Blonde",
+        "brown": "Brown",
+        "brunette": "Brunette",
+        "chestnut": "Chestnut",
+        "auburn": "Auburn",
+        "dark_blonde": "Dark Blonde",
+        "golden": "Golden",
+        "red": "Red",
+        "grey": "Grey",
+        "silver": "Silver",
+        "other": "Other"
+      },
+      "bust": {
+        "very_small": "Very Small",
+        "small_a": "Small (A)",
+        "medium_b": "Medium (B)",
+        "large_c": "Large (C)",
+        "very_large_d": "Very Large (D)",
+        "enormous_e_plus": "Enormous (E+)"
+      },
+      "build": {
+        "skinny": "Skinny",
+        "slim": "Slim",
+        "regular": "Regular",
+        "sport": "Athletic",
+        "fat": "Curvy"
+      },
+      "ethnicity": {
+        "georgian": "Georgian",
+        "russian": "Russian",
+        "black": "Black",
+        "turk": "Turkish",
+        "armenian": "Armenian",
+        "azerbaijan": "Azerbaijani",
+        "kazakh": "Kazakh",
+        "greek": "Greek",
+        "ukraine": "Ukrainian",
+        "other": "Other"
+      }
+    }
   },
   "cities": {
     "tbilisi": "Tbilisi",
