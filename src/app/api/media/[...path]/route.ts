@@ -20,7 +20,7 @@ export async function GET(
     // Optional: Check referer to ensure request comes from your domain
     const referer = request.headers.get('referer');
     const host = request.headers.get('host');
-    
+
     // Allow requests from your domain or direct API calls (for testing)
     // In production, you might want to be stricter
     if (referer && !referer.includes(host || '')) {
@@ -28,10 +28,10 @@ export async function GET(
       // Uncomment to enable strict referer checking:
       // return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
-    
+
     // Await params as required by Next.js 15
     const { path } = await params;
-    
+
     // Reconstruct the filename from path segments
     const filename = path.join('/');
 
@@ -62,6 +62,7 @@ export async function GET(
     return new NextResponse(fileData, {
       headers: {
         'Content-Type': contentType,
+        'Content-Length': fileData.byteLength.toString(),
         'Cache-Control': 'public, max-age=31536000, immutable',
         'Access-Control-Allow-Origin': '*',
       },
