@@ -118,7 +118,7 @@ export default function FavoritesPage() {
 
                     isNew: false,
                     isOnline: true,
-                    coverImage: escort.coverImage || escort.images?.[0]?.url,
+                    coverImage: (escort.images?.some(img => img.url === escort.coverImage) ? escort.coverImage : null) || (escort.images as any)?.[0]?.url,
                   }}
                 />
               ))}

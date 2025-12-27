@@ -39,7 +39,13 @@ export async function generateMetadata({ params }: EscortDetailPageProps) {
 
   const localizedCity = escort.city ? getCityName(escort.city) : 'Georgia';
   const siteUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://gogoxgeorgia.ge';
-  const ogImage = escort.coverImage ? `${siteUrl}${escort.coverImage}` : undefined;
+
+  // Robust cover image fallback
+  const calculatedCoverImage = (escort.images as any[])?.some((img: any) => img.url === escort.coverImage)
+    ? escort.coverImage
+    : (escort.images as any[])?.[0]?.url;
+
+  const ogImage = calculatedCoverImage ? `${siteUrl}${calculatedCoverImage}` : undefined;
 
   // Variables for templates
   const variables = {
@@ -166,12 +172,17 @@ export default async function EscortDetailPage({ params }: EscortDetailPageProps
     ]
   };
 
+  // Robust cover image fallback
+  const calculatedCoverImage = (escort.images as any[])?.some((img: any) => img.url === escort.coverImage)
+    ? escort.coverImage
+    : (escort.images as any[])?.[0]?.url;
+
   // 2. Enhanced Person/Product Schema
   const personJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: escort.name,
-    image: escort.coverImage ? `${siteUrl}${escort.coverImage}` : undefined,
+    image: calculatedCoverImage ? `${siteUrl}${calculatedCoverImage}` : undefined,
     description: escort.aboutYou,
     gender: escort.gender,
     url: `${siteUrl}/${locale}/escort/${slug}`,

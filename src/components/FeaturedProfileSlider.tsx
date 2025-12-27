@@ -224,7 +224,7 @@ export default function FeaturedProfileSlider() {
                       isOnline: (profile as any).isOnline,
                       lastActive: (profile as any).lastActive,
                       languages: profile.languages,
-                      coverImage: profile.coverImage || (profile.images as any)?.[0]?.url,
+                      coverImage: (profile.images?.some(img => img.url === profile.coverImage) ? profile.coverImage : null) || (profile.images as any)?.[0]?.url,
                       imageWidth: (profile.images as any)?.[0]?.width,
                       imageHeight: (profile.images as any)?.[0]?.height,
                     }}
