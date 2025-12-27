@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { Heart } from 'lucide-react';
 import ProfileCard from '@/components/ProfileCard';
+import { Link } from '@/i18n/routing';
 
 
 
@@ -96,12 +97,12 @@ export default function FavoritesPage() {
               <p className="text-gray-600 mb-6">
                 {t('emptyDesc')}
               </p>
-              <a
+              <Link
                 href="/"
                 className="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
               >
                 {t('browseEscorts')}
-              </a>
+              </Link>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">

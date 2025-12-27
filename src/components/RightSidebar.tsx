@@ -250,7 +250,7 @@ export default function RightSidebar() {
               new: false,
               online: false,
             });
-            router.push('/');
+            router.push(pathname);
           }}
           className="w-full text-gray-500 hover:text-gray-700 underline text-sm transition-colors mt-2"
         >

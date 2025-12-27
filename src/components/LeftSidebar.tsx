@@ -44,7 +44,8 @@ export default function LeftSidebar() {
     // Reset pagination
     params.delete('offset');
 
-    router.push(`${pathname}?${params.toString()}`);
+    const queryString = params.toString();
+    router.push(queryString ? `${pathname}?${queryString}` : pathname);
 
     // On mobile, close sidebar after selection
     if (window.innerWidth < 1024) {

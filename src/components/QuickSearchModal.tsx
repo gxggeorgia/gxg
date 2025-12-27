@@ -110,12 +110,11 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
     params.delete('gold');
     params.delete('top');
     params.delete('silver');
-    params.delete('silver');
     params.delete('featured');
     params.delete('verifiedPhotos');
     params.delete('new');
     params.delete('online');
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(pathname);
     onClose();
   };
 

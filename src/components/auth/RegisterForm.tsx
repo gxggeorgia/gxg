@@ -362,7 +362,7 @@ export default function RegisterForm({ onSuccess, isEditMode = false }: Register
 
         // Small delay to ensure cookie is set, then redirect and reload
         setTimeout(() => {
-          window.location.href = '/';
+          router.push('/');
         }, 100);
       }
     } catch (err) {

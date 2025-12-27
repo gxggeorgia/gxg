@@ -1,13 +1,15 @@
 'use client';
 
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
+import { useRouter, usePathname } from '@/i18n/routing';
 import { X, Filter, RotateCcw } from 'lucide-react';
 import { locations } from '@/data/locations';
 
 export default function SearchHeader() {
     const searchParams = useSearchParams();
     const router = useRouter();
+    const pathname = usePathname();
     const t = useTranslations();
     const locale = useLocale() as 'en' | 'ka' | 'ru';
 
@@ -29,7 +31,7 @@ export default function SearchHeader() {
     if (!hasFilters) return null;
 
     const handleClearAll = () => {
-        router.push('/');
+        router.push(pathname);
     };
 
     const getCityName = (id: string) => {

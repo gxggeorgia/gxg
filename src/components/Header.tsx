@@ -68,7 +68,7 @@ export default function Header() {
       // Clear cached user data
       clearCachedUser();
       // Redirect to home page
-      window.location.href = '/';
+      router.push('/');
     } catch (error) {
       console.error('Logout failed:', error);
     }

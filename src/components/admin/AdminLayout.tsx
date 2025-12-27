@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { usePathname } from 'next/navigation';
-import { useRouter } from '@/i18n/routing';
+import { useRouter, usePathname } from '@/i18n/routing';
 import { Users, FileText, MessageSquare, BarChart3, Menu, X } from 'lucide-react';
 
 interface AdminLayoutProps {
@@ -22,7 +21,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   const isActive = (path: string) => {
     if (path === '/admin') {
-      return pathname === '/admin' || pathname.match(/^\/[a-z]{2}\/admin$/);
+      return pathname === '/admin';
     }
     return pathname.includes(path);
   };
