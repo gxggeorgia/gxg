@@ -56,13 +56,26 @@ export async function GET(
       chunks.push(chunk);
     }
     const fileData = Buffer.concat(chunks);
-    const contentType = response.ContentType || 'application/octet-stream';
+
+    let contentType = response.ContentType || 'application/octet-stream';
+
+    // Fallback: If content-type is octet-stream, try to guess from extension
+    if (contentType === 'application/octet-stream') {
+      const ext = filename.split('.').pop()?.toLowerCase();
+      if (ext === 'jpg' || ext === 'jpeg') contentType = 'image/jpeg';
+      else if (ext === 'png') contentType = 'image/png';
+      else if (ext === 'gif') contentType = 'image/gif';
+      else if (ext === 'webp') contentType = 'image/webp';
+      else if (ext === 'mp4') contentType = 'video/mp4';
+      else if (ext === 'mov') contentType = 'video/quicktime';
+    }
 
     // Return the file with appropriate headers
     return new NextResponse(fileData, {
       headers: {
         'Content-Type': contentType,
         'Content-Length': fileData.byteLength.toString(),
+        'Content-Disposition': 'inline', // Important for browsers/crawlers to treat as viewable media
         'Cache-Control': 'public, max-age=31536000, immutable',
         'Access-Control-Allow-Origin': '*',
       },
