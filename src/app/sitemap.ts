@@ -2,31 +2,79 @@ import { MetadataRoute } from 'next';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { eq, isNotNull, and, gt } from 'drizzle-orm';
-
 import { routing } from '@/i18n/routing';
+import { locations } from '@/data/locations';
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://gogoxgeorgia.ge';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const locales = routing.locales;
-  const staticRoutes = ['', '/privacy', '/terms', '/support', '/register', '/favorites'];
+  const defaultLocale = routing.defaultLocale;
+
+  const getLocalizedUrl = (locale: string, path: string) => {
+    const prefix = locale === defaultLocale ? '' : `/${locale}`;
+    return `${baseUrl}${prefix}${path}`;
+  };
+
+  const getAlternates = (path: string) => {
+    const languages: Record<string, string> = {
+      'x-default': getLocalizedUrl(defaultLocale, path)
+    };
+    locales.forEach((l) => {
+      languages[l] = getLocalizedUrl(l, path);
+    });
+    return { languages };
+  };
 
   const sitemapEntries: MetadataRoute.Sitemap = [];
 
-  // Add static routes
-  locales.forEach((locale) => {
-    const prefix = locale === routing.defaultLocale ? '' : `/${locale}`;
-    staticRoutes.forEach((route) => {
+  // 1. Static Routes
+  const staticRoutes = ['', '/support', '/register', '/favorites', '/privacy', '/terms'];
+  staticRoutes.forEach((route) => {
+    locales.forEach((locale) => {
       sitemapEntries.push({
-        url: `${baseUrl}${prefix}${route}`,
+        url: getLocalizedUrl(locale, route),
         lastModified: new Date(),
         changeFrequency: route === '' ? 'daily' : 'monthly',
         priority: route === '' ? 1 : 0.7,
+        alternates: getAlternates(route),
       });
     });
   });
 
-  // Fetch all active escorts
+  // 2. Category Routes (Cities & Districts)
+  locations.forEach((city) => {
+    if (city.id === 'all') return;
+
+    // City Pages
+    const cityPath = `/?city=${city.id}`;
+    locales.forEach((locale) => {
+      sitemapEntries.push({
+        url: getLocalizedUrl(locale, cityPath),
+        lastModified: new Date(),
+        changeFrequency: 'daily',
+        priority: 0.8,
+        alternates: getAlternates(cityPath),
+      });
+    });
+
+    // District Pages
+    city.districts.forEach((district) => {
+      if (district.id === 'all') return;
+      const districtPath = `/?city=${city.id}&district=${district.id}`;
+      locales.forEach((locale) => {
+        sitemapEntries.push({
+          url: getLocalizedUrl(locale, districtPath),
+          lastModified: new Date(),
+          changeFrequency: 'daily',
+          priority: 0.8,
+          alternates: getAlternates(districtPath),
+        });
+      });
+    });
+  });
+
+  // 3. Dynamic Escort Routes
   const activeEscorts = await db
     .select({
       slug: users.slug,
@@ -37,19 +85,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       and(
         eq(users.role, 'escort'),
         isNotNull(users.slug),
-        gt(users.publicExpiry, new Date()) // Only list active profiles
+        gt(users.publicExpiry, new Date())
       )
     );
 
-  // Add dynamic escort routes
   activeEscorts.forEach((escort) => {
+    const escortPath = `/escort/${escort.slug}`;
     locales.forEach((locale) => {
-      const prefix = locale === routing.defaultLocale ? '' : `/${locale}`;
       sitemapEntries.push({
-        url: `${baseUrl}${prefix}/escort/${escort.slug}`,
+        url: getLocalizedUrl(locale, escortPath),
         lastModified: escort.updatedAt || new Date(),
         changeFrequency: 'daily',
         priority: 0.9,
+        alternates: getAlternates(escortPath),
       });
     });
   });
