@@ -7,6 +7,8 @@ import SearchHeader from '@/components/SearchHeader';
 import SiteNotice from '@/components/SiteNotice';
 
 import AgeCheck from '@/components/AgeCheck';
+import Script from 'next/script';
+import { locations } from '@/data/locations';
 
 import { generateSearchMetadata } from '@/lib/searchMetadata';
 import { Metadata } from 'next';
@@ -22,10 +24,13 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 }
 
 export default async function HomePage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  const { locale } = await params;
   const {
     search,
     city,
@@ -55,8 +60,61 @@ export default async function HomePage({
 
   const showFeatured = !hasFilters;
 
+  const siteUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://gogoxgeorgia.ge';
+
+  // Helper to get localized names
+  const getCityName = (id: string) => {
+    const c = locations.find(l => l.id === id);
+    return c?.name[locale as keyof typeof c.name] || id;
+  };
+
+  const getDistrictName = (cityId: string, districtId: string) => {
+    const c = locations.find(l => l.id === cityId);
+    const d = c?.districts.find(d => d.id === districtId);
+    return d?.name[locale as keyof typeof d.name] || districtId;
+  };
+
+  // Breadcrumb Schema
+  const breadcrumbElements = [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: `${siteUrl}/${locale}`
+    }
+  ];
+
+  if (city && city !== 'all' && typeof city === 'string') {
+    breadcrumbElements.push({
+      '@type': 'ListItem',
+      position: 2,
+      name: getCityName(city),
+      item: `${siteUrl}/${locale}?city=${city}`
+    });
+
+    if (district && district !== 'all' && typeof district === 'string') {
+      breadcrumbElements.push({
+        '@type': 'ListItem',
+        position: 3,
+        name: getDistrictName(city, district),
+        item: `${siteUrl}/${locale}?city=${city}&district=${district}`
+      });
+    }
+  }
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbElements
+  };
+
   return (
     <AgeCheck>
+      <Script
+        id="breadcrumb-json-ld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className="min-h-screen bg-gray-50">
         <h1 className="sr-only">Gogoxgeorgia - Leading ესკორტ გოგოები platform. Verified Escort gogoebi, Tbilisi escort & escort batumi profiles.</h1>
 

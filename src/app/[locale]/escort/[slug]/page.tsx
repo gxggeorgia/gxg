@@ -146,7 +146,15 @@ export default async function EscortDetailPage({ params }: EscortDetailPageProps
     }
   }
 
+  // Helper to get localized city name
+  const getCityName = (id: string) => {
+    const c = locations.find(l => l.id === id);
+    return c?.name[locale as keyof typeof c.name] || id;
+  };
+
   // 1. Breadcrumb Schema
+  const localizedCityName = escort.city ? getCityName(escort.city) : 'Georgia';
+
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -157,15 +165,17 @@ export default async function EscortDetailPage({ params }: EscortDetailPageProps
         name: 'Home',
         item: `${siteUrl}/${locale}`
       },
+      ...(escort.city ? [
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: localizedCityName,
+          item: `${siteUrl}/${locale}?city=${escort.city}`
+        }
+      ] : []),
       {
         '@type': 'ListItem',
-        position: 2,
-        name: 'Escorts',
-        item: `${siteUrl}/${locale}`
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
+        position: escort.city ? 3 : 2,
         name: escort.name,
         item: `${siteUrl}/${locale}/escort/${slug}`
       }
