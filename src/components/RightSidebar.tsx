@@ -70,7 +70,7 @@ export default function RightSidebar() {
     if (filters.new) params.set('new', 'true');
     if (filters.online) params.set('online', 'true');
 
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`/?${params.toString()}`);
   };
 
   // Reset district when city changes
@@ -250,7 +250,7 @@ export default function RightSidebar() {
               new: false,
               online: false,
             });
-            router.push(pathname);
+            router.push('/');
           }}
           className="w-full text-gray-500 hover:text-gray-700 underline text-sm transition-colors mt-2"
         >

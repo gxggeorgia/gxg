@@ -319,5 +319,15 @@
     "adminTitle": "ადმინისტრატორის პანელი | GOGO XGEORGIA",
     "homeTitle": "Gogo xgeorgia, ესკორტ გოგოები, Escort gogoebi, ესკორტი xgeorgia, escort batumi, Tbilisi escort, Escort Georgia, Xgeorgia, Gogoxgeorgia",
     "homeDesc": "Gogoxgeorgia - Leading ესკორტ გოგოები platform. Verified Escort gogoebi, Tbilisi escort & escort batumi profiles. Premium ესკორტი xgeorgia in Escort Georgia. Find Gogo xgeorgia today."
+  },
+  "notFound": {
+    "title": "გვერდი ვერ მოიძებნა",
+    "subtitle": "უი! გვერდი, რომელსაც ეძებთ, არ არსებობს.",
+    "description": "როგორც ჩანს, თქვენ იპოვეთ საიდუმლო ადგილი. სამწუხაროდ, აქ არაფერია ციფრული მტვრის გარდა. მოდით, დაგაბრუნოთ მთავარ გვერდზე.",
+    "backHome": "მთავარ გვერდზე დაბრუნება",
+    "errorCode": "404",
+    "searchPlaceholder": "მოძებნეთ ესკორტები...",
+    "searchButton": "ძებნა",
+    "goBack": "უკან დაბრუნება"
   }
 }

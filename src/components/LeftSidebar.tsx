@@ -45,7 +45,7 @@ export default function LeftSidebar() {
     params.delete('offset');
 
     const queryString = params.toString();
-    router.push(queryString ? `${pathname}?${queryString}` : pathname);
+    router.push(queryString ? `/?${queryString}` : '/');
 
     // On mobile, close sidebar after selection
     if (window.innerWidth < 1024) {

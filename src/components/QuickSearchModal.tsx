@@ -96,7 +96,7 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
     if (filters.new) params.set('new', 'true');
     if (filters.online) params.set('online', 'true');
 
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`/?${params.toString()}`);
     onClose();
   };
 
@@ -114,7 +114,7 @@ export default function QuickSearchModal({ open, onClose }: QuickSearchModalProp
     params.delete('verifiedPhotos');
     params.delete('new');
     params.delete('online');
-    router.push(pathname);
+    router.push('/');
     onClose();
   };
 

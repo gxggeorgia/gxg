@@ -31,7 +31,7 @@ export default function SearchHeader() {
     if (!hasFilters) return null;
 
     const handleClearAll = () => {
-        router.push(pathname);
+        router.push('/');
     };
 
     const getCityName = (id: string) => {
