@@ -111,7 +111,7 @@ export default function ProfileCard({ profile, compact = false }: ProfileCardPro
               {/* Watermark */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-90">
                 <img
-                  src="/icons/logo-bgless.png"
+                  src="/assets/logo-bgless.png"
                   alt="Watermark"
                   className="w-1/4 h-auto object-contain"
                 />

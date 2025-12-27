@@ -44,7 +44,7 @@ export default function AgeCheck({ children }: { children: React.ReactNode }) {
                         <div className="flex justify-center mb-2">
                             <div className="relative w-24 h-24 rounded-full overflow-hidden p-1 border-2 border-gray-100">
                                 <Image
-                                    src="/icons/logo.png"
+                                    src="/assets/logo.png"
                                     alt="GogoXGeorgia"
                                     fill
                                     className="object-contain"

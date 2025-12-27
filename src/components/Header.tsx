@@ -84,7 +84,7 @@ export default function Header() {
             <div className="flex justify-center border-b border-slate-800/50">
               <Link href="/" className="flex items-center">
                 <img
-                  src="/icons/logo-bgless.png"
+                  src="/assets/logo-bgless.png"
                   alt={process.env.NEXT_PUBLIC_SITE_NAME || 'EG'}
                   className="h-36 w-auto object-contain"
                 />
@@ -178,7 +178,7 @@ export default function Header() {
             <div className="flex items-center gap-4">
               <Link href="/" className="flex items-center">
                 <img
-                  src="/icons/logo-bgless.png"
+                  src="/assets/logo-bgless.png"
                   alt={process.env.NEXT_PUBLIC_SITE_NAME || 'EG'}
                   className="h-16 w-auto object-contain"
                 />

@@ -100,7 +100,7 @@ export function generateOrganizationSchema(locale: string) {
         '@type': 'Organization',
         name: 'GOGO XGEORGIA',
         url: localizedUrl,
-        logo: `${baseUrl}/icons/logo.png`,
+        logo: `${baseUrl}/assets/logo.png`,
         description: 'GOGOXGEORGIA.GE | Escort Girls, Companions & VIP Services in Georgia',
         sameAs: [
             'https://www.facebook.com/escortdirectoryga',

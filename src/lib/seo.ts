@@ -69,7 +69,7 @@ export const defaultMetadata: Metadata = {
     description: "Gogoxgeorgia - Leading ესკორტ გოგოები platform. Verified Escort gogoebi, Tbilisi escort & escort batumi profiles. Premium ესკორტი xgeorgia in Escort Georgia.",
     images: [
       {
-        url: `${baseUrl}/icons/logo.png`,
+        url: `${baseUrl}/assets/logo.png`,
         width: 1200,
         height: 630,
         alt: `${siteName} Logo`,
@@ -81,32 +81,33 @@ export const defaultMetadata: Metadata = {
     card: 'summary_large_image',
     title: "Gogoxgeorgia - Leading ესკორტ გოგოები platform. Verified Escort gogoebi, Tbilisi escort & escort batumi profiles.",
     description: "Gogoxgeorgia - Leading ესკორტ გოგოები platform. Verified Escort gogoebi, Tbilisi escort & escort batumi profiles. Premium ესკორტი xgeorgia.",
-    images: [`${baseUrl}/icons/logo.png`],
+    images: [`${baseUrl}/assets/logo.png`],
     creator: '@gogoxgeorgia',
   },
   icons: {
     icon: [
-      { url: '/icons/favicon/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/icons/favicon/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/icons/favicon/favicon.ico', type: 'image/x-icon' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/favicon.ico', type: 'image/x-icon' },
     ],
-    apple: { url: '/icons/favicon/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    apple: { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     other: [
       {
         rel: 'icon',
-        url: '/icons/favicon/android-chrome-192x192.png',
+        url: '/android-chrome-192x192.png',
         sizes: '192x192',
         type: 'image/png',
       },
       {
         rel: 'icon',
-        url: '/icons/favicon/android-chrome-512x512.png',
+        url: '/android-chrome-512x512.png',
         sizes: '512x512',
         type: 'image/png',
       },
     ],
   },
-  manifest: '/icons/favicon/site.webmanifest',
+  manifest: '/site.webmanifest',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
@@ -134,7 +135,7 @@ export function generatePageMetadata(
   const prefix = (locale && locale !== defaultLocale) ? `/${locale}` : '';
   const finalPath = locale ? `${prefix}${path}` : path;
   const url = `${baseUrl}${finalPath}`;
-  const ogImage = image || `${baseUrl}/icons/logo.png`;
+  const ogImage = image || `${baseUrl}/assets/logo.png`;
 
   // Base alternates with canonical
   const alternates: Metadata['alternates'] = {

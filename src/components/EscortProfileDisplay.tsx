@@ -205,7 +205,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                                             {/* Watermark */}
                                             <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-90">
                                                 <img
-                                                    src="/icons/logo-bgless.png"
+                                                    src="/assets/logo-bgless.png"
                                                     alt="Watermark"
                                                     className="w-1/2 h-auto object-contain"
                                                 />
@@ -378,7 +378,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                                                 onClick={() => trackInteraction('viber')}
                                                 className="flex items-center gap-2 text-gray-700 p-2.5 bg-red-50 rounded-lg hover:bg-red-100 text-sm"
                                             >
-                                                <Image src="/icons/viber_logo-170x170.png" alt="Viber" width={16} height={16} />
+                                                <Image src="/assets/viber_logo-170x170.png" alt="Viber" width={16} height={16} />
                                                 <span className="font-medium flex-1">{tCommon('viber')}</span>
                                                 <ExternalLink size={12} className="text-gray-400" />
                                             </a>
@@ -475,7 +475,7 @@ export default function EscortProfileDisplay({ profile, isOwnProfile = false, to
                                     {/* Watermark */}
                                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-90">
                                         <img
-                                            src="/icons/logo-bgless.png"
+                                            src="/assets/logo-bgless.png"
                                             alt="Watermark"
                                             className="w-1/4 h-auto object-contain"
                                         />
