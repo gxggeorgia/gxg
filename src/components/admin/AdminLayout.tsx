@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useLocale } from 'next-intl';
 import { useRouter, usePathname } from '@/i18n/routing';
 import { Users, FileText, MessageSquare, BarChart3, Menu, X } from 'lucide-react';
 
@@ -11,6 +12,7 @@ interface AdminLayoutProps {
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const locale = useLocale();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const menuItems = [
@@ -95,7 +97,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           {/* Footer */}
           <div className="p-4 border-t border-gray-200">
             <button
-              onClick={() => router.push('/')}
+              onClick={() => router.push('/', { locale })}
               className="w-full px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition"
             >
               ← Back to Site

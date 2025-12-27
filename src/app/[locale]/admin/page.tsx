@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { Users, Search, Edit, Crown, Star, Trash2 } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
@@ -25,6 +26,7 @@ interface User {
 
 export default function AdminPage() {
   const router = useRouter();
+  const locale = useLocale();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -43,7 +45,7 @@ export default function AdminPage() {
       const response = await fetch('/api/admin/users');
       if (!response.ok) {
         if (response.status === 403) {
-          router.push('/');
+          router.push('/', { locale });
           return;
         }
         throw new Error('Failed to fetch users');

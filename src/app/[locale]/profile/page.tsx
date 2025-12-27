@@ -93,7 +93,7 @@ export default function ProfilePage() {
     try {
       const response = await fetch('/api/profile');
       if (!response.ok) {
-        router.push('/');
+        router.push('/', { locale });
         return;
       }
       const data = await response.json();
