@@ -54,10 +54,10 @@ export default function AgeCheck({ children }: { children: React.ReactNode }) {
                         </div>
 
                         <div className="space-y-4">
-                            <h1 className="text-3xl font-bold text-gray-900">
+                            <div className="text-3xl font-bold text-gray-900" aria-hidden="true">
                                 {t('common.ageVerificationTitle', { defaultMessage: '18+ Age Verification' })}
-                            </h1>
-                            <p className="text-gray-600 text-lg leading-relaxed">
+                            </div>
+                            <p className="text-gray-600 text-lg leading-relaxed" aria-hidden="true">
                                 {t('common.ageVerificationText', { defaultMessage: 'This website contains material that is restricted to adults only. You must be 18 years of age or older to enter.' })}
                             </p>
                         </div>

@@ -52,13 +52,13 @@ export default function SearchHeader() {
                 <div className="space-y-3">
                     <div className="flex items-center gap-2 text-gray-900">
                         <Filter size={20} className="text-red-600" />
-                        <h2 className="text-lg font-bold">
+                        <h1 className="text-lg font-bold">
                             {search ? (
                                 <span>{t('search.searchResultsFor')} <span className="text-red-600">"{search}"</span></span>
                             ) : (
                                 <span>{t('search.filteredResults')}</span>
                             )}
-                        </h2>
+                        </h1>
                     </div>
 
                     <div className="flex flex-wrap gap-2">

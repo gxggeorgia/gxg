@@ -58,6 +58,7 @@ export default async function HomePage({
   return (
     <AgeCheck>
       <div className="min-h-screen bg-gray-50">
+        <h1 className="sr-only">Gogoxgeorgia - Leading ესკორტ გოგოები platform. Verified Escort gogoebi, Tbilisi escort & escort batumi profiles.</h1>
 
         {/* Featured Slider - Full Width - Only show on main page */}
         {showFeatured && (
@@ -91,14 +92,14 @@ export default async function HomePage({
               <SearchHeader />
               <ProfileGrid />
 
-              <div className="mt-8 p-4 bg-red-50 border border-red-100 rounded-lg text-center space-y-2">
+              <aside aria-label="Authenticity Warning" className="mt-8 p-4 bg-red-50 border border-red-100 rounded-lg text-center space-y-2">
                 <p className="font-bold text-red-600 text-lg">
                   ჩვენი 18+ საიტი არის მარტო GOGOXGEORGIA.GE სხვა საიტები არ გვაქვს. ყოველთვის მუშა და აქტუალური საიტის ლინკი იქნება ჩვენ ჯგუფში. დააწკაპუნეთ და შემოგვიერთდით
                 </p>
                 <p className="font-medium text-red-500">
                   (Наш сайт только GOGOXGEORGIA.GE других сайтов нету. В случае блокировки сайта рабочий и актуальный линк будет в группе, нажмите и подписывайтесь)
                 </p>
-              </div>
+              </aside>
             </main>
 
             {/* Right Sidebar - Desktop Only */}
